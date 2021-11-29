@@ -1,2 +1,2 @@
 # Ace-The-Essay
-Online Freelance Writing Website... for all professional that are good at writing technical work and etc.
+Online Freelance Writing Website... for all professionals that are good at writing technical work and etc.

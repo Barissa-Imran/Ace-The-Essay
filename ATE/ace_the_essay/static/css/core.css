@@ -1,0 +1,20 @@
+/* -----Theme-----
+---Yellow- #DBC00B
+---Pale Yellow- #F1F2D3
+---Blue BG- #F5FCFF
+---Blue FT- #B7C8CC
+---Green- #3E5E61
+*/
+
+a:hover {
+  color: #dbc00b !important;
+}
+footer {
+  font-size: small;
+}
+.accordion-button:focus {
+  color: #000 !important;
+}
+div .alert-error {
+  background: #dc3545 !important;
+}

@@ -1,0 +1,378 @@
+{% extends 'ace_the_essay/base.html' %} {% load static %} {% block content %}
+<!-- Header section -->
+<header class="container text-center py-4" style="background-image: url({% static 'img/background.svg' %});
+        background-size: auto;">
+  <h1 class="display-4"><b>
+    Frequently Asked<br />
+    Questions</b>
+  </h1>
+  <p>Apply now and start earning as a freelance writer</p>
+  <a
+    href="{% url 'apply' %}"
+    class="btn btn-outline-success text-success"
+    style="font-size: small"
+    ><b>APPLY NOW</b></a
+  >
+</header>
+<main class="container">
+  <!-- application section -->
+  <div class="row my-5" style="background-color: #f1f2d3; border-radius: 30px">
+    <div class="col-md-6">
+      <h4 class="d-flex d-lg-flex justify-content-center align-items-bottom text-warning p-4">Application<h4>
+    </div>
+    <div class="col-md-6">
+      <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item py-4" style="background: none">
+          <h2 class="accordion-header" id="flush-headingOne">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseOne"
+              aria-expanded="false"
+              aria-controls="flush-collapseOne"
+            >
+              <b>Do you hire?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseOne"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingOne"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              We hire writers from all over the world with English level C1 and
+              higher. Press the “Register” button at the top of the page and
+              follow a few simple steps to become one of our writers
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item py-4" style="background: none">
+          <h2 class="accordion-header" id="flush-headingTwo">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseTwo"
+              aria-expanded="false"
+              aria-controls="flush-collapseTwo"
+            >
+              <b>What are the application stages?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseTwo"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingTwo"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              <ul>
+                <li>Register using your email</li>
+                <li>Verify your email</li>
+                <li>
+                  Complete a 300-word test task within 24 hours after pressing
+                  "Start the Test Task" button
+                </li>
+                <li>
+                  Verify your identity by sending us a scan of your
+                  government-issued ID and a photo of you holding your ID
+                </li>
+                <li>Complete your 1st test order.</li>
+              </ul>
+              <b>Note:</b> The task you submit is reviewed by our editors based
+              on our company’s writing standards. You will receive an email
+              either confirming or declining your application based on our
+              criteria. We do not discuss or reconsider the editor’s decision.
+              You’ll have the opportunity to apply again in several months.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item py-4" style="background: none">
+          <h2 class="accordion-header" id="flush-headingThree">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseThree"
+              aria-expanded="false"
+              aria-controls="flush-collapseThree"
+            >
+              <b> How long does it take to apply at Ace The Essay?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseThree"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingThree"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              It takes 3–6 business days to pass the application process.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item py-4" style="background: none">
+          <h2 class="accordion-header" id="flush-headingFour">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseFour"
+              aria-expanded="false"
+              aria-controls="flush-collapseFour"
+            >
+              <b>How do I verify my phone number?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseFour"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingFour"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              We send you a verification code to the phone number linked to the
+              Facebook page you register with.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item py-4" style="background: none">
+          <h2 class="accordion-header" id="flush-headingFive">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseFive"
+              aria-expanded="false"
+              aria-controls="flush-collapseFive"
+            >
+              <b>What are the requirements for the 1st test order?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseFive"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingFive"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              You are to write a 3-page task with a 3-days deadline. You are to
+              follow all the instructions and exclude any plagiarism, format,
+              style, or grammar mistakes.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item py-4" style="background: none">
+          <h2 class="accordion-header" id="flush-headingSix">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseSix"
+              aria-expanded="false"
+              aria-controls="flush-collapseSix"
+            >
+              <b>What should I do to pass the ID verification?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseSix"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingSix"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              You will need to send us 2 photos:
+              <ul>
+                <li>your government-issued ID with a photo</li>
+                <li>photo of you holding your ID card next to your face</li>
+              </ul>
+              <b>Note:</b> For security purposes, we may ask you to verify your
+              identity again in the future if we suspect your account has been
+              sold.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Working Process section -->
+  <div class="row my-5">
+    <div class="col-md-6">
+            <h4 class="d-flex d-lg-flex justify-content-center align-items-bottom text-warning pt-4">Working</h4><h4 class="d-flex d-lg-flex justify-content-center align-items-bottom">Process</h4>
+    </div>
+    <div class="col-md-6">
+      <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item" style="background: none">
+          <h2 class="accordion-header" id="flush-headingSeven">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseSeven"
+              aria-expanded="false"
+              aria-controls="flush-collapseSeven"
+            >
+              <b>How can I choose an order?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseSeven"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingSeven"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              Check the orders that are available to you and send your desired price per page and deadline for the order you’d like to complete.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" style="background: none">
+          <h2 class="accordion-header" id="flush-headingEight">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseEight"
+              aria-expanded="false"
+              aria-controls="flush-collapseEight"
+            >
+              <b>Are there any fines?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseEight"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingEight"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              Yes—if you drop the order you worked on and in the case of a customer-initiated refund caused by your mistakes or miscommunication. More details on fines will appear in your personal admin panel on the Library—<br>Price Table and Penalties page
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" style="background: none">
+          <h2 class="accordion-header" id="flush-headingNine">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseNine"
+              aria-expanded="false"
+              aria-controls="flush-collapseNine"
+            >
+              <b> What are the standard requirements for an order?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseNine"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingNine"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              We verify your writing based on its originality, adherence to instructions and writing standards, word count, and citation style format as well as grammar, punctuation, and style coherence. You will be able to find out more about how your work is verified and evaluated by our editors at Library—Sending a Completed Work and Library—Evaluation Criteria.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Payments and payroll section -->
+  <div class="row my-5" style="background-color: #f1f2d3; border-radius: 30px">
+    <div class="col-md-6">
+            <h4 class="d-flex d-lg-flex justify-content-center align-items-bottom text-warning pt-4">Payments</h4><h4 class="d-flex d-lg-flex justify-content-center align-items-bottom"> & Payroll</h4>
+    </div>
+    <div class="col-md-6">
+      <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item" style="background: none">
+          <h2 class="accordion-header" id="flush-headingTen">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseTen"
+              aria-expanded="false"
+              aria-controls="flush-collapseTen"
+            >
+              <b>what is the average slary I can earn?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseTen"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingTen"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              Your salary depends solely on you: number of pages written, task complexity, and urgency. Our top writers can earn up $1,000 per payment period, which adds up to $2,000 per month
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" style="background: none">
+          <h2 class="accordion-header" id="flush-headingTwo">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseEleven"
+              aria-expanded="false"
+              aria-controls="flush-collapseEleven"
+            >
+              <b>How often will I receive payment?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseEleven"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingEleven"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              You will be paid twice per month during the payment release days: 1st–10th and 16th–25th of each month. Once you reach the minimum release payout.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" style="background: none">
+          <h2 class="accordion-header" id="flush-headingTwelve">
+            <button
+              class="accordion-button collapsed"
+              style="background: none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseTwelve"
+              aria-expanded="false"
+              aria-controls="flush-collapseTwelve"
+            >
+              <b> How can I get my payout?</b>
+            </button>
+          </h2>
+          <div
+            id="flush-collapseTwelve"
+            class="accordion-collapse collapse"
+            aria-labelledby="flush-headingTwelve"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div class="accordion-body">
+              Use any convenient method available to you.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}

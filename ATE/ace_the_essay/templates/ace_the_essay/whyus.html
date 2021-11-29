@@ -1,0 +1,68 @@
+{% extends 'ace_the_essay/base.html' %} {% load static %} {% block content %}
+<header
+  class="container text-center py-4"
+  style="
+    background-image: url({% static 'img/background.svg' %});
+    background-size: auto;
+  "
+>
+  <h1 class="display-4">Why Us</h1>
+  <p>Apply now and start earning as a freelance writer</p>
+  <a
+    href="{% url 'apply' %}"
+    class="btn btn-outline-success text-success"
+    style="font-size: small"
+    ><b>APPLY NOW</b></a
+  >
+</header>
+<section class="mt-5">
+  <!-- first section -->
+  <div class="container">
+    <div class="container row d-flex justify-content-md-center">
+      <div
+        class="col-sm-11 col-md-9 col-lg-8 col-xl-8 m-2 p-3"
+        style="background: #b7c8cc"
+      >
+        <h6><b>Candidate</b></h6>
+        <p>
+          Successfully pass the application process which is paid with the 1st
+          payroll
+        </p>
+      </div>
+      <div
+        class="col-sm-11 col-md-9 col-lg-8 col-xl-8 m-2 p-3"
+        style="background: #b7c8cc"
+      >
+        <h6><b>Trainee</b></h6>
+        <p>Complete your 1st test order</p>
+      </div>
+      <div
+        class="col-sm-11 col-md-9 col-lg-8 col-xl-8 m-2 p-3"
+        style="background: #b7c8cc"
+      >
+        <h6><b>Expert</b></h6>
+        <p>
+          Become an experienced writer with a $1,000+ salary, paid twice a
+          month.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    class="position-absolut bg-success"
+    style="width: 100%vw; min-height: 10vh"
+  ></div>
+
+  <!-- Benefits section -->
+  <section>
+    <div class="row text-center bg-success">
+      <div class="col-lg-2 col-md-4 d-flex justify-content-center">hi</div>
+      <div class="col-lg-2 col-md-4 d-flex justify-content-center">hi</div>
+      <div class="col-lg-2 col-md-4 d-flex justify-content-center">hi</div>
+      <div class="col-lg-2 col-md-4 d-flex justify-content-center">hi</div>
+      <div class="col-lg-2 col-md-4 d-flex justify-content-center">hi</div>
+      <div class="col-lg-2 col-md-4 d-flex justify-content-center">hi</div>
+    </div>
+  </section>
+</section>
+{% endblock content %}

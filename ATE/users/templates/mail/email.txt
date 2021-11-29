@@ -1,0 +1,10 @@
+
+You are receiving this email because you have applied to be a writer at Ace The Essay
+Your Login credentials are:
+
+Username: {{ username }}
+Password: {{ password }}
+
+https://acetheessay.com/auth/login
+
+please follow the instruction given after log in.

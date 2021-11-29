@@ -1,0 +1,39 @@
+{% extends 'ace_the_essay/base.html' %} {% load static %} {% load crispy_forms_tags %} {% block content %}
+<section class="container mb-5 m-4">
+  <p>
+    Fantastic opportunity for highly skilled freelance writers from all around
+    the world!
+  </p>
+  <ol class="text-warning">
+    <i>
+      <li>
+        please enter your email and click proceed to get your login details in
+        your email
+      </li>
+      <li>
+        Once logged in please fill all details to enable us proceed with your
+        application
+      </li>
+      <li>
+        we might send you a test essay or grammar to check your competency
+      </li></i
+    >
+  </ol>
+  <p>The writer email field must contain a unique value. writer signup</p>
+  <p></p>
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <label for="email">Writer sign up</label>
+      {{ form|crispy }}
+      <small id="emailHelpId" class="form-text text-muted"
+        >you will recieve log in details in this email. Enter a valid email
+        Address</small
+      >
+    </fieldset>
+    <button type="submit" class="btn btn-warning text-white my-3">
+      <strong>Proceed with Sign up</strong>
+    </button>
+  </form>
+</section>
+{% endblock content %}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="291.586" height="120" viewBox="0 0 291.586 259">
+  <g id="test_order" data-name="test order" transform="translate(0 0.168)">
+    <rect id="Rectangle_64" data-name="Rectangle 64" width="246" height="259" rx="47" transform="translate(45.586 -0.168)" fill="#d1dee2"/>
+    <g id="Group_32" data-name="Group 32" transform="translate(0 62.088)">
+      <path id="Path_209" data-name="Path 209" d="M0,0H147.637V125.412H0Z" transform="translate(172.25 143.676) rotate(180)" fill="#fff"/>
+      <path id="Path_207" data-name="Path 207" d="M864.652,277.363H715.413V150.349H864.652Zm-147.637-1.6H863.049V151.951H717.016Z" transform="translate(-715.413 -150.349)" fill="#3f3d56"/>
+      <rect id="Rectangle_54" data-name="Rectangle 54" width="90.464" height="1.016" transform="translate(42.97 93.113)" fill="#3f3d56"/>
+      <rect id="Rectangle_55" data-name="Rectangle 55" width="90.464" height="1.016" transform="translate(42.97 100.228)" fill="#3f3d56"/>
+      <rect id="Rectangle_56" data-name="Rectangle 56" width="90.464" height="1.016" transform="translate(42.97 107.343)" fill="#3f3d56"/>
+      <rect id="Rectangle_57" data-name="Rectangle 57" width="90.464" height="1.016" transform="translate(42.97 60.472)" fill="#3f3d56"/>
+      <rect id="Rectangle_58" data-name="Rectangle 58" width="90.464" height="1.016" transform="translate(42.97 67.587)" fill="#3f3d56"/>
+      <rect id="Rectangle_59" data-name="Rectangle 59" width="90.464" height="1.016" transform="translate(42.97 74.702)" fill="#3f3d56"/>
+      <rect id="Rectangle_60" data-name="Rectangle 60" width="20.348" height="16.532" transform="translate(44.81 34.941)" fill="#d0cde1"/>
+      <path id="Path_208" data-name="Path 208" d="M817.781,230.2h-21.2v-17.38h21.2Zm-20.348-.848h19.5V213.669h-19.5Z" transform="translate(-755.592 -181.271)" fill="#3f3d56"/>
+    </g>
+  </g>
+</svg>

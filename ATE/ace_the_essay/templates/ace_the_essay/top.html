@@ -1,0 +1,50 @@
+{% extends 'ace_the_essay/base.html' %} {% load static %} {% block content %}
+<section
+  class="text-justified py-5"
+  style="
+    background-image: url({% static 'img/background.svg' %});
+    background-size: auto;
+  "
+>
+  <div class="px-5">
+    <header class="container text-center py-4">
+      <h1 class="display-4">Terms of Payment</h1>
+      <p>Apply now and start earning as a freelance writer</p>
+      <a
+        href="{% url 'apply' %}"
+        class="btn btn-outline-success text-success"
+        style="font-size: small"
+        ><b>APPLY NOW</b></a
+      >
+    </header>
+    <section class="containe">
+      <p>
+        The minimum pay rate per page is $4 and it can increase to $20 depending
+        on urgency, complexity and type of the order. Writers who have
+        demonstrated excellent writing skills are awarded bonuses.
+      </p>
+
+      <p>Currently, we are supporting the following payment methods,</p>
+      <ul>
+        <li>Payoneer</li>
+        <li>Paypal</li>
+        <li>Local Bank Transfer via PesaLink</li>
+      </ul>
+      <p>
+        Payment is done on a bi-weekly basis and all the orders worked on by a
+        writer are paid after every fifteen days of each working period i.e. on
+        1st and 15th of every month. On the aforementioned dates, log in to your
+        account and send pay request: My Balance > Invoices > Send
+        Invoice/Request. Note that some clients do not set order to ‘completed
+        status’ immediately after you upload, which may cause a delay for the
+        order to reflect in your invoice.
+      </p>
+
+      <p>
+        Kindly note that we make our payments on time and we have never been
+        late to pay our writers.
+      </p>
+    </section>
+  </div>
+</section>
+{% endblock content %}

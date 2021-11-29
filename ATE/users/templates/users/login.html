@@ -1,0 +1,160 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
+    <title>Login</title>
+  </head>
+  <body style="background: #f5fcff">
+    <!-- webdesign -->
+        {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    <div class="center bg-success">
+      <div class="circle">
+        <h1 class="login-title text-white">
+          <strong>Log in</strong>
+        </h1>
+      </div>
+      <form class="login-form container text-center" method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group text-center">
+        {{form|crispy}}
+        </fieldset>
+        <div class="d-flex flex-column mt-3 form-group">
+          <a href="{% url 'password_reset' %}" class="text-white forgot">Forgot password?</a>
+          <button
+            class="btn btn-block btn-color login-btn btn-success px-5 my-2 form-group"
+            type="submit"
+          >
+            Login
+          </button>
+          <p class="text-white m-0">Don't have an account?</p>
+          <span class="d-flex flex-row justify-content-center">
+            <a class="btn btn-post m-2 text-success" href="{% url 'apply' %}"
+              >Writer</a
+            >
+            <a class="btn btn-apply m-2 text-success" href="{% url 'register' %}">Company</a>
+          </span>
+        </div>
+      </form>
+      <img
+        class="position-relative laptop"
+        src="{% static 'img/laptop-fill.svg' %}"
+        alt="laptop"
+      />
+      <img
+        class="position-relative keyboard"
+        src="{% static 'img/keyboard-fill.svg' %}"
+        alt="keyboard"
+      />
+    </div>
+    <a href="{% url 'index' %}">
+      <img
+        class="btn btn-back position-absolute"
+        data-toggle="tooltip"
+        data-placement="back"
+        src="{% static 'img/chevron-circle-left.svg' %}"
+        alt="back"
+        role="button"
+      />
+    </a>
+    <!-- Mobile design -->
+      <form class="login-form mobile container text-center" method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group text-center">
+        {{form|crispy}}
+        </fieldset>
+        <div class="d-flex flex-column mt-3 form-group">
+          <a href="{% url 'password_reset' %}" class="text-white forgot">Forgot password?</a>
+          <button
+            class="btn btn-block btn-color login-btn btn-success px-5 my-2 form-group"
+            type="submit"
+          >
+            Login
+          </button>
+          <p class="text-white m-0">Don't have an account?</p>
+          <span class="d-flex flex-row justify-content-center">
+            <a class="btn btn-post m-2 text-success" href="{% url 'apply' %}"
+              >Writer</a
+            >
+            <a class="btn btn-apply m-2 text-success" href="{% url 'register' %}">Company</a>
+          </span>
+        </div>
+      </form>
+        <img
+          class="position-relative laptop-mobile"
+          src="{% static 'img/laptop-fill.svg' %}"
+          alt="laptop"
+        />
+        <img
+          class="position-relative keyboard-mobile"
+          src="{% static 'img/keyboard-fill.svg' %}"
+          alt="keyboard"
+        />
+      </div>
+    </div>
+
+    <!-- End of mobile design -->
+    <footer>
+      <p
+        class="
+          d-flex
+          justify-content-center
+          badge
+          mb-0
+          position-absolute
+          bottom-0
+          start-50
+          end-50
+        "
+        style="color: #198754;"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="86.406"
+          height="20.951"
+          viewBox="0 0 86.406 89.951"
+        >
+          <g transform="translate(2448.541 -2655.803)">
+            <path
+              d="M228.467,720.372,227.2,719.9c-.278-.1-27.992-10.723-40.975-34.8s-6.626-53.067-6.56-53.356l.3-1.32,1.267.475c.278.1,27.992,10.723,40.975,34.8s6.626,53.067,6.56,53.356Zm-40.163-36.4c10.976,20.357,32.877,30.792,38.426,33.174,1.055-5.947,4.364-30-6.6-50.334s-32.874-30.786-38.426-33.174c-1.056,5.95-4.363,30,6.6,50.334Z"
+              transform="translate(-2592.514 2025.381)"
+              fill="#345b5e"
+            />
+            <path
+              d="M196.146,676.652c23.331,14.037,32.317,41.918,32.317,41.918s-28.842,5.123-52.173-8.914-32.317-41.918-32.317-41.918S172.815,662.615,196.146,676.652Z"
+              transform="translate(-2592.514 2025.381)"
+              fill="#345b5e"
+            />
+          </g>
+        </svg>
+        2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i> Made by
+        <a href="#" class="text-decoration-none text-warning px-1">
+          Barrylabs</a
+        >
+      </p>
+    </footer>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

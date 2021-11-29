@@ -1,0 +1,38 @@
+{% extends 'ace_the_essay/base.html' %} {% load static %} {% load crispy_forms_tags %} {%block content %}
+<header class="container text-center py-4">
+  <h1 class="display-4"><b> Register</b></h1>
+  <p>Looking for work?</p>
+  <p></p>
+  <p>Apply now and start earning as a freelance writer</p>
+  <a
+    href="{% url 'apply' %}"
+    class="btn btn-outline-success text-success"
+    style="font-size: small"
+    ><b>APPLY NOW</b></a
+  >
+</header>
+<div
+  class="content-section"
+  style="
+    background-image: url({ %static 'img/background.svg' %});
+    background-size: auto;
+  "
+>
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="form_group m-4 p-4">
+      <legend class="border-bottom mb-4">Create an Account</legend>
+      {{ form|crispy }}
+    </fieldset>
+    <div class="form-group mb-2 mx-5">
+      <button class="btn btn-outline-warning" type="submit">Sign Up</button>
+    </div>
+  </form>
+  <div class="border-top pt-3 mb-4 mx-5">
+    <small class="text-muted">
+      Already have an account?
+      <a class="ml-2 text-dark" href="{% url 'login' %}">Sign In</a>
+    </small>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% extends 'ace_the_essay/base.html' %} {% block content %}
+
+<section class="m-5">
+<h3 class="border-bottom">You have been logged out</h3>
+  <p>Thank you for using our site! Please come back again</p>
+  <a class="text-warning" href="{% url 'login' %}">Sign in</a>
+</section>
+
+{% endblock content %}

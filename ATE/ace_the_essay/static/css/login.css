@@ -1,0 +1,171 @@
+/* -------LOG IN PAGE CSS------- */
+.center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* background: #3e5e61; */
+  border-radius: 30px;
+  padding: 10px;
+  min-width: 40vw;
+  height: 80vh;
+  overflow: hidden;
+}
+.circle {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  background: linear-gradient( rgb(220, 241, 240), #088551);
+  width: 20vw;
+  height: 40vh;
+  border-radius: 200px;
+  box-shadow: 0 2px 7px rgb(47, 74, 78);
+}
+.login-title {
+  position: relative;
+  left: 50%;
+  transform: translate(-20%, 28vh);
+}
+.login-form {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  color: #f1fcff;
+  transform: translate(-19vw, -55vh);
+min-width: 70% !important;
+max-width: 70%;
+}
+
+input,
+textarea {
+    background-color: #F3E5F5;
+    border-radius: 50px !important;
+    padding: 5px 15px 5px 15px !important;
+    box-sizing: border-box;
+    border: none !important;
+    font-size: 16px !important;
+    color: #088551 !important;
+    font-weight: bold !important;
+}
+input:focus,
+textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 2px solid #3E5E61 !important;
+    outline-width: 0;
+    font-weight: 400
+}
+
+.login-btn {
+  font-weight: bolder !important;
+  float: left;
+  box-shadow: 0 2px 7px rgb(47, 74, 78);
+}
+.btn-post {
+  background: #f1fcff;
+  font-weight: bold;
+}
+.btn-apply {
+  background: #f1fcff;
+  font-weight: bold;
+}
+.btn-post:hover {
+    background-color: #DBC00B !important;
+    box-shadow: 0px 5px 5px rgb(47, 74, 78);
+}
+.btn-apply:hover {
+    background-color: #DBC00B !important;
+    box-shadow: 0px 5px 5px rgb(47, 74, 78);
+}
+.laptop {
+  left: 50%;
+  top: 50%;
+  transform: translate(13.5vw, -75vh);
+  z-index: -1;
+}
+.keyboard {
+  left: 50%;
+  top: 50%;
+  transform: translate(-24vw, -65vh);
+  z-index: -1;
+}
+.btn-back {
+    transform: translate(40vh, 45vh) !important;
+}
+.back-btn:hover{
+    box-shadow: 0px 5px 5px rgb(47, 74, 78);
+}
+/* some mobile settings */
+.mobile {
+    display: none;
+}
+.circle-mobile {
+    display: none;
+}
+.laptop-mobile {
+    display: none;
+}
+.keyboard-mobile{
+    display: none;
+}
+
+.forgot:hover {
+  color: #DBC00B !important;
+}
+/* ----------END (LOGIN)--------- */
+/* ------LOGIN MOBILE CSS------- */
+@media only screen and (max-width: 1024px) {
+  body {
+    background: #198754 !important;
+    /* overflow: cli !important; */
+  }
+  .center {
+      display: none;
+  }
+  .mobile{
+      display: unset;
+      position: absolute;
+      top:50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+  .circle-mobile {
+      display: unset;
+      position: absolute;
+      top: -4pt;
+  left: 50%;
+  transform: translate(-90pt, -50pt);
+      background: linear-gradient( rgb(220, 241, 240), #088551);
+  min-width: 2.5in;
+  height: 1.5in;
+  border-radius: 7in;
+  box-shadow: 0 2px 7px rgb(47, 74, 78);
+  }
+  .login-title-mob {
+      position: absolute;
+    top: 1in;
+  left: 50pt;
+  /* transform: translate(1px, 1px); */
+  }
+  .laptop-mobile {
+      width: 50px;
+      position: absolute;
+      display: unset;
+      transform: translate(45vw, -6vh) !important;
+      z-index: -1;
+  }
+  .keyboard-mobile {
+      width: 50px;
+      display: unset;
+        transform: translate(-40vw, 2vh) !important;
+      z-index: -1;
+  }
+  .btn-back {
+      transform: translate(5vw, 80vh) !important;
+  }
+
+  footer >p {
+    color: #f1fcff !important;
+  }
+/* --------END LOGIN MOBILE--------- */

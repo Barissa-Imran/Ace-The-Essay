@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
+    <title>Writer</title>
+    <style>
+    .alert-error {
+      background: #dc3545;
+      color: #fff;
+    }
+    </style>
+  </head>
+  <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
+    <!-- navbar here -->
+    <!-- Sidebar menu -->
+    <div class="sidebar-container">
+      <div class="sidebar-logo">Writer Dashboard</div>
+      <ul class="sidebar-navigation">
+        <li class="header">Navigation</li>
+        <li>
+          <a href="{% url 'writer' %}">
+            <i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'projects' %}">
+            <i class="fa fa-box" aria-hidden="true"></i> Projects
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'invoices' %}">
+            <i class="fa fa-wallet" aria-hidden="true"></i> Invoices
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'reports' %}">
+            <i class="fa fa-chart-pie" aria-hidden="true"></i> Reports
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'settings' %}">
+            <i class="fa fa-cog" aria-hidden="true"></i> Settings
+          </a>
+        </li>
+      </ul>
+      {% if user.is_authenticated %}
+      <a
+        href="{% url 'logout' %}"
+        class="text-white mx-5 my-3 btn btn-warning"
+        style="text-decoration: none"
+        role="button"
+      >
+        <i class="fa fa-sign-out-alt"></i> log out
+      </a>
+      {% else %}
+      <a
+        href="{% url 'login' %}"
+        class="text-white mx-5 my-3 btn btn-warning"
+        style="text-decoration: none"
+        role="button"
+      >
+        <i class="fa fa-sign-out-alt"></i> log in
+      </a>
+      {% endif %}
+      <div class="help mx-4 my-4">
+        <p>
+          Having trouble? <br />
+          <a href="#contact">Contact us</a>
+        </p>
+      </div>
+      <!-- copyright section -->
+      <p
+        class="d-flex flex-column text-white text-center badge mt-5 text-center"
+        style="
+          box-shadow: inset 0 -1px 3px #0000009d, inset 0 1px 3px #0000009d;
+        "
+      >
+        2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a
+          class="text-warning"
+          href="#portfolio"
+          style="text-decoration: none"
+          >Barrylabs</a
+        >
+      </p>
+      <!-- end of copyright -->
+    </div>
+    <div class="content-container">
+      <div class="container-fluid">
+        <!-- navbar area -->
+        <nav class="navbar">
+          <div class="navbar-brand text-dark">
+            <a
+              href="{% url 'writer' %}"
+              style="text-decoration: none; font-size: medium"
+              class="text-dark"
+              ><i class="fa fa-arrow-left m-2"></i> back</a
+            >
+          </div>
+          <div class="form-group has-search">
+            <input
+              type="text"
+              name="search"
+              id="project"
+              class="form-control"
+              placeholder="Search for projects"
+              style="
+                border: none;
+                background-color: #cfe2eb9f;
+                padding: 5px;
+                border-radius: 10px;
+                font-size: small;
+              "
+            />
+          </div>
+        </nav>
+
+        <!-- content area -->
+        {% if messages %} 
+          {% for message in messages %}
+            <div class="alert alert-{{message.tags}}">{{ message }}</div>
+          {% endfor %}
+        {% endif %} 
+        
+        {% block content %} {% endblock content%}
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script src="{% static 'js/writer.js' %}"></script>
+  </body>
+</html>
