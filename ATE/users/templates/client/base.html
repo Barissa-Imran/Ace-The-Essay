@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
     <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Writer</title>
+    <title>ATE - Client</title>
     <style>
     .alert-error {
       background: #dc3545;
@@ -32,31 +32,36 @@
     <!-- navbar here -->
     <!-- Sidebar menu -->
     <div class="sidebar-container">
-      <div class="sidebar-logo">Writer Dashboard</div>
+      <div class="sidebar-logo">Client Dashboard</div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
         <li>
-          <a href="{% url 'writer' %}">
+          <a href="{% url 'client' %}">
             <i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard
           </a>
         </li>
         <li>
-          <a href="{% url 'projects' %}">
+          <a href="{% url 'place_order' %}">
+            <i class="fa fa-share-square" aria-hidden="true"></i> Place Order
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'client_projects' %}">
             <i class="fa fa-box" aria-hidden="true"></i> Projects
           </a>
         </li>
         <li>
-          <a href="{% url 'invoices' %}">
+          <a href="{% url 'client_invoices' %}">
             <i class="fa fa-wallet" aria-hidden="true"></i> Invoices
           </a>
         </li>
         <li>
-          <a href="{% url 'reports' %}">
+          <a href="{% url 'client_reports' %}">
             <i class="fa fa-chart-pie" aria-hidden="true"></i> Reports
           </a>
         </li>
         <li>
-          <a href="{% url 'settings' %}">
+          <a href="{% url 'client_settings' %}">
             <i class="fa fa-cog" aria-hidden="true"></i> Settings
           </a>
         </li>
@@ -108,7 +113,7 @@
         <nav class="navbar">
           <div class="navbar-brand text-dark">
             <a
-              href="{% url 'writer' %}"
+              href="{% url 'client' %}"
               style="text-decoration: none; font-size: medium"
               class="text-dark"
               ><i class="fa fa-arrow-left m-2"></i> back</a

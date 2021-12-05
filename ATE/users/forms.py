@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import fields
-from .models import Profile
+from .models import Profile, ProjectOrder, Applicant
 
 # Company registration page registration form
 
@@ -36,3 +35,20 @@ class ProfileUpdateForm(forms.ModelForm):
 
 class EmailApplicationForm(forms.Form):
     email = forms.EmailField(required=True)
+
+# client Project order form----------------
+# view admin.py for admin form
+class ProjectOrderForm(forms.ModelForm):
+    class Meta:
+        model = ProjectOrder
+        fields = '__all__'
+
+# Applicant writer form
+class ApplicantForm(forms.ModelForm):
+    class Meta:
+        model = Applicant
+        fields = '__all__'
+
+# Task form to upload test document on
+class TaskForm(forms.Form):
+    test_task = forms.FileField(help_text='Upload the completed test task here')

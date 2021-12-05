@@ -20,44 +20,29 @@
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
     <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Writer</title>
+    <title>ATE - Applicant</title>
     <style>
-    .alert-error {
-      background: #dc3545;
-      color: #fff;
-    }
+      .alert-error {
+        background: #dc3545;
+        color: #fff;
+      }
     </style>
   </head>
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
     <!-- navbar here -->
     <!-- Sidebar menu -->
     <div class="sidebar-container">
-      <div class="sidebar-logo">Writer Dashboard</div>
+      <div class="sidebar-logo">Applicant</div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
         <li>
-          <a href="{% url 'writer' %}">
-            <i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard
+          <a href="{% url 'application' %}">
+            <i class="fa fa-signature" aria-hidden="true"></i> Application
           </a>
         </li>
         <li>
-          <a href="{% url 'projects' %}">
-            <i class="fa fa-box" aria-hidden="true"></i> Projects
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'invoices' %}">
-            <i class="fa fa-wallet" aria-hidden="true"></i> Invoices
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'reports' %}">
-            <i class="fa fa-chart-pie" aria-hidden="true"></i> Reports
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'settings' %}">
-            <i class="fa fa-cog" aria-hidden="true"></i> Settings
+          <a href="{% url 'application_task' %}">
+            <i class="fa fa-file" aria-hidden="true"></i> Test Task
           </a>
         </li>
       </ul>
@@ -108,38 +93,34 @@
         <nav class="navbar">
           <div class="navbar-brand text-dark">
             <a
-              href="{% url 'writer' %}"
+              href="{% url 'index' %}"
               style="text-decoration: none; font-size: medium"
               class="text-dark"
-              ><i class="fa fa-arrow-left m-2"></i> back</a
+              ><i class="fa fa-arrow-left m-2"></i> Home Logo</a
             >
           </div>
-          <div class="form-group has-search">
-            <input
-              type="text"
-              name="search"
-              id="project"
-              class="form-control"
-              placeholder="Search for projects"
-              style="
-                border: none;
-                background-color: #cfe2eb9f;
-                padding: 5px;
-                border-radius: 10px;
-                font-size: small;
-              "
-            />
+          <div class="dropdown show">
+            <a
+              class="btn btn-light dropdown-toggle"
+              href="#"
+              role="button"
+              id="dropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {{user.username}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'logout' %}">Log out <i class="fa fa-power-off"></i></a>
+            </div>
           </div>
         </nav>
 
         <!-- content area -->
-        {% if messages %} 
-          {% for message in messages %}
-            <div class="alert alert-{{message.tags}}">{{ message }}</div>
-          {% endfor %}
-        {% endif %} 
-        
-        {% block content %} {% endblock content%}
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{ message }}</div>
+        {% endfor %} {% endif %} {% block content %} {% endblock content%}
       </div>
     </div>
     <script

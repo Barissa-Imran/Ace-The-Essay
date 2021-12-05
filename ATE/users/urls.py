@@ -23,8 +23,8 @@ urlpatterns = [
         name="password_reset_complete"),
 
     # Landing pages
-    path("application", user_views.application, name="application"),
-    path("client", user_views.client, name="client"),
+    path("applicant/application", user_views.application, name="application"),
+    path("applicant/application-task", user_views.application_task, name="application_task"),
 
     # Writer Dashboard pages urls
     path("writer", user_views.writer, name="writer"),
@@ -32,5 +32,13 @@ urlpatterns = [
     path("invoices", user_views.invoices, name="invoices"),
     path("reports", user_views.reports, name="reports"),
     path("settings", user_views.settings, name="settings"),
-    path("settings/profile", user_views.profile, name="profile"),
+    # path("settings/profile", user_views.profile, name="profile"),
+
+    # Client Dashboard pages urls
+    path("client", user_views.client, name="client"),
+    path("client/place-order", user_views.place_order, name="place_order"),
+    path("client/invoices", user_views.client_invoices, name="client_invoices"),
+    path("client/projects", user_views.client_projects, name="client_projects"),
+    path("client/reports", user_views.client_reports, name="client_reports"),
+    path("client/settings", user_views.client_settings, name="client_settings"),
 ]

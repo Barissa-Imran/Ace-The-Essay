@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,37 +20,48 @@
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
     <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Writer</title>
+    <title>ATE - Client</title>
+    <style>
+    .alert-error {
+      background: #dc3545;
+      color: #fff;
+    }
+    </style>
   </head>
-  {% if user.is_authenticated %}
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
+    <!-- navbar here -->
     <!-- Sidebar menu -->
     <div class="sidebar-container">
-      <div class="sidebar-logo">Writer Dashboard</div>
+      <div class="sidebar-logo">Client Dashboard</div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
         <li>
-          <a href="{% url 'writer' %}">
+          <a href="{% url 'client' %}">
             <i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard
           </a>
         </li>
         <li>
-          <a href="{% url 'projects' %}">
+          <a href="{% url 'place_order' %}">
+            <i class="fa fa-share-square" aria-hidden="true"></i> Place Order
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'client_projects' %}">
             <i class="fa fa-box" aria-hidden="true"></i> Projects
           </a>
         </li>
         <li>
-          <a href="{% url 'invoices' %}">
+          <a href="{% url 'client_invoices' %}">
             <i class="fa fa-wallet" aria-hidden="true"></i> Invoices
           </a>
         </li>
         <li>
-          <a href="{% url 'reports' %}">
+          <a href="{% url 'client_reports' %}">
             <i class="fa fa-chart-pie" aria-hidden="true"></i> Reports
           </a>
         </li>
         <li>
-          <a href="{% url 'settings' %}">
+          <a href="{% url 'client_settings' %}">
             <i class="fa fa-cog" aria-hidden="true"></i> Settings
           </a>
         </li>
@@ -72,18 +82,17 @@
       </div>
       <!-- copyright section -->
       <p
-        class="
-          d-flex
-          flex-column
-          text-white
-          text-center
-          badge
-          mt-5
-          text-center
+        class="d-flex flex-column text-white text-center badge mt-5 text-center"
+        style="
+          box-shadow: inset 0 -1px 3px #0000009d, inset 0 1px 3px #0000009d;
         "
-        style=" box-shadow: inset 0 -1px 3px #0000009d ,inset 0 1px 3px #0000009d;"
       >
-        2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a class="text-warning" href="#portfolio" style="text-decoration: none;">Barrylabs</a>
+        2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a
+          class="text-warning"
+          href="#portfolio"
+          style="text-decoration: none"
+          >Barrylabs</a
+        >
       </p>
       <!-- end of copyright -->
     </div>
@@ -258,7 +267,7 @@
                   <div class="d-flex justify-content-between">
                     <i class="fa fa-image mt-3"></i>
                     <span class="px-2"
-                      ><p>Client name<br /><span>Company name</span></p></span
+                      ><p>Writer name<br /><span>project title</span></p></span
                     >
                     <p class="badge bg-danger" style=" height: fit-content;">
                       late
@@ -269,7 +278,7 @@
                   <div class="d-flex justify-content-between">
                     <i class="fa fa-image mt-3"></i>
                     <span class="px-2"
-                      ><p>Client name<br /><span>Company name</span></p></span
+                      ><p>Writer name<br /><span>project name</span></p></span
                     >
                     <p class="badge bg-success" style="height: fit-content;">
                       paid
@@ -293,7 +302,7 @@
                 <i class="fa fa-hashtag p-3" style="font-size: xx-large"></i>
                 <span class="pt-2">
                   <p>
-                    Engage with clients<br /><span style="color: #f5fcff"
+                    Engage with writers<br /><span style="color: #f5fcff"
                       >Join our message board</span
                     >
                   </p>
@@ -318,9 +327,10 @@
               style="color: #198787; font-size: small; font-weight: 600"
               class="my-3"
             >
-              Recommended Project
+              Recommended Writers
             </p>
-                  <div
+            <a class="btn" href="#writer-detail-url" role="button">
+            <div
               class="p-3"
               style="
                 border-radius: 10px;
@@ -332,30 +342,25 @@
                 <i class="fa fa-image mt-3"></i>
                 <span class="px-2"
                   ><p>
-                    Client name<br /><span>Updated time</span>
+                    Writer name<br /><span>Last login</span>
                   </p></span
                 >
                 <p class="badge bg-warning mt-2" style="height: fit-content;">category</p>
               </div>
-              <p>project title here</p>
-              <p>project description goes here</p>
+              <p>writer Projects counter</p>
+              <p>best project</p>
               <span class="d-flex justify-content-between p-2" style="background-color: whitesmoke; border-radius: 10px">
                   <p>
-                  ${{price|default:"0"}}/month
+                  ${{price|default:"0"}}/page
                   </p>
                   <p class="text-warning p-1" style="border: 1px solid #ffc107; border-radius: 25px;">full time</p>
               </span>
             </div>
+            </a>
           </div>
         </section>
       </div>
     </div>
-    {% else %}
-    <div>
-    <p class="alert alert-danger">Sign in to access this page</p>
-    <a class="btn btn-warning m-2" href="{% url 'login' %}">Sign in</a>
-    </div>
-    {% endif %}
     <script
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
