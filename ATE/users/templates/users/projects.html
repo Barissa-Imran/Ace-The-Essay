@@ -3,6 +3,7 @@
   Suggested Projects
 </p>
 <section class="row row-cols-1 p-2">
+  {% for project in projects %}
   <div
     class="col p-1 mt-2"
     style="
@@ -12,47 +13,48 @@
   >
     <div class="accordion accordion-flush" id="accordionFlushExample">
       <div class="accordion-item py-4" style="background: none">
-        <h2 class="accordion-header" id="flush-headingOne">
+        <h2 class="accordion-header" id="flush-heading{{ project.id }}">
           <button
             class="accordion-button collapsed"
             style="background: none"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#flush-collapseOne"
+            data-bs-target="#flush-collapse{{ project.id }}"
             aria-expanded="false"
-            aria-controls="flush-collapseOne"
+            aria-controls="flush-collapse{{ project.id }}"
           >
             <div class="d-flex">
               <i class="fa fa-image mt-3"></i>
               <span class="px-4"
                 ><p>
-                  Project name<br /><span class="badge bg-danger m-2"
+                  {{project.title}}<br /><span class="badge bg-danger m-2"
                     >Category</span
-                  ><a href="{% url 'writer' %}" class="text-dark client-name" style="text-decoration: none; z-index: 2;">Client name</a>
+                  ><a href="{% url 'writer' %}" class="text-dark client-name" style="text-decoration: none; z-index: 2;">{{project.username}}</a>
                 </p></span
               >
             </div>
           </button>
         </h2>
         <div
-          id="flush-collapseOne"
+          id="flush-collapse{{ project.id }}"
           class="accordion-collapse collapse"
-          aria-labelledby="flush-headingOne"
+          aria-labelledby="flush-heading{{ project.id }}"
           data-bs-parent="#accordionFlushExample"
         >
           <div class="accordion-body">
             <p style="font-size: small">
-              {{project.description|default:'This project does not have a description'}}
+              {{ project.paper_instructions|default:'This project does not have a description'}}
             </p>
             <span
               class="d-flex justify-content-between p-2"
               style="background-color: whitesmoke; border-radius: 10px"
             >
-              <p style="font-weight: 600">${{price|default:"0"}}/month</p>
+              <p style="font-weight: 600">${{project.price|default:"0"}}/month</p>
               <span>
                 <a
                   class="btn btn-outline-success p-2"
-                  href="#viewdetails"
+                  {% comment %} fix this url {% endcomment %}
+                  href="#"
                   style="height: fit-content; font-size: small"
                   >view details</a
                 >
@@ -65,7 +67,7 @@
                     font-size: small;
                     font-weight: 600;
                   "
-                  >Apply now</a
+                  >Bid</a
                 >
               </span>
             </span>
@@ -74,5 +76,6 @@
       </div>
     </div>
   </div>
+  {% endfor %}
 </section>
 {% endblock content %}

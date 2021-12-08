@@ -7,8 +7,11 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User, Group
 from .forms import EmailApplicationForm, UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ProjectOrderForm, ApplicantForm, TaskForm
 from .models import ProjectOrder
+# Class based views
+from django.views.generic import ListView, DetailView
 
 from decouple import config
+
 # To be used in password creation
 import random
 import string
@@ -101,10 +104,14 @@ def apply(request):
 
 @login_required
 def application(request):
+    user1 = request.user
     if request.method == "POST":
-        form = ApplicantForm(request.post)
+        form = ApplicantForm(request.POST,
+                             request.FILES)
         if form.is_valid():
-            form.save()
+            new_form = form.save(commit=False)
+            new_form.username = request.user
+            new_form.save()
             messages.success(
                 request, 'Your application has been sent successfully! Please proceed to the TASK page')
     else:
@@ -112,19 +119,24 @@ def application(request):
 
     context = {
         'Applicantform': form,
+        'user': user1,
     }
     return render(request, 'applicant/application.html', context)
+
 
 @login_required
 def application_task(request):
     form = TaskForm(request.POST,
-                      request.FILES)
+                    request.FILES)
     if form.is_valid():
-        form.save()
-        messages.success(request, "Task has been uploaded successfully! Please wait for feedback in the next 24hrs")
+        new_form = form.save(commit=False)
+        new_form.username = request.user
+        new_form.save()
+        messages.success(
+            request, "Task has been uploaded successfully! Please wait for feedback in the next 3-6 business days or sooner")
     else:
         form = TaskForm()
-
+        messages.info(request, 'You can only upload a task once, please be thorough!')
     return render(request, 'applicant/application_task.html', {'form': form})
 # register page view
 
@@ -153,18 +165,18 @@ def register(request):
 @login_required
 def writer(request):
     context = {
-        'ProjectOrders': ProjectOrder.objects.all()
+        'projects': ProjectOrder.objects.all()
     }
     # redirect the user according to user group
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
     if usergroup == "Writers":
-        return HttpResponseRedirect('writer', context)
+        return render(request, 'users/writer.html', context)
     elif usergroup == "Applicants":
-        return HttpResponseRedirect('application')
+        return HttpResponseRedirect('applicant/application')
     elif usergroup == "Clients":
         # check to see if it's first login then redirect to order page
-        return HttpResponseRedirect('client')
+        return HttpResponseRedirect('client/client')
     else:
         messages.info(
             request, "you have been logged in but can't be redirected to the correct page, contact admin!!")
@@ -174,15 +186,15 @@ def writer(request):
 
 # main view
 
-
+# Display projects writer is working on
 @login_required
 def projects(request):
     context = {
-        'ProjectOrders': ProjectOrder.objects.all()
+        'projects': ProjectOrder.objects.all()
     }
     return render(request, 'users/Projects.html', context)
 
-
+# Displays all projects created and active
 def all_projects(request):
     context = {
         'ProjectOrders': ProjectOrder.objects.all()
@@ -260,6 +272,8 @@ def place_order(request):
     }
     return render(request, 'client/place_order.html', context)
 
+class ProjectDetailView(DetailView):
+    model = ProjectOrder
 
 @login_required
 def client_projects(request):

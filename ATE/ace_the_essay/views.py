@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
-
+from django.contrib import messages
+from .forms import ContactForm
 class HomeView(TemplateView):
     template_name = "core.html"
 
@@ -33,3 +34,17 @@ def TC(request):
 def HIW(request):
     return render(request, "ace_the_essay/hiw.html")
 
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # send email to support here
+            messages.success(request, 'Your message has been sent succefully')
+    else:
+        form = ContactForm()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, "ace_the_essay/contact.html", context)

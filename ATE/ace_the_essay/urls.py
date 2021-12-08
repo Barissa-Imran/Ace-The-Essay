@@ -5,10 +5,11 @@ from .import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("whyus", views.whyus, name="whyus"),
-    path("Termsofpayment", views.top, name="top"),
+    path("Terms-of-payment", views.top, name="top"),
     path("FAQ", views.faq, name="faq"),
-    path("Revisionpolicy", views.revision_policy, name="revision-policy"),
-    path("Privacypolicy", views.privacy_policy, name="privacy-policy"),
+    path("Revision-policy", views.revision_policy, name="revision-policy"),
+    path("Privacy-policy", views.privacy_policy, name="privacy-policy"),
     path("T&C", views.TC, name="TC"),
-    path("HIW", views.HIW, name="HIW"),
+    path("How-it-works", views.HIW, name="HIW"),
+    path("contact-us", views.contact, name="contact"),
 ]

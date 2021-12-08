@@ -11,7 +11,7 @@
       rel="stylesheet"
       href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
     />
-        <link
+    <link
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,300&display=swap"
       rel="stylesheet"
     />
@@ -20,13 +20,19 @@
     <link rel="shortcut icon" href="#" type="image/x-icon" />
     <title>ATE</title>
     <style>
-    .alert-error {
-      background: #dc3545;
-      color: #fff;
-    }
+      .alert-error {
+        background: #dc3545;
+        color: #fff;
+      }
     </style>
   </head>
-  <body style="background: #f5fcff; overflow-x: hidden; font-family: 'Poppins', sans-serif">
+  <body
+    style="
+      background: #f5fcff;
+      overflow-x: hidden;
+      font-family: 'Poppins', sans-serif;
+    "
+  >
     <!-- Navigation bar section -->
     <nav class="navbar navbar-default navbar-expand-md" role="navigation">
       <div class="container-fluid">
@@ -80,14 +86,9 @@
         >
       </div>
     </nav>
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{{message.tags}}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-    {% block content %}{% endblock content %}
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{message.tags}}">{{ message }}</div>
+    {% endfor %} {% endif %} {% block content %}{% endblock content %}
     <footer class="" style="background: #b7c8cc">
       <nav class="navbar d-flex flex-row justify-content-start container">
         <ul class="list-unstyled">
@@ -133,6 +134,15 @@
               class="text-decoration-none nav-link text-white"
               href="{% url 'faq' %}"
               ><strong>Frequently Asked Questions</strong></a
+            >
+          </li>
+        </ul>
+        <ul class="list-unstyled">
+          <li class="nav-item">
+            <a
+              class="text-decoration-none nav-link text-white"
+              href="{% url 'contact' %}"
+              ><strong>Contact Us</strong></a
             >
           </li>
         </ul>

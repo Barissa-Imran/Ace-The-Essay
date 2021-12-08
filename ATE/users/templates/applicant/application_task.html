@@ -9,8 +9,11 @@
     Please note that this task will determine whether you're fit for
     <b>AceTheEssay.com</b> or not
   </p>
-  <p>Task: <a href="#file" target="_blank" rel="noopener noreferrer">Test task</a><p>
-  <form method="POST">
+  <p>
+    Please note that you're to follow instructions as indicated on the <a href="{% url 'faq' %}" class="text-warning">FAQ</a> page
+  </p>
+  <p>Task: <a href="#file" target="_blank" rel="noopener noreferrer" class="text-danger">Test task</a><p>
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <fieldset class="form_group m-4 p-4">
       <legend class="border-bottom mb-4 lead">Finished Test Task</legend>

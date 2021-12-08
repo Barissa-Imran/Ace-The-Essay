@@ -1,0 +1,16 @@
+{% extends 'users/base.html' %}
+{% block content %}
+
+<section class="media content-section">
+    <img src="{{ object.username.profile.image }}" alt="" class="rounded-circle article-img">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a href="#" class="mr-2">{{ object.username }}</a>
+            <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+        </div>
+        <h2 class="project-title">{{ object.title }}</h2>
+        <p class="project-content">{{ object.paper_instructions }}</p>
+    </div>
+</section>
+
+{% endblock content %}

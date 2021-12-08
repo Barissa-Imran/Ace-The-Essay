@@ -26,6 +26,9 @@ urlpatterns = [
     path("applicant/application", user_views.application, name="application"),
     path("applicant/application-task", user_views.application_task, name="application_task"),
 
+    # Project detail view
+    path("project/<int:pk>", user_views.ProjectDetailView.as_view(), name="project-detail"), #fix this to show the project
+
     # Writer Dashboard pages urls
     path("writer", user_views.writer, name="writer"),
     path("projects", user_views.projects, name="projects"),

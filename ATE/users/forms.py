@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, ProjectOrder, Applicant
+from .models import Profile, ProjectOrder, Applicant, TestTask
+
+
 
 # Company registration page registration form
 
@@ -38,17 +40,45 @@ class EmailApplicationForm(forms.Form):
 
 # client Project order form----------------
 # view admin.py for admin form
+
+
 class ProjectOrderForm(forms.ModelForm):
     class Meta:
         model = ProjectOrder
-        fields = '__all__'
+        fields = [
+            'academic_level', 
+            'type_of_paper',
+             'subject_area', 
+             'title',
+             'paper_instructions',
+             'Additional_materials',
+             'paper_format',
+             'number_of_pages',
+             'spacing',
+             'currency',
+             'date_posted',
+            ]
 
 # Applicant writer form
+
+
 class ApplicantForm(forms.ModelForm):
     class Meta:
         model = Applicant
-        fields = '__all__'
+        fields = [
+            'First_Name',
+            'Last_Name',
+            'Identification',
+            'photo_id',
+            'Highest_Level_of_Education',
+            'CourseField_of_Study',
+            'CV',
+        ]
 
 # Task form to upload test document on
-class TaskForm(forms.Form):
-    test_task = forms.FileField(help_text='Upload the completed test task here')
+
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = TestTask
+        fields = ['test_task']

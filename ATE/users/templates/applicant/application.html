@@ -1,19 +1,24 @@
 {% extends 'applicant/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-
+  {% comment %} {% if user.groups.filter(name='Applicants').exists() or user.groups.filter(name='Admin').exists() %} {% endcomment %}
 <div class="content-section m-5">
-
-  <form method="POST">
+<h3>Application</h3>
+  <p class="bg-light">
+    fill in the fields as indicated. Please note that you're to follow instructions as indicated on the <a href="{% url 'faq' %}" class="text-warning">FAQ</a> page
+  </p>
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <fieldset class="form_group m-4 p-4">
-      <legend class="border-bottom mb-4 lead">Application</legend>
+      <legend class="border-bottom mb-4 lead">Application form</legend>
       {{ Applicantform|crispy }}
     </fieldset>
     <div class="form-group mb-2 mx-5">
-      <button class="btn btn-outline-warning" type="submit">Submit</button>
+      <button class="btn btn-outline-warning" type="submit" role="button">Submit</button>
     </div>
   </form>
 </div>
-
+{% comment %} {% else %}
+        <div class="alert alert-error">You are logged in but do not have permission to view this page!</div>
+  {% endif %} {% endcomment %}
 {% endblock content %}
