@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+sys.path.append('/users/programming/ATE')
+sys.path.append('/users/programming/Ace-The-Essay/ATE')
 
 from django.core.wsgi import get_wsgi_application
 
