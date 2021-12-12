@@ -17,11 +17,11 @@
         ><b>APPLY NOW</b></a
       >
     </header>
-    <section class="container d-flex justify-content-center">
+    <section class="container d-flex justify-content-center mt-2">
       <form method="POST" class="bg-info" style="width: fit-content">
         {% csrf_token %}
         <fieldset class="form_group m-4 p-4">
-          <legend class="border-bottom mb-4 lead">contact us</legend>
+          <legend class="border-bottom mb-4 lead">Contact Us</legend>
           {{ form|crispy }}
         </fieldset>
         <div class="form-group mb-2 mx-5">

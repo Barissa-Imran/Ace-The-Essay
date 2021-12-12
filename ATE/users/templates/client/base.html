@@ -22,10 +22,10 @@
     <link rel="shortcut icon" href="#" type="image/x-icon" />
     <title>ATE - Client</title>
     <style>
-    .alert-error {
-      background: #dc3545;
-      color: #fff;
-    }
+      .alert-error {
+        background: #dc3545;
+        color: #fff;
+      }
     </style>
   </head>
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
@@ -47,7 +47,12 @@
         </li>
         <li>
           <a href="{% url 'client_projects' %}">
-            <i class="fa fa-box" aria-hidden="true"></i> Projects
+            <i class="fa fa-clipboard-list" aria-hidden="true"></i> Projects
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'client_bids' %}">
+            <i class="fa fa-hammer" aria-hidden="true"></i> Bids
           </a>
         </li>
         <li>
@@ -138,18 +143,18 @@
         </nav>
 
         <!-- content area -->
-        {% if messages %} 
-          {% for message in messages %}
-            <div class="alert alert-{{message.tags}}">{{ message }}</div>
-          {% endfor %}
-        {% endif %} 
-        
-        {% block content %} {% endblock content%}
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">{{ message }}</div>
+        {% endfor %} {% endif %} {% block content %} {% endblock content%}
       </div>
     </div>
     <script
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
     <script src="{% static 'js/writer.js' %}"></script>
   </body>

@@ -22,10 +22,10 @@
     <link rel="shortcut icon" href="#" type="image/x-icon" />
     <title>ATE - Client</title>
     <style>
-    .alert-error {
-      background: #dc3545;
-      color: #fff;
-    }
+      .alert-error {
+        background: #dc3545;
+        color: #fff;
+      }
     </style>
   </head>
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
@@ -47,7 +47,12 @@
         </li>
         <li>
           <a href="{% url 'client_projects' %}">
-            <i class="fa fa-box" aria-hidden="true"></i> Projects
+            <i class="fa fa-clipboard-list" aria-hidden="true"></i> Projects
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'client_bids' %}">
+            <i class="fa fa-hammer" aria-hidden="true"></i> Bids
           </a>
         </li>
         <li>
@@ -269,7 +274,7 @@
                     <span class="px-2"
                       ><p>Writer name<br /><span>project title</span></p></span
                     >
-                    <p class="badge bg-danger" style=" height: fit-content;">
+                    <p class="badge bg-danger" style="height: fit-content">
                       late
                     </p>
                     <p>${{paid|default:"0"}}</p>
@@ -280,7 +285,7 @@
                     <span class="px-2"
                       ><p>Writer name<br /><span>project name</span></p></span
                     >
-                    <p class="badge bg-success" style="height: fit-content;">
+                    <p class="badge bg-success" style="height: fit-content">
                       paid
                     </p>
                     <p>${{paid|default:"0"}}</p>
@@ -330,32 +335,38 @@
               Recommended Writers
             </p>
             <a class="btn" href="#writer-detail-url" role="button">
-            <div
-              class="p-3"
-              style="
-                border-radius: 10px;
-                box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
-              "
-            >
-            <!-- header section -->
-              <div class="d-flex justify-content-between">
-                <i class="fa fa-image mt-3"></i>
-                <span class="px-2"
-                  ><p>
-                    Writer name<br /><span>Last login</span>
-                  </p></span
-                >
-                <p class="badge bg-warning mt-2" style="height: fit-content;">category</p>
-              </div>
-              <p>writer Projects counter</p>
-              <p>best project</p>
-              <span class="d-flex justify-content-between p-2" style="background-color: whitesmoke; border-radius: 10px">
-                  <p>
-                  ${{price|default:"0"}}/page
+              <div
+                class="p-3"
+                style="
+                  border-radius: 10px;
+                  box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
+                "
+              >
+                <!-- header section -->
+                <div class="d-flex justify-content-between">
+                  <i class="fa fa-image mt-3"></i>
+                  <span class="px-2"
+                    ><p>Writer name<br /><span>Last login</span></p></span
+                  >
+                  <p class="badge bg-warning mt-2" style="height: fit-content">
+                    category
                   </p>
-                  <p class="text-warning p-1" style="border: 1px solid #ffc107; border-radius: 25px;">full time</p>
-              </span>
-            </div>
+                </div>
+                <p>writer Projects counter</p>
+                <p>best project</p>
+                <span
+                  class="d-flex justify-content-between p-2"
+                  style="background-color: whitesmoke; border-radius: 10px"
+                >
+                  <p>${{price|default:"0"}}/page</p>
+                  <p
+                    class="text-warning p-1"
+                    style="border: 1px solid #ffc107; border-radius: 25px"
+                  >
+                    full time
+                  </p>
+                </span>
+              </div>
             </a>
           </div>
         </section>
@@ -364,6 +375,10 @@
     <script
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
     <script src="{% static 'js/writer.js' %}"></script>
   </body>

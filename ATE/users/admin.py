@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django import forms
-from .models import Applicant, Profile, ProjectOrder
+from .models import Applicant, Profile, ProjectOrder, Bid
 
 # custom project order form with price field editable
 
@@ -21,3 +21,4 @@ class ProjectOrderAdmin(admin.ModelAdmin):
 admin.site.register(Profile)
 admin.site.register(Applicant)
 admin.site.register(ProjectOrder, ProjectOrderAdmin)
+admin.site.register(Bid)

@@ -1,8 +1,16 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from PIL import Image
-from .choices import TYPE_OF_PAPER, PAPER_FORMAT, SUBJECT_CHOICES, ACADEMICS_LEVEL, HLE_CHOICES
+from .choices import (
+    TYPE_OF_PAPER,
+    PAPER_FORMAT,
+    SUBJECT_CHOICES,
+    ACADEMICS_LEVEL,
+    HLE_CHOICES
+)
+from django.shortcuts import reverse
 
 
 class Profile(models.Model):
@@ -33,7 +41,7 @@ class ProjectOrder(models.Model):
     paper_instructions = models.TextField()
     Additional_materials = models.FileField(
         null=True, blank=True,
-        # widge= models.ClearableFileInput(attrs={'multiple': True}),
+        # widget= models.ClearableFileInput(attrs={'multiple': True}),
         help_text='Please upload any additional files here! ZIP multiple files'
     )
     paper_format = models.CharField(max_length=50, choices=PAPER_FORMAT)
@@ -49,16 +57,20 @@ class ProjectOrder(models.Model):
         max_length=50, default='$', help_text='currency is always in US dollars')
     date_posted = models.DateTimeField(
         default=timezone.now, help_text="This is an automatically generated field, don't fill in")
-    # update_time = models.DateField(auto_now=True)
+    deadline = models.DateField(default=timezone.now)
+    update_time = models.DateField(auto_now=True)
     username = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.CASCADE)
-    # slug = models.SlugField(max_length=250,
-    #                         unique=True,
-    #                         help_text="unique value for project page url, contains project name"
-    #                         )
+    slug = models.SlugField(unique=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("project_detail", kwargs={
+            "slug": self.slug
+            })
 
     class Meta:
         ordering = ['-date_posted']
@@ -92,6 +104,29 @@ class Applicant(models.Model):
 
     def __str__(self):
         return self.First_Name
+
+
+class Bid(models.Model):
+    project = models.ForeignKey(ProjectOrder, on_delete=models.CASCADE)
+    made_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.project.title
+    class Meta:
+        ordering = ['-date']
+
+class CompleteTask(models.Model):
+    complete_task = models.FileField(
+        upload_to='finals',
+        help_text='upload the finished task here'
+    )
+    bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
 
 
 class TestTask(models.Model):

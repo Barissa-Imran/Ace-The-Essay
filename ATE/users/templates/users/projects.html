@@ -1,9 +1,10 @@
-{% extends 'users/base.html' %} {% block content %}
+{% extends 'users/base.html' %} 
+{% block content %}
 <p style="color: #198787; font-size: medium; font-weight: 600">
   Suggested Projects
 </p>
 <section class="row row-cols-1 p-2">
-  {% for project in projects %}
+{% for project in projects %}
   <div
     class="col p-1 mt-2"
     style="
@@ -29,7 +30,7 @@
                 ><p>
                   {{project.title}}<br /><span class="badge bg-danger m-2"
                     >Category</span
-                  ><a href="{% url 'writer' %}" class="text-dark client-name" style="text-decoration: none; z-index: 2;">{{project.username}}</a>
+                  ><a href="#writer" class="text-dark client-name" style="text-decoration: none; z-index: 2;">{{project.username}}</a>
                 </p></span
               >
             </div>
@@ -53,8 +54,7 @@
               <span>
                 <a
                   class="btn btn-outline-success p-2"
-                  {% comment %} fix this url {% endcomment %}
-                  href="#"
+                  href="{{ project.get_absolute_url }}"
                   style="height: fit-content; font-size: small"
                   >view details</a
                 >
@@ -76,6 +76,7 @@
       </div>
     </div>
   </div>
-  {% endfor %}
+
+{% endfor %}
 </section>
 {% endblock content %}

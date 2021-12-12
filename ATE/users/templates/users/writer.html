@@ -37,7 +37,12 @@
         </li>
         <li>
           <a href="{% url 'projects' %}">
-            <i class="fa fa-box" aria-hidden="true"></i> Projects
+            <i class="fa fa-clipboard-list" aria-hidden="true"></i> Projects
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'writer_bids' %}">
+            <i class="fa fa-hammer" aria-hidden="true"></i> Bids
           </a>
         </li>
         <li>
@@ -99,11 +104,12 @@
               >
             </p>
           </div>
-          <div class="form-group has-search">
+          <form class="form-group has-search" method="GET" action="search/results/">
+            <label for="q">
             <input
               type="text"
-              name="search"
-              id="project"
+              name="q"
+              id="q"
               class="form-control"
               placeholder="Search for projects"
               style="
@@ -114,7 +120,10 @@
                 font-size: small;
               "
             />
-          </div>
+            {% comment %} <input
+            type="submit"
+            value="Search"
+           /> {% endcomment %}
         </nav>
         <!-- content area -->
         <section class="row">
@@ -217,7 +226,7 @@
                 <a href="#profile">{{ project.username.image }}</a>
                 <span class="px-2"
                   ><p>
-                    <a href="#permalink" style="text-decoration: none"
+                    <a href="{{ project.get_absolute_url }}" style="text-decoration: none"
                       >{{ project.title }}</a
                     ><br /><span>{{ project.date_posted|date:"F d, Y" }}</span>
                   </p></span
@@ -362,6 +371,10 @@
     <script
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
     <script src="{% static 'js/writer.js' %}"></script>
   </body>

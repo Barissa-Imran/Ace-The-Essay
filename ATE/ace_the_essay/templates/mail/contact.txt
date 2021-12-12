@@ -1,0 +1,13 @@
+This message was sent from the contact us page.
+
+Name: {{ name }}
+
+Email: {{ email }}
+
+Subject: {{ subject }}
+
+Message:||
+{{ message }}
+
+regards,
+the ATE team.

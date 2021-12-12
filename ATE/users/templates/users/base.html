@@ -42,7 +42,12 @@
         </li>
         <li>
           <a href="{% url 'projects' %}">
-            <i class="fa fa-box" aria-hidden="true"></i> Projects
+            <i class="fa fa-clipboard-list" aria-hidden="true"></i> Projects
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'writer_bids' %}">
+            <i class="fa fa-hammer" aria-hidden="true"></i> Bids
           </a>
         </li>
         <li>
@@ -114,11 +119,12 @@
               ><i class="fa fa-arrow-left m-2"></i> back</a
             >
           </div>
-          <div class="form-group has-search">
+          <form class="form-group has-search" method="GET" action="search/results/">
+            <label for="q">
             <input
               type="text"
-              name="search"
-              id="project"
+              name="q"
+              id="q"
               class="form-control"
               placeholder="Search for projects"
               style="
@@ -129,7 +135,11 @@
                 font-size: small;
               "
             />
-          </div>
+            {% comment %} <input
+            type="submit"
+            value="Search"
+           /> {% endcomment %}
+          </form>
         </nav>
 
         <!-- content area -->
@@ -145,6 +155,10 @@
     <script
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
     <script src="{% static 'js/writer.js' %}"></script>
   </body>

@@ -28,7 +28,8 @@
       }
     </style>
   </head>
-  <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">    <!-- navbar here -->
+  <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
+    <!-- navbar here -->
     <!-- Sidebar menu -->
     <div class="sidebar-container">
       <div class="sidebar-logo">Applicant</div>
@@ -111,7 +112,9 @@
               {{user.username}}
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="{% url 'logout' %}">Log out <i class="fa fa-power-off"></i></a>
+              <a class="dropdown-item" href="{% url 'logout' %}"
+                >Log out <i class="fa fa-power-off"></i
+              ></a>
             </div>
           </div>
         </nav>
@@ -126,7 +129,10 @@
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
     ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
+    ></script>
     <script src="{% static 'js/writer.js' %}"></script>
-  
   </body>
 </html>
