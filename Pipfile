@@ -4,8 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-python-decouple = "*"
+python-decouple = "==3.5"
+django-crispy-forms = "==1.13.0"
+asgiref = "==3.4.1"
+gunicorn = "==20.1.0"
+pytz = "==2021.3"
+sqlparse = "==0.4.2"
+Django = "==3.2.8"
+Pillow = "==8.4.0"
 
 [dev-packages]
 
