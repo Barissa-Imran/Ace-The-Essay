@@ -136,7 +136,7 @@ USE_TZ = True
 
 # -----static files config-------
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
@@ -168,5 +168,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_PASS') 
-
+EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
