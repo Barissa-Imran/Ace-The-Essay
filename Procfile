@@ -1,1 +1,1 @@
-web: gunicorn ace_the_essay.wsgi 
+web: gunicorn ATE.wsgi 
