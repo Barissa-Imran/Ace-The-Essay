@@ -18,7 +18,7 @@ from .forms import (
 from .models import Bid, ProjectOrder
 # Class based views
 from django.views.generic import DetailView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from decouple import config
 
 # To be used in password creation
@@ -346,9 +346,9 @@ def place_order(request):
             username = request.user
 
             # test case
-            made_by = request.user
-            bid = Bid.objects.create(project=new_form, made_by=made_by)
-            bid.save()
+            # made_by = request.user
+            # bid = Bid.objects.create(project=new_form, made_by=made_by)
+            # bid.save()
 
             try:
                 send_mail(
@@ -371,14 +371,22 @@ def place_order(request):
     return render(request, 'client/place_order.html', context)
 
 
-class ProjectDetailView(DetailView):
+class ProjectDetailView(LoginRequiredMixin, DetailView):
     model = ProjectOrder
-    
+    # request.session['click'] = True
 
-
+    '''
+    def get_context_data(self):
+        context = super(ProjectDetailView, self).get_context_data()
+        # Object is accessible through self.object or self.get_object()
+        if request.session.pop('click', False):
+            project = self.object
+            made_by = request.user
+            bid = Bid.objects.create(project=project, made_by=made_by)
+            bid.save()
+    '''
     def create_bid(self, request):
         
-
         if request.method =="POST":
             try:
                 project = self.instance
