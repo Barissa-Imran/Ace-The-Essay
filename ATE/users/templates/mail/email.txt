@@ -8,6 +8,7 @@ Password: {{ password }}
 https://acetheessayapp.herokuapp.com/auth/login
 
 please follow the instructions given after log in.
+If for any reason logging in fails, try resetting your password by clicking on forgot password.
 
 Regards,
 the team @ATE
