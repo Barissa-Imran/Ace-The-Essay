@@ -117,7 +117,7 @@ def application(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
 
-    if usergroup == "Applicant" or usergroup == "Admin":
+    if usergroup == "Applicants" or usergroup == "Admin":
         user1 = request.user
         if request.method == "POST":
             form = ApplicantForm(request.POST,
@@ -155,7 +155,7 @@ def application_task(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
 
-    if usergroup == "Applicant" or usergroup == "Admin":
+    if usergroup == "Applicants" or usergroup == "Admin":
         form = TaskForm(request.POST,
                         request.FILES)
         if form.is_valid():
