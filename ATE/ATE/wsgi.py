@@ -7,12 +7,11 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 """
 
+from django.core.wsgi import get_wsgi_application
 import os
 import sys
-sys.path.append('/users/programming/ATE')
-sys.path.append('/users/programming/Ace-The-Essay/ATE')
-
-from django.core.wsgi import get_wsgi_application
+sys.path.append('/acetheessayapp/ATE')
+sys.path.append('/acetheessayapp/ATE/ATE')
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ATE.settings')
