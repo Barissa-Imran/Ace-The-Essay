@@ -5,6 +5,9 @@ Your Login credentials are:
 Username: {{ username }}
 Password: {{ password }}
 
-https://acetheessay.com/auth/login
+https://acetheessayapp.herokuapp.com/auth/login
 
-please follow the instruction given after log in.
+please follow the instructions given after log in.
+
+Regards,
+the team @ATE

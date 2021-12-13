@@ -79,7 +79,7 @@ def apply(request):
                             Group.objects.get(name="Applicants"))
 
                 add_to_group(instance=user, created=isinstance)
-                # if django_user.groups.filter(name=groupname).exists():
+                # # if django_user.groups.filter(name=groupname).exists():
                 messages.success(request,
                                  "Your email has been submitted successfully")
                 # Send credentials email to user
@@ -90,7 +90,7 @@ def apply(request):
                     }
 
                     msg_plain = render_to_string('mail/email.txt', context)
-                    # msg_html = render_to_string('templates/mail/email.html', context)
+                #     # msg_html = render_to_string('templates/mail/email.html', context)
 
                     send_mail(
                         'LOGIN CREDENTIALS',
@@ -103,7 +103,8 @@ def apply(request):
                     messages.error(
                         request, 'Could not send email, click login above then forgot password!')
             except:
-                messages.error(request, "(X) Email already exists, try again!")
+                messages.error(
+                    request, "(X) There was a problem submitting your Email or Email already exists, try again after a few minutes!")
     else:
         form = EmailApplicationForm()
     return render(request, "users/apply.html", {'form': form})
@@ -116,11 +117,11 @@ def application(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
 
-    if usergroup =="Applicant" or usergroup=="Admin":
+    if usergroup == "Applicant" or usergroup == "Admin":
         user1 = request.user
         if request.method == "POST":
             form = ApplicantForm(request.POST,
-                                request.FILES)
+                                 request.FILES)
             if form.is_valid():
                 new_form = form.save(commit=False)
                 new_form.username = request.user
@@ -154,7 +155,7 @@ def application_task(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
 
-    if usergroup =="Applicant" or usergroup=="Admin":
+    if usergroup == "Applicant" or usergroup == "Admin":
         form = TaskForm(request.POST,
                         request.FILES)
         if form.is_valid():
@@ -340,7 +341,8 @@ def place_order(request):
             new_form = form.save()
             title = new_form.title
             pk = new_form.pk
-            new_form.slug = str(title) +"-"+ str(pk) #fix this functionality to produce raw string
+            # fix this functionality to produce raw string
+            new_form.slug = str(title) + "-" + str(pk)
             new_form.username = request.user
             new_form.save()
             username = request.user
@@ -385,9 +387,10 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
             bid = Bid.objects.create(project=project, made_by=made_by)
             bid.save()
     '''
+
     def create_bid(self, request):
-        
-        if request.method =="POST":
+
+        if request.method == "POST":
             try:
                 project = self.instance
                 made_by = request.user
@@ -397,7 +400,8 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
                 messages.success(
                     request, "Bid sent sucessfully! Wait for feedback from the project owner on the Bids Tab")
             except:
-                messages.error(request, 'cannot send multiple bids for one project')
+                messages.error(
+                    request, 'cannot send multiple bids for one project')
 
         return render(request, 'users/projectorder_detail.html')
 

@@ -16,12 +16,15 @@
       </li>
       <li>
         we might send you a test essay or grammar to check your competency
-      </li></i
-    >
+      </li>
+      <small class="text-muted">
+        Don't forget to check your spam folder incase you can't see the email
+      </small>
+      </i>
   </ol>
-  <p>The writer email field must contain a unique value. writer signup</p>
+  <p>The writer email field must contain a unique value.</p>
   <p></p>
-  <form method="POST">
+  <form method="POST" style="width: fit-content;">
     {% csrf_token %}
     <fieldset class="form-group">
       <label for="email">Writer sign up</label>
