@@ -19,8 +19,8 @@
     />
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
-    <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Writer</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
+    <title>ACE - Writer</title>
     <style>
     .alert-error {
       background: #dc3545;
@@ -88,7 +88,7 @@
       <div class="help mx-4 my-4">
         <p>
           Having trouble? <br />
-          <a href="#contact">Contact us</a>
+          <a href="{% url 'contact' %}">Contact us</a>
         </p>
       </div>
       <!-- copyright section -->
@@ -100,7 +100,7 @@
       >
         2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a
           class="text-warning"
-          href="#portfolio"
+          href="https://barryimranapp.herokuapp.com/"
           style="text-decoration: none"
           >Barrylabs</a
         >

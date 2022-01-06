@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from users import views as user_views
 
@@ -30,18 +31,21 @@ urlpatterns = [
          user_views.application_task, name="application_task"),
 
     # Project detail view
-    path("project/<slug>", user_views.ProjectDetailView.as_view(),
-         name="project_detail"),  # fix this to show the project
+    path("project/<slug>", user_views.ProjectDetailView.as_view(), name="project_detail"),
+    path("client/project-new/", user_views.ProjectCreateView.as_view(), name="project_create"),
+    # Project update view
+    path("project/<slug>/update", user_views.ProjectUpdateView.as_view(), name="project_update"),
+    # url(r'^saveForm/$', user_views.BidFormView.as_view(), name='form'),
     # search results url
     path("search/results/", user_views.search_results, name="search_results"),
 
     # Writer Dashboard pages urls
     path("writer", user_views.writer, name="writer"),
-    path("projects", user_views.projects, name="projects"),
-    path("bids", user_views.writer_bids, name="writer_bids"),
-    path("invoices", user_views.invoices, name="invoices"),
-    path("reports", user_views.reports, name="reports"),
-    path("settings", user_views.settings, name="settings"),
+    path("writer/projects", user_views.projects, name="projects"),
+    path("writer/bids", user_views.writer_bids, name="writer_bids"),
+    path("writer/invoices", user_views.invoices, name="invoices"),
+    path("writer/reports", user_views.reports, name="reports"),
+    path("writer/settings", user_views.settings, name="settings"),
 
     # Client Dashboard pages urls
     path("client", user_views.client, name="client"),
@@ -51,4 +55,6 @@ urlpatterns = [
     path("client/bids", user_views.client_bids, name="client_bids"),
     path("client/reports", user_views.client_reports, name="client_reports"),
     path("client/settings", user_views.client_settings, name="client_settings"),
+
+    # path("client/projects", user_views.ClientProjectsListView.as_view(), name='client_projects'),
 ]

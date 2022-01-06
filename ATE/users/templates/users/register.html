@@ -1,7 +1,7 @@
 {% extends 'ace_the_essay/base.html' %} {% load static %} {% load crispy_forms_tags %} {%block content %}
 <header class="container text-center py-4">
   <h1 class="display-4"><b> Register</b></h1>
-  <p>Looking for work?</p>
+  <p>Looking for work instead?</p>
   <p></p>
   <p>Apply now and start earning as a freelance writer</p>
   <a
@@ -10,14 +10,24 @@
     style="font-size: small"
     ><b>APPLY NOW</b></a
   >
+  <div class="mt-4 text-primary">scroll below to post a job</div>
 </header>
 <div
   class="content-section"
-  style="
-    background-image: url({ %static 'img/background.svg' %});
-    background-size: auto;
-  "
 >
+<section class="mx-4 px-4">
+  <h5 class="text-success">Our Custom Essay Writing Service Offers</h5>
+  <ul>
+    <li>On-time delivery guarantee</li>
+    <li>100% money-back guarantee</li>
+    <li>PhD-level proffessional editors</li>
+    <li>Automatic plagiarism check</li>
+    <li>100% Privacy and confidentiality</li>
+    <li>High-Quality custom-written pages</li>
+  </ul>
+  <div>Visit our dedicated section us to why you should use our services on the why us page <a href="{% url 'whyus' %}" class="text-warning">here.</a> </div>
+  <div class="text-warning" >You have to create an account to post a job on this website. Register below.</div>
+</section>
   <form method="POST">
     {% csrf_token %}
     <fieldset class="form_group m-4 p-4">

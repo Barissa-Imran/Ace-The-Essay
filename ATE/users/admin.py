@@ -1,24 +1,11 @@
 from django.contrib import admin
 
-from django import forms
-from .models import Applicant, Profile, ProjectOrder, Bid
-
-# custom project order form with price field editable
-
-
-class CustomProjectOrderForm(forms.ModelForm):
-    price = forms.FloatField()
-
-    class Meta:
-        model = ProjectOrder
-        fields = '__all__'
-
-
-class ProjectOrderAdmin(admin.ModelAdmin):
-    form = CustomProjectOrderForm
-
+# from django import forms
+from .models import Applicant, Profile, ProjectOrder, Bid, CompleteTask, TestTask
 
 admin.site.register(Profile)
 admin.site.register(Applicant)
-admin.site.register(ProjectOrder, ProjectOrderAdmin)
+admin.site.register(ProjectOrder)
 admin.site.register(Bid)
+admin.site.register(CompleteTask)
+admin.site.register(TestTask)

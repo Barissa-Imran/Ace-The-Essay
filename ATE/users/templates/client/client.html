@@ -19,8 +19,12 @@
     />
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
-    <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Client</title>
+    <link
+      rel="shortcut icon"
+      href="{% static 'img/favicon.svg' %}"
+      type="image/x-icon"
+    />
+    <title>ACE - Client</title>
     <style>
       .alert-error {
         background: #dc3545;
@@ -82,7 +86,7 @@
       <div class="help mx-4 my-4">
         <p>
           Having trouble? <br />
-          <a href="#contact">Contact us</a>
+          <a href="{% url 'contact' %}">Contact us</a>
         </p>
       </div>
       <!-- copyright section -->
@@ -94,7 +98,7 @@
       >
         2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a
           class="text-warning"
-          href="#portfolio"
+          href="https://barryimranapp.herokuapp.com/"
           style="text-decoration: none"
           >Barrylabs</a
         >
@@ -102,7 +106,7 @@
       <!-- end of copyright -->
     </div>
     <!-- Page content -->
-    <div class="content-container">
+    <div class="content-container mb-4">
       <div class="container-fluid">
         <!-- navbar area -->
         <nav class="navbar">
@@ -215,7 +219,7 @@
           <!-- main second column -->
           <div class="col-lg-4">
             <p style="color: #198787; font-size: small; font-weight: 600">
-              Your Projects
+              Featured Projects
             </p>
             <div
               class="p-2"
@@ -225,25 +229,24 @@
               "
             >
               <!-- first project -->
+              {% for project in projects %}
               <div class="d-flex">
-                <i class="fa fa-image mt-3"></i>
+                <a href="#profile">{{ project.username.image }}</a>
                 <span class="px-2"
                   ><p>
-                    Project name<br /><span>Time remaining in days</span>
+                    <a
+                      href="{{ project.get_absolute_url }}"
+                      class="text-secondary"
+                      style="text-decoration: none"
+                      >{{ project.title }}</a
+                    ><br /><span class="badge bg-success">{{ project.date_posted|date:"F d - Y" }}</span>
+                    <span class="badge bg-danger">{{ project.deadline|date:"F d - Y" }}</span>
                   </p></span
                 >
               </div>
-              <!-- second project -->
-              <div class="d-flex">
-                <i class="fa fa-image mt-3"></i>
-                <span class="px-2"
-                  ><p>
-                    Project name<br /><span>Time remaining in days</span>
-                  </p></span
-                >
-              </div>
+              {% endfor %}
               <a
-                href="{% url 'projects' %}"
+                href="{% url 'client_projects' %}"
                 class="text-warning"
                 style="text-decoration: none"
                 >See all projects</a

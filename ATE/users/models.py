@@ -16,7 +16,7 @@ from django.shortcuts import reverse
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(
-        default='profile_pics/default.jpg', upload_to='profile_pics')
+        default='media/profile_pics/default.jpg', upload_to='profile_pics')
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -49,7 +49,6 @@ class ProjectOrder(models.Model):
     spacing = models.CharField(
         max_length=50,
         choices=[
-            ('Null', '*Select'),
             ('single', 'Single spaced'),
             ('double', 'Double spaced')
         ])
@@ -62,7 +61,8 @@ class ProjectOrder(models.Model):
     username = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
-    is_active = models.BooleanField(default=True)
+    complete = models.BooleanField(default=False)
+    price = models.FloatField(default=4.0)
 
     def __str__(self):
         return self.title
@@ -70,7 +70,7 @@ class ProjectOrder(models.Model):
     def get_absolute_url(self):
         return reverse("project_detail", kwargs={
             "slug": self.slug
-            })
+        })
 
     class Meta:
         ordering = ['-date_posted']
@@ -107,26 +107,30 @@ class Applicant(models.Model):
 
 
 class Bid(models.Model):
-    project = models.ForeignKey(ProjectOrder, on_delete=models.CASCADE)
+    project = models.ForeignKey(ProjectOrder, default="null",on_delete=models.CASCADE)
     made_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        default="null",
+        on_delete=models.CASCADE
     )
     date = models.DateField(auto_now_add=True)
+    assign = models.BooleanField(default=False)
 
     def __str__(self):
         return self.project.title
+
     class Meta:
         ordering = ['-date']
+
 
 class CompleteTask(models.Model):
     complete_task = models.FileField(
         upload_to='finals',
         help_text='upload the finished task here'
     )
-    bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
+    bid = models.ForeignKey(Bid, on_delete=models.CASCADE) #set to project, delete all bids on complete project
 
 
 class TestTask(models.Model):

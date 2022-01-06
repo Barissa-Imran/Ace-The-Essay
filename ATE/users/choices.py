@@ -1,7 +1,6 @@
 # This module is used to store field choices
 
 ACADEMICS_LEVEL = [
-    ('Null', '*Select'),
     ('diploma', 'College/diploma'),
     ('undergraduate', 'Undergraduate'),
     ('Masters', 'Masters'),
@@ -9,12 +8,11 @@ ACADEMICS_LEVEL = [
 ]
 
 TYPE_OF_PAPER = [
-    ('Null','*Select'),
     ('Essay', 'Essay (Any Type)'),
     ('Abstract', 'Abstract'),
     ('admission Essay', 'Admission Essay'),
     ('Annotated Bibliography', 'Annotated Bibliography'),
-    ('Argumentativ Essay', 'Argumentative Essay'),
+    ('Argumentative Essay', 'Argumentative Essay'),
     ('Article (Any Type)', 'Article (Any Type)'),
     ('Article Review', 'Article Review'),
     ('Article Summary', 'Article Summary'),
@@ -86,7 +84,6 @@ TYPE_OF_PAPER = [
 ]
 
 SUBJECT_CHOICES = [
-    ('Null', '*Select Subject'),
     ('Accounting', 'Accounting'),
     ('Aeronautics', 'Aeronautics'),
     ('Anthropology', 'Anthropology'),
@@ -160,7 +157,6 @@ SUBJECT_CHOICES = [
 ]
 
 PAPER_FORMAT = [
-    ('Null','*Select'),
     ('APA', 'APA'),
     ('MLA', 'MLA'),
     ('Harvard', 'Harvard'),

@@ -20,8 +20,8 @@
     />
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
-    <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Writer</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
+    <title>ACE - Writer</title>
   </head>
   {% if user.is_authenticated %}
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
@@ -72,7 +72,7 @@
       <div class="help mx-4 my-4">
         <p>
           Having trouble? <br />
-          <a href="#contact">Contact us</a>
+          <a href="{% url 'contact' %}">Contact us</a>
         </p>
       </div>
       <!-- copyright section -->
@@ -84,7 +84,7 @@
       >
         2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a
           class="text-warning"
-          href="#portfolio"
+          href="https://barryimranapp.herokuapp.com/"
           style="text-decoration: none"
           >Barrylabs</a
         >
@@ -92,7 +92,7 @@
       <!-- end of copyright -->
     </div>
     <!-- Page content -->
-    <div class="content-container">
+    <div class="content-container mb-4">
       <div class="container-fluid">
         <!-- navbar area -->
         <nav class="navbar">
@@ -226,9 +226,12 @@
                 <a href="#profile">{{ project.username.image }}</a>
                 <span class="px-2"
                   ><p>
-                    <a href="{{ project.get_absolute_url }}" style="text-decoration: none"
+                    <a 
+                      href="{{ project.get_absolute_url }}" 
+                      class="text-secondary" 
+                      style="text-decoration: none"
                       >{{ project.title }}</a
-                    ><br /><span>{{ project.date_posted|date:"F d, Y" }}</span>
+                    ><br /><span class="badge bg-success">{{ project.date_posted|date:"F d, Y" }}</span>
                   </p></span
                 >
               </div>

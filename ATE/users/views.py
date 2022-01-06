@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http.response import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -13,11 +13,18 @@ from .forms import (
     ProfileUpdateForm,
     ProjectOrderForm,
     ApplicantForm,
-    TaskForm
+    TaskForm,
+    BidForm,
+    CompleteTaskForm,
 )
 from .models import Bid, ProjectOrder
 # Class based views
-from django.views.generic import DetailView
+from django.views.generic import (
+    DetailView,
+    DeleteView,
+    CreateView,
+    UpdateView
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from decouple import config
 
@@ -118,7 +125,7 @@ def application(request):
     usergroup = request.user.groups.values_list('name', flat=True).first()
 
     if usergroup == "Applicants" or usergroup == "Admin":
-        user1 = request.user
+        current_user = request.user
         if request.method == "POST":
             form = ApplicantForm(request.POST,
                                  request.FILES)
@@ -127,7 +134,8 @@ def application(request):
                 new_form.username = request.user
                 new_form.save()
                 messages.success(
-                    request, 'Your application has been sent successfully! Please proceed to the TASK page')
+                    request, "Your application has been sent successfully, please proceed with the TASK below!")
+
                 try:
                     send_mail(
                         'NEW APPLICANT',
@@ -138,12 +146,13 @@ def application(request):
                     )
                 except:
                     pass
+                return HttpResponseRedirect("application-task")
         else:
             form = ApplicantForm()
 
         context = {
             'Applicantform': form,
-            'user': user1,
+            'user': current_user,
         }
         return render(request, 'applicant/application.html', context)
     else:
@@ -218,7 +227,6 @@ def register(request):
 # ------------------Writer dashboard views-----------------#
 # writer dashboard view
 
-
 @login_required
 def writer(request):
     context = {
@@ -228,12 +236,17 @@ def writer(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
     if usergroup == "Writers" or usergroup == "Admin":
-        return render(request, 'users/writer.html', context)
+        return render(request, 'writer/writer.html', context)
     elif usergroup == "Applicants" or usergroup == "Admin":
         return HttpResponseRedirect('applicant/application')
     elif usergroup == "Clients" or usergroup == "Admin":
-        # check to see if it's first login then redirect to order page
-        return HttpResponseRedirect('client/client')
+        # check if it's first client login then redirect to place order page.
+        if User.last_login is None:
+            return HttpResponseRedirect('client/place_order.html')
+        else:
+            return HttpResponseRedirect('client')
+    # elif usergroup == "Admin":
+    #     pass
     else:
         messages.info(
             request, "you have been logged in but can't be redirected to the correct page, contact admin!!")
@@ -250,20 +263,12 @@ def writer(request):
 def projects(request):
 
     context = {
-        'projects': ProjectOrder.objects.all()
+        'projects': ProjectOrder.objects.all(),
+        'assigned': ProjectOrder.objects.filter(bid__assign=True)
     }
 
-    return render(request, 'users/Projects.html', context)
+    return render(request, 'writer/Projects.html', context)
 
-# Displays all projects created and active
-
-
-@login_required
-def all_projects(request):
-    context = {
-        'ProjectOrders': ProjectOrder.objects.all()
-    }
-    return render(request, 'users/allprojects.html')
 # search results view
 
 
@@ -271,7 +276,7 @@ def all_projects(request):
 def search_results(request):
     search_text = request.GET.get('q', '')
     results = ProjectOrder.objects.filter(title__icontains=search_text)
-    return render(request, 'users/results.html', {'results': results})
+    return render(request, 'writer/results.html', {'results': results})
 
 # writer bids view
 
@@ -281,20 +286,24 @@ def writer_bids(request):
     context = {
         'bids': Bid.objects.filter(made_by=request.user)
     }
-    return render(request, "users/writer_bids.html", context)
+    return render(request, "writer/writer_bids.html", context)
 # Invoices view
 
 
 @login_required
 def invoices(request):
-    return render(request, 'users/invoices.html')
+    complete = ProjectOrder.objects.filter(complete=True)
+    context = {
+        'projects': complete,
+    }
+    return render(request, 'writer/invoices.html', context)
 
 # reports view
 
 
 @login_required
 def reports(request):
-    return render(request, 'users/reports.html')
+    return render(request, 'writer/reports.html')
 
 # settings view
 
@@ -310,8 +319,8 @@ def settings(request):
             u_form.save()
             p_form.save()
             messages.success(
-                request, f'Your account has been update!')
-            return redirect('client_settings')
+                request, f'Your account has been updated!')
+            return redirect('settings')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -320,7 +329,7 @@ def settings(request):
         'u_form': u_form,
         'p_form': p_form
     }
-    return render(request, 'users/settings.html', context)
+    return render(request, 'writer/settings.html', context)
 
 # ------------------End Writer dashboard views-----------------#
 
@@ -329,7 +338,12 @@ def settings(request):
 
 @login_required
 def client(request):
-    return render(request, 'client/client.html')
+
+    context = {
+        'projects': ProjectOrder.objects.filter(username=request.user)
+    }
+
+    return render(request, 'client/client.html', context)
 
 
 @login_required
@@ -375,46 +389,102 @@ def place_order(request):
 
 class ProjectDetailView(LoginRequiredMixin, DetailView):
     model = ProjectOrder
-    # request.session['click'] = True
 
-    '''
-    def get_context_data(self):
-        context = super(ProjectDetailView, self).get_context_data()
-        # Object is accessible through self.object or self.get_object()
-        if request.session.pop('click', False):
-            project = self.object
-            made_by = request.user
-            bid = Bid.objects.create(project=project, made_by=made_by)
-            bid.save()
-    '''
+    # Get detail template according to user.
+    def get_template_names(self):
+        usergroup = None
+        usergroup = self.request.user.groups.values_list(
+            'name', flat=True).first()
 
-    def create_bid(self, request):
+        if usergroup == "Writers" or usergroup == "Admin":
+            return ["writer/projectorder_detail.html"]
+        elif usergroup == "Clients" or usergroup == "Admin":
+            return ["client/projectorder_detail.html"]
+        else:
+            HttpResponseBadRequest("You are not allowed to access this page")
 
-        if request.method == "POST":
-            try:
-                project = self.instance
-                made_by = request.user
-                bid = Bid.objects.create(project=project, made_by=made_by)
-                bid.save()
+    # Get the forms ready to be produced them in the template (context)
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        project = self.model.title
+        context.update({
+            'cForm': CompleteTaskForm,
+            'bForm': BidForm,
+            'project': project,
+        })
 
-                messages.success(
-                    request, "Bid sent sucessfully! Wait for feedback from the project owner on the Bids Tab")
-            except:
-                messages.error(
-                    request, 'cannot send multiple bids for one project')
+        return context
 
-        return render(request, 'users/projectorder_detail.html')
+    # Bid form validation
+    def bForm_form_valid(self, request, form):
+        form.instance.project = self.request.ProjectOrder
+        form.instance.made_by = self.request.user
+        messages.success(
+            request, "Your bid has been submitted successfuly. View all bids by clicking on the Bids tab")
+        return super().form_valid(form)
+
+    # Complete task form validation
+    def cForm_form_valid(self, request, form):
+        form.instance.project = self.request.ProjectOrder
+        project = self.request.ProjectOrder
+        form.instance.bid = project.bid.filter(made_by=self.request.user)
+        messages.success(request, "Project was submitted successfully")
+        return super().form_valid(form)
+
+
+class ProjectCreateView(LoginRequiredMixin, CreateView):
+    model = ProjectOrder
+    template_name = "client/projectorder_form.html"
+    fields = [
+        'academic_level',
+        'type_of_paper',
+        'subject_area',
+        'title',
+        'paper_instructions',
+        'Additional_materials',
+        'paper_format',
+        'number_of_pages',
+        'spacing',
+        'currency',
+        'date_posted',
+    ]
+
+    def form_valid(self, form):
+        form.instance.slug = str(form.instance.title) + \
+            '-' + str(form.instance.pk)
+        form.instance.username = self.request.user
+        return super().form_valid(form)
+
+
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+    model = ProjectOrder
+    fields = [
+        'academic_level',
+        'type_of_paper',
+        'subject_area',
+        'title',
+        'paper_instructions',
+        'Additional_materials',
+        'paper_format',
+        'number_of_pages',
+        'spacing',
+        'currency',
+        'date_posted',
+    ]
 
 
 @login_required
 def client_projects(request):
-    return render(request, 'client/client_projects.html')
+    context = {
+        'projects': ProjectOrder.objects.filter(username=request.user)
+    }
+    return render(request, 'client/client_projects.html', context)
 
 
 @login_required
 def client_bids(request):
     context = {
-        # 'bids': Bids.objects.all()
+        'bids': Bid.objects.filter(project__username=request.user)
     }
     return render(request, "client/client_bids.html", context)
 
@@ -456,3 +526,5 @@ def client_settings(request):
 @login_required
 def client_ProjectOrders(request):
     return render(request, 'client/client_ProjectOrders.html')
+
+# ------------------------End client dahsboard views--------------------------#

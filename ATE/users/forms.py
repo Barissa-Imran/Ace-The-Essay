@@ -1,8 +1,15 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, ProjectOrder, Applicant, TestTask
-
+from django.db.models import fields
+from .models import (
+    Profile,
+    ProjectOrder,
+    Applicant,
+    TestTask,
+    Bid,
+    CompleteTask,
+)
 
 
 # Company registration page registration form
@@ -46,18 +53,34 @@ class ProjectOrderForm(forms.ModelForm):
     class Meta:
         model = ProjectOrder
         fields = [
-            'academic_level', 
+            'academic_level',
             'type_of_paper',
-             'subject_area', 
-             'title',
-             'paper_instructions',
-             'Additional_materials',
-             'paper_format',
-             'number_of_pages',
-             'spacing',
-             'currency',
-             'date_posted',
-            ]
+            'subject_area',
+            'title',
+            'paper_instructions',
+            'Additional_materials',
+            'paper_format',
+            'number_of_pages',
+            'spacing',
+            'deadline',
+        ]
+# Create bid form-(filled automatically when user clicks bid button on project detail view)
+
+
+class BidForm(forms.ModelForm):
+
+    class Meta:
+        model = Bid
+        fields = ['project', 'made_by']
+
+# upload complete task form
+
+
+class CompleteTaskForm(forms.ModelForm):
+
+    class Meta:
+        model = CompleteTask
+        fields = ["complete_task"]
 
 # Applicant writer form
 

@@ -1,7 +1,6 @@
-{% extends 'users/base.html' %} {% block content %}
+{% extends 'client/base.html' %} {% load crispy_forms_tags %} {% block content %}
 
 <section class="media content-section container">
-<form method="GET" action="{{ object.get_absolute_url }}">
   <img
     src="{{ object.username.profile.image }}"
     alt=""
@@ -13,6 +12,13 @@
       style="background: #00bbbb9d"
     >
       <a href="#" class="mr-2 text-white">{{ object.username }}</a>
+      <small class="badge bg-danger">
+        Deadline:
+        <span style="font-weight: 600">{{object.deadline}}</span></small
+      >
+      <span class="badge text-secondar bg-primary"
+        >Price: ${{object.price}} /pg</span
+      >
       <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
     </div>
     <div class="mt-3 project-details">
@@ -29,30 +35,13 @@
       <p><strong>Number of Pages:</strong> {{object.number_of_pages}}</p>
       <p class="border-bottom"><strong>Spacing:</strong> {{object.spacing}}</p>
       <p class="project-content text-dark bg-light border-bottom">
-        {{ object.paper_instructions }} <br />
-        <small class="text-danger">
-          Deadline:
-          <span style="font-weight: 600">{{object.deadline}}</span></small
-        >
+        {{ object.paper_instructions }}
       </p>
-      <p>Additional Materials: {{object.additional_materials}}</p>
+      <p class="text-secondary">
+        Additional Materials: {{object.additional_materials| default:'None'}}
+      </p>
       <p></p>
     </div>
-  </div>
-  <div class="d-flex justify-content-between">
-    <p>price/pg: {{object.price}}</p>
-    </form>
- <input
-      type="submit"
-      value="Bid"
-      class="btn bid btn-warning text-white d-flex justify-content-end"
-    />
-    {% comment %} <button
-      type="submit"
-      class="btn bid btn-warning text-white d-flex justify-content-end"
-    >
-      BID
-    </button>  {% endcomment %}
   </div>
 </section>
 

@@ -19,8 +19,12 @@
     />
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
-    <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>ATE - Applicant</title>
+    <link
+      rel="shortcut icon"
+      href="{% static 'img/favicon.svg' %}"
+      type="image/x-icon"
+    />
+    <title>ACE - Applicant</title>
     <style>
       .alert-error {
         background: #dc3545;
@@ -41,7 +45,7 @@
           </a>
         </li>
         <li>
-          <a href="{% url 'application_task' %}">
+          <a href="{% url 'application_task' %}" class="btn disabled">
             <i class="fa fa-file" aria-hidden="true"></i> Test Task
           </a>
         </li>
@@ -68,7 +72,7 @@
       <div class="help mx-4 my-4">
         <p>
           Having trouble? <br />
-          <a href="#contact">Contact us</a>
+          <a href="{% url 'contact' %}">Contact us</a>
         </p>
       </div>
       <!-- copyright section -->
@@ -80,7 +84,7 @@
       >
         2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i>Made by<a
           class="text-warning"
-          href="#portfolio"
+          href="https://barryimranapp.herokuapp.com/"
           style="text-decoration: none"
           >Barrylabs</a
         >
@@ -96,7 +100,7 @@
               href="{% url 'index' %}"
               style="text-decoration: none; font-size: medium"
               class="text-dark"
-              ><i class="fa fa-arrow-left m-2"></i> Home Logo</a
+              ><i class="fa fa-arrow-left m-2"></i> HOME</a
             >
           </div>
           <div class="dropdown show">

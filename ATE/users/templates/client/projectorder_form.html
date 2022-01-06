@@ -10,7 +10,7 @@
     {% csrf_token %}
     <fieldset class="form_group m-4 p-4">
       <legend class="border-bottom mb-4 lead">Order Details</legend>
-      {{ place_order|crispy }}
+      {{ form|crispy }}
     </fieldset>
     <div class="form-group mb-2 mx-5">
       <button class="btn btn-outline-warning" type="submit">Order</button>
@@ -18,9 +18,8 @@
   </form>
   <section class="text-center">We Accept: <img style="width: 4vw;" src="{% static 'img/cc-paypal.svg' %}" alt="Paypal"><br>
     <small class="text-info">Orders are charged a default fee of $4 per page unless on special cases where support will inform you of the price</small> <br>
-    <small class="text-info">Please note that our currency is always in US Dollars $</small>
-    <br>
-    <small class="text-info">You can read our<a href="{% url 'TC' %}" class="text-warning"> terms here.</a>and<a href="{% url 'privacy-policy' %}" class="text-warning"> privacy policy here.</a></small>
+    <small class="text-info">Please note that our currency is always in US Dollars $</small><br>
+    <small>You can read our terms<a href="{% url 'TC' %}"> here.</a></small>
   </section>
 </div>
 
