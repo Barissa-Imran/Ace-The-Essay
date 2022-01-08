@@ -223,20 +223,19 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
+# Admin landing page
 
-# ------------------Writer dashboard views-----------------#
-# writer dashboard view
 
 @login_required
-def writer(request):
-    context = {
-        'projects': ProjectOrder.objects.all()
-    }
-    # redirect the user according to user group
+def admin_landing(request):
+    # Redirect logged in users according to user group
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
-    if usergroup == "Writers" or usergroup == "Admin":
-        return render(request, 'writer/writer.html', context)
+    if usergroup == "Admin":
+        messages.info(request, "Select a page you would like to visit below!")
+        return render(request, "users/admin_landing.html")
+    elif usergroup == "Writers" or usergroup == "Admin":
+        return HttpResponseRedirect('writer')
     elif usergroup == "Applicants" or usergroup == "Admin":
         return HttpResponseRedirect('applicant/application')
     elif usergroup == "Clients" or usergroup == "Admin":
@@ -245,18 +244,43 @@ def writer(request):
             return HttpResponseRedirect('client/place_order.html')
         else:
             return HttpResponseRedirect('client')
-    # elif usergroup == "Admin":
-    #     pass
     else:
         messages.info(
             request, "you have been logged in but can't be redirected to the correct page, contact admin!!")
         return HttpResponseRedirect('login')
 
+
+# ------------------Writer dashboard views-----------------#
+# writer dashboard view
+
+@login_required
+def writer(request):
+
+    def count_complete():
+        count = 0
+        completed = ProjectOrder.objects.filter(bid__made_by=request.user,
+                                                bid__assign=True,
+                                                complete=True)
+        for project in completed:
+            count += 1
+        return count
+
+    context = {
+        'projects': ProjectOrder.objects.filter(bid__made_by=request.user, bid__assign=True)[:2],
+        'recommended': ProjectOrder.objects.filter(bid__assign=False)[:1],
+        'completedProjects': ProjectOrder.objects.filter(bid__made_by=request.user,
+                                                         bid__assign=True,
+                                                         complete=True)[:2],
+        'count': count_complete(),
+    }
+
+    return render(request, 'writer/writer.html', context)
+
 # ProjectOrders page views {--------}
 
 # main view
 
-# Display projects writer is working on
+# Display projects according to the tabs on the page
 
 
 @login_required
@@ -292,9 +316,13 @@ def writer_bids(request):
 
 @login_required
 def invoices(request):
-    complete = ProjectOrder.objects.filter(complete=True)
+    complete = ProjectOrder.objects.filter(
+        complete=True, bid__made_by=request.user)
+    assigned = ProjectOrder.objects.filter(
+        bid__assign=True, bid__made_by=request.user)
     context = {
-        'projects': complete,
+        'complete': complete,
+        'assigned': assigned,
     }
     return render(request, 'writer/invoices.html', context)
 
@@ -330,6 +358,11 @@ def settings(request):
         'p_form': p_form
     }
     return render(request, 'writer/settings.html', context)
+
+@login_required
+def library(request):
+    messages.info(request, "Information will be made available soon.")
+    return render(request, "writer/library.html")
 
 # ------------------End Writer dashboard views-----------------#
 

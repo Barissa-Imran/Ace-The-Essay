@@ -60,6 +60,11 @@
             <i class="fa fa-cog" aria-hidden="true"></i> Settings
           </a>
         </li>
+        <li>
+          <a href="{% url 'library' %}">
+            <i class="fa fa-book" aria-hidden="true"></i> Library
+          </a>
+        </li>
       </ul>
       <a
         href="{% url 'logout' %}"
@@ -153,7 +158,7 @@
                   class="row row-cols-1 p-1"
                   style="
                     border-radius: 10px;
-                    box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
+                    box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   "
                 >
                   <div class="col">
@@ -162,10 +167,10 @@
                       style="background-color: whitesmoke; border-radius: 10px"
                     >
                       <p class="bg-warning p-2" style="border-radius: 10px">
-                        98
+                        1
                       </p>
                       <span class="px-2"
-                        ><p>Rank<br /><span>in top 30%</span></p></span
+                        ><p>Rank<br /><span class="badge text-dark">in top 5%</span></p></span
                       >
                     </div>
                   </div>
@@ -176,13 +181,15 @@
                     >
                       <div class="d-flex">
                         <p class="bg-warning p-2" style="border-radius: 10px">
-                          32
+                          {{ count| default:"0" }}
                         </p>
                         <span class="px-2"
-                          ><p>Projects<br /><span>#this month</span></p></span
+                          ><p>Project(s)<br /><span class="badge text-dark">This month</span></p></span
                         >
                       </div>
                       <div class="tags">
+
+                        {% for project in completedProjects %}
                         <p
                           class="badge text-dark"
                           style="
@@ -190,17 +197,10 @@
                             border-radius: 15px;
                           "
                         >
-                          {{ project.category|default:'category' }}
+                          {{ project.type_of_paper|default:'category' }}
                         </p>
-                        <p
-                          class="badge text-dark"
-                          style="
-                            background-color: #00bbbb9d;
-                            border-radius: 15px;
-                          "
-                        >
-                          {{ project.category|default:'category' }}
-                        </p>
+                        {% endfor %}
+
                       </div>
                     </div>
                   </div>
@@ -211,17 +211,19 @@
           <!-- main second column -->
           <div class="col-lg-4">
             <p style="color: #198787; font-size: small; font-weight: 600">
-              Your Projects
+              Active Projects
             </p>
             <div
               class="p-2"
               style="
                 border-radius: 10px;
-                box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
+                box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
               "
             >
               <!-- first project -->
               {% for project in projects %}
+              {% if project.complete is False %}
+
               <div class="d-flex">
                 <a href="#profile">{{ project.username.image }}</a>
                 <span class="px-2"
@@ -231,10 +233,13 @@
                       class="text-secondary" 
                       style="text-decoration: none"
                       >{{ project.title }}</a
-                    ><br /><span class="badge bg-success">{{ project.date_posted|date:"F d, Y" }}</span>
-                  </p></span
-                >
+                    ><br /><span class="badge bg-success">{{ project.date_posted|date:"F d - Y" }}</span>
+                    <span class="badge bg-danger">{{ project.deadline|date:"F d - Y" }}</span>
               </div>
+                            
+              {% else %}
+              <span></span>
+              {% endif %}
               {% endfor %}
 
               <a
@@ -260,31 +265,30 @@
                   class="p-3"
                   style="
                     border-radius: 10px;
-                    box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
+                    box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   "
                 >
+
+                {% for project in projects %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
                     <i class="fa fa-image mt-3"></i>
-                    <span class="px-2"
-                      ><p>Client name<br /><span>Company name</span></p></span
+                    <span class="px-2 badge text-secondary"
+                      ><p><span class="text-warning">{{ project.username }}</span><br /><span>{{ project.title }}</span></p></span
                     >
-                    <p class="badge bg-danger" style="height: fit-content">
-                      late
-                    </p>
-                    <p>${{paid|default:"0"}}</p>
+                    {% if project.complete and project.paid is True %}
+                      <p class="badge bg-success" style="height: fit-content">
+                        paid
+                      </p>
+                    {% else %}
+                      <p class="badge bg-danger" style="height: fit-content">
+                        pending
+                      </p>
+                    {% endif %}
+                    <p class="badge bg-primary">${{ project.price }}/pg</p>
                   </div>
-                  <!-- second project -->
-                  <div class="d-flex justify-content-between">
-                    <i class="fa fa-image mt-3"></i>
-                    <span class="px-2"
-                      ><p>Client name<br /><span>Company name</span></p></span
-                    >
-                    <p class="badge bg-success" style="height: fit-content">
-                      paid
-                    </p>
-                    <p>${{paid|default:"0"}}</p>
-                  </div>
+                {% endfor %}
+                
                 </div>
               </div>
               <div
@@ -309,7 +313,7 @@
                 </span>
                 <a
                   href="#message"
-                  class="btn btn-warning m-3 text-white"
+                  class="btn btn-warning m-3 text-white disabled"
                   style="
                     width: fit-content;
                     height: fit-content;
@@ -329,38 +333,46 @@
             >
               Recommended Project
             </p>
-            <div
-              class="p-3"
-              style="
-                border-radius: 10px;
-                box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
-              "
-            >
-              <!-- header section -->
-              <div class="d-flex justify-content-between">
-                <i class="fa fa-image mt-3"></i>
-                <span class="px-2"
-                  ><p>Client name<br /><span>Updated time</span></p></span
-                >
-                <p class="badge bg-warning mt-2" style="height: fit-content">
-                  category
-                </p>
-              </div>
-              <p>project title here</p>
-              <p>project description goes here</p>
-              <span
-                class="d-flex justify-content-between p-2"
-                style="background-color: whitesmoke; border-radius: 10px"
+
+            {% for project in recommended %}
+            <a class="btn" href="{{ project.get_absolute_url }}" role="button">
+              <div
+                class="p-3"
+                style="
+                  border-radius: 10px;
+                  box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
+                "
               >
-                <p>${{price|default:"0"}}/month</p>
-                <p
-                  class="text-warning p-1"
-                  style="border: 1px solid #ffc107; border-radius: 25px"
+                <!-- header section -->
+                <div class="d-flex justify-content-between">
+                  <i class="fa fa-image mt-3"></i>
+                  <span class="px-2"
+                    ><p class="">{{ project.username }}<br /><span>{{project.update_time}}</span></p></span
+                  >
+                  <p class="badge bg-warning mt-2" style="height: fit-content">
+                    {{ project.type_of_paper }}
+                  </p>
+                </div>
+                <span>
+                  <p class="badge bg-info">{{ project.subject_area }}</p>
+                  <p class="bg-secondary text-white"
+                  >{{ project.title }}</p>
+                </span>
+                <span
+                  class="d-flex justify-content-between p-2"
+                  style="background-color: whitesmoke; border-radius: 10px"
                 >
-                  full time
-                </p>
-              </span>
-            </div>
+                  <p>${{ project.price }}/page</p>
+                  <p
+                    class="badge bg-danger"
+                  >
+                    {{ project.deadline }}
+                  </p>
+                </span>
+              </div>
+            </a>
+            {% endfor %}
+
           </div>
         </section>
       </div>

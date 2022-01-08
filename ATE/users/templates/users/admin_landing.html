@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; width: 100%;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
+    <title>ACE - Writer</title>
+    <style>
+    .alert-error {
+      background: #dc3545;
+      color: #fff;
+    }
+    </style>
+  </head>
+  <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif; height: 100%; width: 100%;">
+    {% if messages %} 
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}} m-2">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <header class="m-4">Welcome, <span class="text-muted">{{user.username}}</span>
+    <a
+        href="{% url 'logout' %}"
+        class="text-white btn btn-danger"
+        style="text-decoration: none"
+        role="button"
+      >
+        <i class="fa fa-sign-out-alt"></i> log out
+      </a>
+    </header>
+    <section class="h-100 w-100 row d-flex align-items-center ">
+        <div class="col-md-12 m-4">
+            <a class="btn btn-outline-primary m-2" href="/admin" role="button">Admin Panel</a>
+            <a class="btn btn-outline-warning m-2" href="{% url 'application' %}" role="button">Applicant Dashboard</a>
+            <a class="btn btn-outline-info m-2" href="{% url 'writer' %}" role="button">Writer Dashboard</a>
+            <a class="btn btn-outline-secondary m-2" href="{% url 'client' %}" role="button">Client Dashboard</a>
+        </div>   
+    </section>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
+    ></script>
+    <script src="{% static 'js/writer.js' %}"></script>
+  </body>
+</html>    

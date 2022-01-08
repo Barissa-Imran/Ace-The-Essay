@@ -65,6 +65,11 @@
             <i class="fa fa-cog" aria-hidden="true"></i> Settings
           </a>
         </li>
+        <li>
+          <a href="{% url 'library' %}">
+            <i class="fa fa-book" aria-hidden="true"></i> Library
+          </a>
+        </li>
       </ul>
       {% if user.is_authenticated %}
       <a

@@ -30,6 +30,8 @@ urlpatterns = [
     path("applicant/application-task",
          user_views.application_task, name="application_task"),
 
+    # admin landing page
+    path("admin-landing", user_views.admin_landing, name="admin_landing"),
     # Project detail view
     path("project/<slug>", user_views.ProjectDetailView.as_view(), name="project_detail"),
     path("client/project-new/", user_views.ProjectCreateView.as_view(), name="project_create"),
@@ -46,6 +48,8 @@ urlpatterns = [
     path("writer/invoices", user_views.invoices, name="invoices"),
     path("writer/reports", user_views.reports, name="reports"),
     path("writer/settings", user_views.settings, name="settings"),
+    path("writer/library", user_views.library, name="library"),
+
 
     # Client Dashboard pages urls
     path("client", user_views.client, name="client"),

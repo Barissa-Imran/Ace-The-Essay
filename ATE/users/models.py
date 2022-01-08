@@ -16,7 +16,7 @@ from django.shortcuts import reverse
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(
-        default='media/profile_pics/default.jpg', upload_to='profile_pics')
+        default='profile_pics/default.jpg', upload_to='profile_pics')
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -62,6 +62,7 @@ class ProjectOrder(models.Model):
         User, blank=True, null=True, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
     complete = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
     price = models.FloatField(default=4.0)
 
     def __str__(self):
@@ -103,11 +104,12 @@ class Applicant(models.Model):
                                  )
 
     def __str__(self):
-        return self.First_Name
+        return self.First_Name + " - " + self.username
 
 
 class Bid(models.Model):
-    project = models.ForeignKey(ProjectOrder, default="null",on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        ProjectOrder, default="null", on_delete=models.CASCADE)
     made_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -130,7 +132,12 @@ class CompleteTask(models.Model):
         upload_to='finals',
         help_text='upload the finished task here'
     )
-    bid = models.ForeignKey(Bid, on_delete=models.CASCADE) #set to project, delete all bids on complete project
+    # set to project, delete all bids on complete project
+    bid = models.ForeignKey(Bid, on_delete=models.CASCADE)
+    upload_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.bid.project.title
 
 
 class TestTask(models.Model):

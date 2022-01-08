@@ -1,5 +1,4 @@
-{% extends 'users/base.html' %}
-{% block content %}
+{% extends 'users/base.html' %} {% block content %}
 
 <!-- navbar tabs area -->
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -24,12 +23,12 @@
   <li class="nav-item" role="presentation">
     <button
       class="nav-link"
-      id="pendingInvoices-tab"
+      id="lateInvoices-tab"
       data-bs-toggle="tab"
-      data-bs-target="#pendingInvoices"
+      data-bs-target="#lateInvoices"
       type="button"
       role="tab"
-      aria-controls="pendingInvoices"
+      aria-controls="lateInvoices"
       aria-selected="false"
       style="color: #198787; font-size: medium; font-weight: 600"
     >
@@ -57,7 +56,6 @@
 
 <!-- tabs content area -->
 <div class="tab-content" id="myTabContent">
-
   <!-----------All Invoices Tab content---------->
   <div
     class="tab-pane fade show active"
@@ -65,11 +63,10 @@
     role="tabpanel"
     aria-labelledby="allInvoices-tab"
   >
-    <div class="">
+    <!------------- content -------------->
+    {% for project in assigned %}
 
-      <!------------- content -------------->
-      <section class="row row-cols-1 p-2">
-      {% for project in projects %}
+    <section class="row row-cols-1 p-2">
       <div
         class="col p-1 mt-2"
         style="
@@ -77,153 +74,57 @@
           box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
         "
       >
-        <div class="accordion accordion-flush" id="accordionFlushExample">
-          <div class="accordion-item py-4" style="background: none">
-            <h2 class="accordion-header" id="flush-heading{{ project.id }}">
-              <button
-                class="accordion-button collapsed"
-                style="background: none"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse{{ project.id }}"
-                aria-expanded="false"
-                aria-controls="flush-collapse{{ project.id }}"
+
+      <!------------------ header section ---------------------- -->
+        <div class="d-flex">
+          <i class="fa fa-image mt-3"></i>
+          <span class="px-4"
+            ><p>
+              {{project.title}}<br /><span class="badge bg-danger m-2"
+                >{{ project.type_of_paper }}</span
+              ><a
+                href="#writer"
+                class="badge bg-success"
+                style="text-decoration: none; z-index: 2"
+                >{{project.username}}</a
               >
-                <div class="d-flex">
-                  <i class="fa fa-image mt-3"></i>
-                  <span class="px-4"
-                    ><p>
-                      {{project.title}}<br /><span class="badge bg-danger m-2"
-                        >{{ project.type_of_paper }}</span
-                      ><a
-                        href="#writer"
-                        class="badge bg-success"
-                        style="text-decoration: none; z-index: 2"
-                        >{{project.username}}</a
-                      >
-                    </p></span
-                  >
-                </div>
-              </button>
-            </h2>
-            <div
-              id="flush-collapse{{ project.id }}"
-              class="accordion-collapse collapse"
-              aria-labelledby="flush-heading{{ project.id }}"
-              data-bs-parent="#accordionFlushExample"
-            >
-              <div class="accordion-body">
-                <p style="font-size: small">
-                  {{ project.paper_instructions|default:'This project does not have a description'}}
-                </p>
-                <span
-                  class="d-flex justify-content-between p-2"
-                  style="background-color: whitesmoke; border-radius: 10px"
-                >
-                  <p style="font-weight: 600">
-                    ${{project.price|default:"0"}}/month
-                  </p>
-                  <span>
-                    <a
-                      class="btn btn-outline-success p-2"
-                      href="{{ project.get_absolute_url }}"
-                      style="height: fit-content; font-size: small"
-                      >view details</a
-                    >
-                    </span>
-                  </span>
-              </div>
-            </div>
-          </div>
+            </p></span
+          >
         </div>
+      
+        <!-- ------------- bottom section -------------------- -->
+        <span
+          class="d-flex justify-content-between p-2"
+          style="background-color: whitesmoke; border-radius: 10px"
+        >
+          <span>
+            <p class="badge bg-primary">${{ project.price|default:"0" }}/page </p><small class="text-muted"> Status:</small>
+            <p class="badge bg-info"> {{ project.bid.completetask.upload_date|default:"Not Complete" }}</p>
+          </span>
+          <span>
+            <a
+              class="btn btn-outline-success p-2"
+              href="{{ project.get_absolute_url }}"
+              style="height: fit-content; font-size: small"
+              >view details</a
+            >
+          </span>
+        </span>
       </div>
-      {% endfor %}
     </section>
 
-    </div>
+    {% endfor %}
   </div>
 
-  <!-----------Assigned Invoices Tab content---------->
+  <!-----------Late Invoices Tab content---------->
   <div
     class="tab-pane fade"
-    id="pendingInvoices"
+    id="lateInvoices"
     role="tabpanel"
-    aria-labelledby="pendingInvoices-tab"
+    aria-labelledby="lateInvoices-tab"
   >
     <!----------------------- content ------------------->
-    <section class="row row-cols-1 p-2">
-      {% for project in assigned %}
-
-      <div
-        class="col p-1 mt-2"
-        style="
-          border-radius: 10px;
-          box-shadow: 0 1.5px 2px rgba(128, 128, 128, 0.651);
-        "
-      >
-        <div class="accordion accordion-flush" id="accordionFlushExample">
-          <div class="accordion-item py-4" style="background: none">
-            <h2 class="accordion-header" id="flush-heading{{ project.id }}">
-              <button
-                class="accordion-button collapsed"
-                style="background: none"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse{{ project.id }}"
-                aria-expanded="false"
-                aria-controls="flush-collapse{{ project.id }}"
-              >
-                <div class="d-flex">
-                  <i class="fa fa-image mt-3"></i>
-                  <span class="px-4"
-                    ><p>
-                      {{project.title}}<br /><span class="badge bg-danger m-2"
-                        >{{ project.type_of_paper }}</span
-                      ><a
-                        href="#writer"
-                        class="badge bg-success"
-                        style="text-decoration: none; z-index: 2"
-                        >{{project.username}}</a
-                      >
-                    </p></span
-                  >
-                </div>
-              </button>
-            </h2>
-            <div
-              id="flush-collapse{{ project.id }}"
-              class="accordion-collapse collapse"
-              aria-labelledby="flush-heading{{ project.id }}"
-              data-bs-parent="#accordionFlushExample"
-            >
-              <div class="accordion-body">
-                <p style="font-size: small">
-                  {{ project.paper_instructions|default:'This project does not have a description'}}
-                </p>
-                <span
-                  class="d-flex justify-content-between p-2"
-                  style="background-color: whitesmoke; border-radius: 10px"
-                >
-                  <p style="font-weight: 600">
-                    ${{project.price|default:"0"}}/month
-                  </p>
-                  <span>
-                    <a
-                      class="btn btn-outline-success p-2"
-                      href="{{ project.get_absolute_url }}"
-                      style="height: fit-content; font-size: small"
-                      >view details</a
-                    >
-                    </span>
-                  </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </section>
-
+    <section class="row row-cols-1 p-2">late invoices</section>
   </div>
 
   <!-----------Paid Invoices Tab content---------->
@@ -233,84 +134,66 @@
     role="tabpanel"
     aria-labelledby="paidInvoices-tab"
   >
-
-   <!--------------------- content -------------------- -->
-   <section class="row row-cols-1 p-2">
-      {% for project in assigned %}
-      {% if project.complete is True %}
-      
+    <!--------------------- content -------------------- -->
+    {% for project in complete %}
+    {% if project.paid and project.complete is True %}
+    
+        <section class="row row-cols-1 p-2">
       <div
         class="col p-1 mt-2"
         style="
           border-radius: 10px;
-          box-shadow: 0 1.5px 2px rgba(128, 128, 128, 0.651);
+          box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
         "
       >
-        <div class="accordion accordion-flush" id="accordionFlushExample">
-          <div class="accordion-item py-4" style="background: none">
-            <h2 class="accordion-header" id="flush-heading{{ project.id }}">
-              <button
-                class="accordion-button collapsed"
-                style="background: none"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#flush-collapse{{ project.id }}"
-                aria-expanded="false"
-                aria-controls="flush-collapse{{ project.id }}"
+
+      <!------------------ header section ---------------------- -->
+        <div class="d-flex">
+          <i class="fa fa-image mt-3"></i>
+          <span class="px-4"
+            ><p>
+              {{project.title}}<br /><span class="badge bg-danger m-2"
+                >{{ project.type_of_paper }}</span
+              ><a
+                href="#writer"
+                class="badge bg-success"
+                style="text-decoration: none; z-index: 2"
+                >{{project.username}}</a
               >
-                <div class="d-flex">
-                  <i class="fa fa-image mt-3"></i>
-                  <span class="px-4"
-                    ><p>
-                      {{project.title}}<br /><span class="badge bg-danger m-2"
-                        >{{ project.type_of_paper }}</span
-                      ><a
-                        href="#writer"
-                        class="badge bg-success"
-                        style="text-decoration: none; z-index: 2"
-                        >{{project.username}}</a
-                      >
-                    </p></span
-                  >
-                </div>
-              </button>
-            </h2>
-            <div
-              id="flush-collapse{{ project.id }}"
-              class="accordion-collapse collapse"
-              aria-labelledby="flush-heading{{ project.id }}"
-              data-bs-parent="#accordionFlushExample"
-            >
-              <div class="accordion-body">
-                <p style="font-size: small">
-                  {{ project.paper_instructions|default:'This project does not have a description'}}
-                </p>
-                <span
-                  class="d-flex justify-content-between p-2"
-                  style="background-color: whitesmoke; border-radius: 10px"
-                >
-                  <p style="font-weight: 600">
-                    ${{project.price|default:"0"}}/month
-                  </p>
-                  <span>
-                    <a
-                      class="btn btn-outline-success p-2"
-                      href="{{ project.get_absolute_url }}"
-                      style="height: fit-content; font-size: small"
-                      >view details</a
-                    >
-                    </span>
-                  </span>
-              </div>
-            </div>
-          </div>
+            </p></span
+          >
         </div>
+      
+        <!-- ------------- bottom section -------------------- -->
+        <span
+          class="d-flex justify-content-between p-2"
+          style="background-color: whitesmoke; border-radius: 10px"
+        >
+          <span>
+            <p class="badge bg-primary">${{ project.price|default:"0" }}/page </p><small class="text-muted"> Status:</small>
+            
+            {% if project.complete is True %}
+            <p class="badge bg-info"> {{ project.bid.completetask.upload_date| default:"Complete"}}</p>
+            {% else %}
+            <p class="badge bg-info">Not Complete</p>
+            {% endif %}
+          </span>
+          <span>
+            <a
+              class="btn btn-outline-success p-2"
+              href="{{ project.get_absolute_url }}"
+              style="height: fit-content; font-size: small"
+              >view details</a
+            >
+          </span>
+        </span>
       </div>
-      {% else %}
-      <p> <p>
-      {% endif %}
-      {% endfor %}
     </section>
+
+    {% else %}
+    <p> </p>
+    {% endif %}
+    {% endfor %}
 
   </div>
 </div>

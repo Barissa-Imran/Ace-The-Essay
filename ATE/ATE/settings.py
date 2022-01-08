@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,6 +138,7 @@ USE_TZ = True
 # -----static files config-------
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
@@ -158,7 +160,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # else:
 #     LOGIN_REDIRECT_URL = 'login'
 
-LOGIN_REDIRECT_URL = 'writer'
+LOGIN_REDIRECT_URL = 'admin_landing'
 
 LOGIN_URL = 'login'
 
