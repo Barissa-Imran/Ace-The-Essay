@@ -61,7 +61,6 @@ $(document).ready(function () {
 
 $("#deadline_6").click(function (e) {
   $("#deadline_count").html(new Date(Date.now() + 0.25 * 24 * 60 * 60 * 1000));
-  var price = 30;
 });
 
 $("#deadline_12").click(function (e) {
