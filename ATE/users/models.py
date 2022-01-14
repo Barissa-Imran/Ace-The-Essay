@@ -45,7 +45,7 @@ class ProjectOrder(models.Model):
         help_text='Please upload any additional files here! ZIP multiple files'
     )
     paper_format = models.CharField(max_length=50, choices=PAPER_FORMAT)
-    number_of_pages = models.IntegerField()
+    number_of_pages = models.IntegerField(help_text='0 words approx')
     spacing = models.CharField(
         max_length=50,
         choices=[
@@ -138,7 +138,9 @@ class CompleteTask(models.Model):
 
     def __str__(self):
         return self.bid.project.title
-
+    
+    class Meta:
+        ordering = ['-upload_date']
 
 class TestTask(models.Model):
     test_task = models.FileField(

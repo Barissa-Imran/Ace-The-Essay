@@ -42,7 +42,7 @@
     {% for bid in bids %}
 
     <div
-      class="col-md-3 p-4"
+      class="col-md-3 p-4 m-2"
       style="
         border-radius: 10px;
         width: fit-content;
@@ -73,7 +73,7 @@
   >
     {% for bid in bids %} {% if bid.assign is True %}
     <div
-      class="col-md-3 p-4"
+      class="col-md-3 p-4 m-2"
       style="
         border-radius: 10px;
         width: fit-content;
@@ -94,8 +94,8 @@
       >
     </div>
     {% else %}
-    <p class="border-bottom">
-      Bid not assigned
+    <p>
+      
     </p>
     {% endif %} {% endfor %}
   </div>

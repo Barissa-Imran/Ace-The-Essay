@@ -1,0 +1,18 @@
+{% extends 'client/base.html' %} {% load static %}
+{% block content %}
+
+<div class="content-section m-2">
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="form_group m-2 p-2">
+      <legend class="border-bottom mb-4 lead">Delete Project Order</legend>
+      <p style="background: whitesmoke;">Are you sure you want to delete the post "{{ object.title }}"</p>
+    </fieldset>
+    <div class="form-group mx-2">
+      <a class="btn btn-outline-primary" href="{{ object.get_absolute_url }}">Cancel</a>
+      <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}

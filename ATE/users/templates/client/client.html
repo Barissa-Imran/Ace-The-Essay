@@ -60,7 +60,7 @@
           </a>
         </li>
         <li>
-          <a href="{% url 'client_invoices' %}">
+          <a href="{% url 'client_projects' %}">
             <i class="fa fa-wallet" aria-hidden="true"></i> Invoices
           </a>
         </li>
@@ -170,10 +170,14 @@
                       style="background-color: whitesmoke; border-radius: 10px"
                     >
                       <p class="bg-warning p-2" style="border-radius: 10px">
-                        98
+                        1
                       </p>
                       <span class="px-2"
-                        ><p>Rank<br /><span>in top 30%</span></p></span
+                        ><p>
+                          Rank<br /><span class="badge text-dark"
+                            >in top 5%</span
+                          >
+                        </p></span
                       >
                     </div>
                   </div>
@@ -184,13 +188,18 @@
                     >
                       <div class="d-flex">
                         <p class="bg-warning p-2" style="border-radius: 10px">
-                          32
+                          {{ count| default:"0" }}
                         </p>
                         <span class="px-2"
-                          ><p>Projects<br /><span>#this month</span></p></span
+                          ><p>
+                            Project(s)<br /><span class="badge text-dark"
+                              >This month</span
+                            >
+                          </p></span
                         >
                       </div>
                       <div class="tags">
+                        {% for project in projects %}
                         <p
                           class="badge text-dark"
                           style="
@@ -198,17 +207,9 @@
                             border-radius: 15px;
                           "
                         >
-                          {{project.category|default:'category'}}
+                          {{project.type_of_paper|default:'category'}}
                         </p>
-                        <p
-                          class="badge text-dark"
-                          style="
-                            background-color: #00bbbb9d;
-                            border-radius: 15px;
-                          "
-                        >
-                          {{project.category|default:'category'}}
-                        </p>
+                        {% endfor %}
                       </div>
                     </div>
                   </div>
@@ -239,8 +240,12 @@
                       class="text-secondary"
                       style="text-decoration: none"
                       >{{ project.title }}</a
-                    ><br /><span class="badge bg-success">{{ project.date_posted|date:"F d - Y" }}</span>
-                    <span class="badge bg-danger">{{ project.deadline|date:"F d - Y" }}</span>
+                    ><br /><span class="badge bg-success"
+                      >{{ project.date_posted|date:"F d - Y" }}</span
+                    >
+                    <span class="badge bg-danger"
+                      >{{ project.deadline|date:"F d - Y" }}</span
+                    >
                   </p></span
                 >
               </div>
@@ -271,40 +276,31 @@
                     box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   "
                 >
+
+                {% for project in invoices %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
                     <i class="fa fa-image mt-3"></i>
-                    <span class="px-2"
-                      ><p>Writer name<br /><span>project title</span></p></span
+                    <span class="px-2 badge text-secondary"
+                      ><p><span class="text-warning">{{ project.bid.made_by| default:"writer name" }}</span><br /><span>{{ project.title }}</span></p></span
                     >
-                    <p class="badge bg-danger" style="height: fit-content">
-                      late
-                    </p>
-                    <p>${{paid|default:"0"}}</p>
+                    {% if project.complete and project.paid is True %}
+                      <p class="badge bg-success" style="height: fit-content">
+                        paid
+                      </p>
+                    {% else %}
+                      <p class="badge bg-danger" style="height: fit-content">
+                        pending
+                      </p>
+                    {% endif %}
+                    <p class="badge bg-primary">${{ project.price }}/pg</p>
                   </div>
-                  <!-- second project -->
-                  <div class="d-flex justify-content-between">
-                    <i class="fa fa-image mt-3"></i>
-                    <span class="px-2"
-                      ><p>Writer name<br /><span>project name</span></p></span
-                    >
-                    <p class="badge bg-success" style="height: fit-content">
-                      paid
-                    </p>
-                    <p>${{paid|default:"0"}}</p>
-                  </div>
+                {% endfor %}
+
                 </div>
               </div>
               <div
-                class="
-                  col
-                  d-flex
-                  flex-row
-                  justify-content-between
-                  text-white
-                  align-baseline
-                  mt-4
-                "
+                class="col d-flex flex-row justify-content-between text-white align-baseline mt-4"
                 style="background-color: #00bbbb9d; border-radius: 15px"
               >
                 <i class="fa fa-hashtag p-3" style="font-size: xx-large"></i>
@@ -317,7 +313,7 @@
                 </span>
                 <a
                   href="#message"
-                  class="btn btn-warning m-3 text-white"
+                  class="btn btn-warning m-3 text-white disabled"
                   style="
                     width: fit-content;
                     height: fit-content;
@@ -349,24 +345,24 @@
                 <div class="d-flex justify-content-between">
                   <i class="fa fa-image mt-3"></i>
                   <span class="px-2"
-                    ><p>Writer name<br /><span>Last login</span></p></span
+                    ><p class="badge text-muted">{{ writer_name| default:"writer-name" }}<br /><span>{{ writer_last_login| default:"Last-login" }}</span></p></span
                   >
                   <p class="badge bg-warning mt-2" style="height: fit-content">
-                    category
+                    {{ best_type_of_paper| default:"best-category" }}
                   </p>
                 </div>
-                <p>writer Projects counter</p>
-                <p>best project</p>
+                <p class="badge bg-info">Project count: {{ writer_count| default:"0" }}</p>
+                <p class="badge bg-info">Best project: {{ best_project_title| default:"title" }}</p>
                 <span
                   class="d-flex justify-content-between p-2"
                   style="background-color: whitesmoke; border-radius: 10px"
                 >
-                  <p>${{price|default:"0"}}/page</p>
+                  <p></p>
                   <p
                     class="text-warning p-1"
                     style="border: 1px solid #ffc107; border-radius: 25px"
                   >
-                    full time
+                    Pro
                   </p>
                 </span>
               </div>

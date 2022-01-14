@@ -1,26 +1,163 @@
-{% extends 'client/base.html' %} {% load static %}  {% load crispy_forms_tags %}
+{% extends 'client/base.html' %} {% load static %} {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="content-section m-5">
-  <header class="header container text-center mt-3">
+<section class="row">
+  <header class="header container text-center mt-2">
     <h4 class="">Place Order</h4>
     <p class="text-success">It's fast, secure, and confidential</p>
   </header>
-  <form method="POST">
-    {% csrf_token %}
-    <fieldset class="form_group m-4 p-4">
-      <legend class="border-bottom mb-4 lead">Order Details</legend>
-      {{ form|crispy }}
-    </fieldset>
-    <div class="form-group mb-2 mx-5">
-      <button class="btn btn-outline-warning" type="submit">Order</button>
-    </div>
-  </form>
-  <section class="text-center">We Accept: <img style="width: 4vw;" src="{% static 'img/cc-paypal.svg' %}" alt="Paypal"><br>
-    <small class="text-info">Orders are charged a default fee of $4 per page unless on special cases where support will inform you of the price</small> <br>
-    <small class="text-info">Please note that our currency is always in US Dollars $</small><br>
-    <small>You can read our terms<a href="{% url 'TC' %}"> here.</a></small>
+  <div class="content-section m col">
+    <form method="POST">
+      {% csrf_token %}
+      <fieldset class="form_group p-4">
+        <legend class="border-bottom mb-4 lead">Order Details</legend>
+        {{ form|crispy }}
+      </fieldset>
+      <div class="form_group px-4 mb-2">
+        <p>Deadline</p>
+        <div id="deadline_time">
+          <button
+            id="deadline_6"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            6 Hours
+          </button>
+          <button
+            id="deadline_12"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            12 Hours
+          </button>
+          <button
+            id="deadline_15"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            15 Hours
+          </button>
+          <button
+            id="deadline_24"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            24 Hours
+          </button>
+          <button
+            id="deadline_36"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            36 Hours
+          </button>
+          <button
+            id="deadline_48"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            48 Hours
+          </button>
+          <button
+            id="deadline_3"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            3 Days
+          </button>
+          <button
+            id="deadline_5"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            5 Days
+          </button>
+          <button
+            id="deadline_7"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            7 Days
+          </button>
+          <button
+            id="deadline_10"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            10 Days
+          </button>
+          <button
+            id="deadline_14"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            14 Days
+          </button>
+          <button
+            id="deadline_40"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            30 Days
+          </button>
+          <button
+            id="deadline_60"
+            class="btn btn-outline-secondary"
+            type="button"
+          >
+            60 Days
+          </button>
+        </div>
+        <div>
+          <small id="deadline_count" class="text-muted"> Deadline date</small>
+        </div>
+      </div>
+      <div class="form-group mb-2 mx-4">
+        <button class="btn btn-outline-warning" type="submit">Order</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col p-2 my-5 compute-main">
+    <span
+      class="compute bg-secondary text-white p-2"
+      style="
+        border-radius: 10px;
+        box-shadow: 0 0.5px 1.5px rgba(128, 128, 128, 0.651);
+        height: fit-content;
+      "
+    >
+      <p class="border-bottom">Price</p>
+      <p id="academic_level"></p>
+      <p id="type_of_paper"></p>
+      <p id="number_of_pages"></p>
+      <p id="total" class="text-warning border-top">$0</p>
+      <span class="d-flex justify-content-between">
+        <input class="text-muted" placeholder="Enter coupon" />
+        <button class="btn btn-primary">Apply</button>
+      </span>
+    </span>
+  </div>
+
+  <section class="text-center mb-2">
+    We Accept:
+    <img
+      style="width: 4vw"
+      src="{% static 'img/cc-paypal.svg' %}"
+      alt="Paypal"
+    />
+    <br />
+    <small class="text-info"
+      >Please note that our currency is always in US Dollars ($)</small
+    ><br />
+    <small class="text-info"
+      >You can read our<a href="{% url 'TC' %}" class="text-warning">
+        terms here.</a
+      >and<a href="{% url 'privacy-policy' %}" class="text-warning">
+        privacy policy here.</a
+      ></small
+    >
   </section>
-</div>
+</section>
 
 {% endblock content %}

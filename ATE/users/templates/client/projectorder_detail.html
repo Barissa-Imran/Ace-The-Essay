@@ -1,4 +1,5 @@
-{% extends 'client/base.html' %} {% load crispy_forms_tags %} {% block content %}
+{% extends 'client/base.html' %} {% load crispy_forms_tags %} 
+{% block content %}
 
 <section class="media content-section container">
   <img
@@ -43,6 +44,18 @@
       <p></p>
     </div>
   </div>
+  <a
+    class="btn bg-success p-2 text-white"
+    href="{{ object.get_absolute_url }}/update"
+    style="height: fit-content; font-size: small"
+    >Update</a
+  >
+  <a
+    class="btn btn-outline-danger p-2"
+    href="{{ object.get_absolute_url }}/delete"
+    style="height: fit-content; font-size: small"
+    >Delete</a
+  >
 </section>
 
 {% endblock content %}

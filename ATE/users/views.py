@@ -25,7 +25,7 @@ from django.views.generic import (
     CreateView,
     UpdateView
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from decouple import config
 
 # To be used in password creation
@@ -59,10 +59,10 @@ def apply(request):
                 lower = string.ascii_lowercase
                 upper = string.ascii_uppercase
                 num = string.digits
-                symbols = string.punctuation
+                # symbols = string.punctuation---------password too complicated for users
 
                 # Combine the data
-                all = lower + upper + num + symbols
+                all = lower + upper + num
 
                 # use random to randomise the characters
                 temp = random.sample(all, length)
@@ -267,6 +267,7 @@ def writer(request):
 
     context = {
         'projects': ProjectOrder.objects.filter(bid__made_by=request.user, bid__assign=True)[:2],
+        # fix to get latest
         'recommended': ProjectOrder.objects.filter(bid__assign=False)[:1],
         'completedProjects': ProjectOrder.objects.filter(bid__made_by=request.user,
                                                          bid__assign=True,
@@ -317,9 +318,13 @@ def writer_bids(request):
 @login_required
 def invoices(request):
     complete = ProjectOrder.objects.filter(
-        complete=True, bid__made_by=request.user)
+        complete=True,
+        bid__made_by=request.user
+    )
     assigned = ProjectOrder.objects.filter(
-        bid__assign=True, bid__made_by=request.user)
+        bid__assign=True,
+        bid__made_by=request.user
+    )
     context = {
         'complete': complete,
         'assigned': assigned,
@@ -359,6 +364,7 @@ def settings(request):
     }
     return render(request, 'writer/settings.html', context)
 
+
 @login_required
 def library(request):
     messages.info(request, "Information will be made available soon.")
@@ -371,9 +377,19 @@ def library(request):
 
 @login_required
 def client(request):
+    def get_count():
+        count = 0
+        projects = ProjectOrder.objects.filter(username=request.user)
+
+        for project in projects:
+            count += 1
+        return count
 
     context = {
-        'projects': ProjectOrder.objects.filter(username=request.user)
+        'projects': ProjectOrder.objects.filter(username=request.user)[:2],
+        'invoices': ProjectOrder.objects.filter(bid__assign=True)[:2],
+        'recommended': '',
+        'count': get_count(),
     }
 
     return render(request, 'client/client.html', context)
@@ -393,11 +409,6 @@ def place_order(request):
             new_form.username = request.user
             new_form.save()
             username = request.user
-
-            # test case
-            # made_by = request.user
-            # bid = Bid.objects.create(project=new_form, made_by=made_by)
-            # bid.save()
 
             try:
                 send_mail(
@@ -428,22 +439,38 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
         usergroup = None
         usergroup = self.request.user.groups.values_list(
             'name', flat=True).first()
-
         if usergroup == "Writers" or usergroup == "Admin":
             return ["writer/projectorder_detail.html"]
         elif usergroup == "Clients" or usergroup == "Admin":
             return ["client/projectorder_detail.html"]
         else:
-            HttpResponseBadRequest("You are not allowed to access this page")
+            return HttpResponseBadRequest("You are not allowed to access this page")
 
-    # Get the forms ready to be produced them in the template (context)
+    # provide custom context data for the view i.e forms
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project = self.model.title
+
+        # get the current user's usergroup
+        usergroup = None
+        usergroup = self.request.user.groups.values_list(
+            'name', flat=True).first()
+
+        # to pass admin user into the context as True
+        def get_admin(usergroup):
+            Admin = None
+            if usergroup == "Admin":
+                Admin =True
+                return Admin
+            else:
+                Admin =False
+                return Admin
+        
         context.update({
             'cForm': CompleteTaskForm,
             'bForm': BidForm,
             'project': project,
+            'usergroup':get_admin(usergroup),
         })
 
         return context
@@ -479,18 +506,41 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         'number_of_pages',
         'spacing',
         'currency',
-        'date_posted',
     ]
 
+    # validate the form and add data to empty fields as specified
     def form_valid(self, form):
-        form.instance.slug = str(form.instance.title) + \
-            '-' + str(form.instance.pk)
+
+        # generate random unique characters to be used in the slug
+        def char_Gen(length):
+
+            # defined data to be used in the characters
+            lower = string.ascii_lowercase
+            upper = string.ascii_uppercase
+            num = string.digits
+
+            # Combine the data
+            all = lower + upper + num
+
+            # use random to randomise the characters
+            temp = random.sample(all, length)
+
+            # create the char hash
+            char = "".join(temp)
+            return char
+
+        # replace spaces in title with hiphens
+        title = form.instance.title.replace(" ", "-")
+
+        form.instance.slug = str(title) + \
+            '-' + str(char_Gen(8))
         form.instance.username = self.request.user
         return super().form_valid(form)
 
 
-class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = ProjectOrder
+    template_name = "client/projectorder_form.html"
     fields = [
         'academic_level',
         'type_of_paper',
@@ -505,6 +555,50 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
         'date_posted',
     ]
 
+
+    def form_valid(self, form):
+
+        # generate random unique characters to be used in the slug
+        def char_Gen(length):
+
+            # defined data to be used in the characters
+            lower = string.ascii_lowercase
+            upper = string.ascii_uppercase
+            num = string.digits
+
+            # Combine the data
+            all = lower + upper + num
+
+            # use random to randomise the characters
+            temp = random.sample(all, length)
+
+            # create the char hash
+            char = "".join(temp)
+            return char
+
+        # replace spaces in title with hiphens
+        title = form.instance.title.replace(" ", "-")
+
+        form.instance.slug = str(title) + \
+            '-' + str(char_Gen(8))
+        form.instance.username = self.request.user
+        return super().form_valid(form)
+    
+    def test_func(self):
+        project = self.get_object()
+        if self.request.user == project.username:
+            return True
+        return False
+
+class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = ProjectOrder
+    template_name = "client/projectorder_confirm_delete.html"
+
+    def test_func(self):
+        project = self.get_object()
+        if self.request.user == project.username:
+            return True
+        return False
 
 @login_required
 def client_projects(request):
@@ -524,7 +618,19 @@ def client_bids(request):
 
 @login_required
 def client_invoices(request):
-    return render(request, 'client/client_invoices.html')
+    complete = ProjectOrder.objects.filter(
+        username=request.user,
+        complete=True
+    )
+    assigned = ProjectOrder.objects.filter(
+        username=request.user,
+        bid__assign=True,
+    )
+    context = {
+        'complete': complete,
+        'assigned': assigned,
+    }
+    return render(request, 'client/client_invoices.html', context)
 
 
 @login_required

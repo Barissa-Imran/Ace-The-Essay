@@ -34,9 +34,7 @@ urlpatterns = [
     path("admin-landing", user_views.admin_landing, name="admin_landing"),
     # Project detail view
     path("project/<slug>", user_views.ProjectDetailView.as_view(), name="project_detail"),
-    path("client/project-new/", user_views.ProjectCreateView.as_view(), name="project_create"),
     # Project update view
-    path("project/<slug>/update", user_views.ProjectUpdateView.as_view(), name="project_update"),
     # url(r'^saveForm/$', user_views.BidFormView.as_view(), name='form'),
     # search results url
     path("search/results/", user_views.search_results, name="search_results"),
@@ -53,7 +51,10 @@ urlpatterns = [
 
     # Client Dashboard pages urls
     path("client", user_views.client, name="client"),
-    path("client/place-order", user_views.place_order, name="place_order"),
+    # path("client/place-order", user_views.place_order, name="place_order"),
+    path("client/place-order", user_views.ProjectCreateView.as_view(), name="place_order"),
+    path("project/<slug>/update", user_views.ProjectUpdateView.as_view(), name="project_update"),
+    path("project/<slug>/delete", user_views.ProjectDeleteView.as_view(), name="project_delete"),
     path("client/invoices", user_views.client_invoices, name="client_invoices"),
     path("client/projects", user_views.client_projects, name="client_projects"),
     path("client/bids", user_views.client_bids, name="client_bids"),

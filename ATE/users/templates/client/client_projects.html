@@ -9,7 +9,7 @@
   class="col p-1 mt-2"
   style="
     border-radius: 10px;
-    box-shadow: 0 1.5px 5px rgba(128, 128, 128, 0.651);
+    box-shadow: 0 0.5px 1.5px rgba(128, 128, 128, 0.651);
   "
 >
   <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -58,14 +58,20 @@
             <p style="font-weight: 600">${{project.price|default:"0"}}/month</p>
             <span>
               <a
+                class="btn bg-primary p-2 text-white"
+                href="{{ project.get_absolute_url }}"
+                style="height: fit-content; font-size: small"
+                >View Details</a
+              >
+              <a
                 class="btn btn-outline-success p-2"
-                href="{% url 'project_update' %}"
+                href="{{ project.get_absolute_url }}/update"
                 style="height: fit-content; font-size: small"
                 >Update</a
               >
               <a
                 class="btn btn-outline-danger p-2"
-                href="#"
+                href="{{ project.get_absolute_url }}/delete"
                 style="height: fit-content; font-size: small"
                 >Delete</a
               >
