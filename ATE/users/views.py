@@ -292,7 +292,7 @@ def projects(request):
         'assigned': ProjectOrder.objects.filter(bid__assign=True)
     }
 
-    return render(request, 'writer/Projects.html', context)
+    return render(request, 'writer/projects.html', context)
 
 # search results view
 
