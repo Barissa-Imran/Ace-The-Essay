@@ -44,15 +44,15 @@ $("#id_type_of_paper").mouseup(function (e) {
 });
 
 // calculate deadline date according to selected date
-$.each(
-  $("deadline_time").click(function () {
-    if ($(this).text() == "36 Hours") {
-      console.log("yes");
-    } else {
-      console.log("no");
-    }
-  })
-);
+// $.each(
+//   $("deadline_time").click(function () {
+//     if ($(this).text() == "36 Hours") {
+//       console.log("yes");
+//     } else {
+//       console.log("no");
+//     }
+//   })
+// );
 
 // calculate deadline date according to selected date
 $(document).ready(function () {
