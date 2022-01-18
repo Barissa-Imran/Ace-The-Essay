@@ -35,9 +35,9 @@
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
     <!-- navbar here -->
     <!-- Sidebar menu -->
-    <div class="sidebar-container">
+    <div id="navcol-1" class="sidebar-container">
       <div class="sidebar-logo">Client Dashboard</div>
-      <ul class="sidebar-navigation">
+      <ul class="sidebar-navigation ">
         <li class="header">Navigation</li>
         <li>
           <a href="{% url 'client' %}">
@@ -132,20 +132,29 @@
               "
             />
           </div>
+          <button
+            class="navbar-toggler collapsed d-lg-none"
+            data-bs-toggle="collapse"
+            data-bs-target="#navcol-1"
+            aria-expanded="false"
+          >
+            <span class="visually-hidden">Toggle navigation</span>
+            <i class="fas fa-bars text-success"></i>
+          </button>
         </nav>
         <!-- content area -->
         <section class="row">
           <!-- main first column -->
           <div class="col-lg-8">
             <!-- main div dividing into two -->
-            <div class="row row-cols-2">
+            <div class="row">
               <!-- first column -->
-              <div class="col">
+              <div class="col-lg-6">
                 <div
                   class="bg-warning p-4 text-white"
                   style="border-radius: 10px"
                 >
-                  <p>#graph here</p>
+                  <p>#graph here <i class="fas fa-signature"></i></p>
                   <p>Earnings</p>
                   <p style="font-size: large">${{Earnings|default:'0'}}</p>
                   <p
@@ -156,7 +165,8 @@
                   </p>
                 </div>
               </div>
-              <div class="col">
+              <!-- second column -->
+              <div class="col-lg-6 second">
                 <div
                   class="row row-cols-1 p-1"
                   style="
@@ -219,11 +229,14 @@
           </div>
           <!-- main second column -->
           <div class="col-lg-4">
-            <p style="color: #198787; font-size: small; font-weight: 600">
+            <p
+              class="featured"
+              style="color: #198787; font-size: small; font-weight: 600"
+            >
               Featured Projects
             </p>
             <div
-              class="p-2"
+              class="p-2 third"
               style="
                 border-radius: 10px;
                 box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
@@ -270,33 +283,35 @@
                   Recent Invoices
                 </p>
                 <div
-                  class="p-3"
+                  class="p-3 fourth"
                   style="
                     border-radius: 10px;
                     box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   "
                 >
-
-                {% for project in invoices %}
+                  {% for project in invoices %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
                     <i class="fa fa-image mt-3"></i>
                     <span class="px-2 badge text-secondary"
-                      ><p><span class="text-warning">{{ project.bid.made_by| default:"writer name" }}</span><br /><span>{{ project.title }}</span></p></span
+                      ><p>
+                        <span class="text-warning"
+                          >{{ project.bid.made_by| default:"writer name" }}</span
+                        ><br /><span>{{ project.title }}</span>
+                      </p></span
                     >
                     {% if project.complete and project.paid is True %}
-                      <p class="badge bg-success" style="height: fit-content">
-                        paid
-                      </p>
+                    <p class="badge bg-success" style="height: fit-content">
+                      paid
+                    </p>
                     {% else %}
-                      <p class="badge bg-danger" style="height: fit-content">
-                        pending
-                      </p>
+                    <p class="badge bg-danger" style="height: fit-content">
+                      pending
+                    </p>
                     {% endif %}
                     <p class="badge bg-primary">${{ project.price }}/pg</p>
                   </div>
-                {% endfor %}
-
+                  {% endfor %}
                 </div>
               </div>
               <div
@@ -335,7 +350,7 @@
             </p>
             <a class="btn" href="#writer-detail-url" role="button">
               <div
-                class="p-3"
+                class="p-3 fifth"
                 style="
                   border-radius: 10px;
                   box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
@@ -345,14 +360,22 @@
                 <div class="d-flex justify-content-between">
                   <i class="fa fa-image mt-3"></i>
                   <span class="px-2"
-                    ><p class="badge text-muted">{{ writer_name| default:"writer-name" }}<br /><span>{{ writer_last_login| default:"Last-login" }}</span></p></span
+                    ><p class="badge text-muted">
+                      {{ writer_name| default:"writer-name" }}<br /><span
+                        >{{ writer_last_login| default:"Last-login" }}</span
+                      >
+                    </p></span
                   >
                   <p class="badge bg-warning mt-2" style="height: fit-content">
                     {{ best_type_of_paper| default:"best-category" }}
                   </p>
                 </div>
-                <p class="badge bg-info">Project count: {{ writer_count| default:"0" }}</p>
-                <p class="badge bg-info">Best project: {{ best_project_title| default:"title" }}</p>
+                <p class="badge bg-info">
+                  Project count: {{ writer_count| default:"0" }}
+                </p>
+                <p class="badge bg-info">
+                  Best project: {{ best_project_title| default:"title" }}
+                </p>
                 <span
                   class="d-flex justify-content-between p-2"
                   style="background-color: whitesmoke; border-radius: 10px"

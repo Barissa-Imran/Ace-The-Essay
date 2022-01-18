@@ -36,7 +36,7 @@
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
     <!-- navbar here -->
     <!-- Sidebar menu -->
-    <div class="sidebar-container">
+    <div id="navcol-1" class="sidebar-container">
       <div class="sidebar-logo">Client Dashboard</div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
@@ -145,6 +145,15 @@
               "
             />
           </div>
+          <button
+            class="navbar-toggler collapsed d-lg-none"
+            data-bs-toggle="collapse"
+            data-bs-target="#navcol-1"
+            aria-expanded="false"
+          >
+            <span class="visually-hidden">Toggle navigation</span>
+            <i class="fas fa-bars text-success"></i>
+          </button>
         </nav>
 
         <!-- content area -->
@@ -161,7 +170,7 @@
       type="text/javascript"
       src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
-    <script src="{% static 'js/writer.js' %}"></script>
-    <script src="{% static 'js/client.js' %}"></script>
+    {% comment %} <script src="{% static 'js/writer.js' %}"></script> {% endcomment %}
+    <script type="text/javascript" src="{% static 'js/client.js' %}"></script>
   </body>
 </html>

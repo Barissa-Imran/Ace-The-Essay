@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 {% block content %}
   {% comment %} {% if user.groups.filter(name='Applicants').exists() or user.groups.filter(name='Admin').exists() %} {% endcomment %}
-<div class="content-section m-5">
-<h3>Application</h3>
+<div class="content-section m-2">
+  <h3>Application</h3>
   <p class="bg-light">
     fill in the fields as indicated. Please note that you're to follow instructions as indicated on the <a href="{% url 'faq' %}" target="_blank" class="text-warning">FAQ</a> page
   </p>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <fieldset class="form_group m-4 p-4">
+    <fieldset class="form_group m-4 p-2" style="width: fit-content;">
       <legend class="border-bottom mb-4 lead">Application form</legend>
       {{ Applicantform|crispy }}
     </fieldset>

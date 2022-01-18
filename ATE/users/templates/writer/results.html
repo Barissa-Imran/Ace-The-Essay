@@ -1,10 +1,4 @@
-{% extends 'users/base.html' %}
-{% block content %}
+{% extends 'writer/base.html' %} {% block content %} {% for result in results %}
 
-{% for result in results %}
-
-<p>{{ result.title }}<p>
-
-{% endfor %}
-
-{% endblock content %}
+<p>{{ result.title }}</p>
+<p>{% endfor %} {% endblock content %}</p>

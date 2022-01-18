@@ -26,7 +26,7 @@
   {% if user.is_authenticated %}
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
     <!-- Sidebar menu -->
-    <div class="sidebar-container">
+    <div id="navcol-1" class="sidebar-container">
       <div class="sidebar-logo">Writer Dashboard</div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
@@ -109,12 +109,11 @@
               >
             </p>
           </div>
-          <form class="form-group has-search" method="GET" action="search/results/">
-            <label for="q">
+          <div class="form-group has-search">
             <input
               type="text"
-              name="q"
-              id="q"
+              name="search"
+              id="project"
               class="form-control"
               placeholder="Search for projects"
               style="
@@ -125,19 +124,25 @@
                 font-size: small;
               "
             />
-            {% comment %} <input
-            type="submit"
-            value="Search"
-           /> {% endcomment %}
+          </div>
+          <button
+            class="navbar-toggler collapsed d-lg-none"
+            data-bs-toggle="collapse"
+            data-bs-target="#navcol-1"
+            aria-expanded="false"
+          >
+            <span class="visually-hidden">Toggle navigation</span>
+            <i class="fas fa-bars text-success"></i>
+          </button>
         </nav>
         <!-- content area -->
         <section class="row">
           <!-- main first column -->
           <div class="col-lg-8">
             <!-- main div dividing into two -->
-            <div class="row row-cols-2">
+            <div class="row">
               <!-- first column -->
-              <div class="col">
+              <div class="col-lg-6">
                 <div
                   class="bg-warning p-4 text-white"
                   style="border-radius: 10px"
@@ -153,7 +158,8 @@
                   </p>
                 </div>
               </div>
-              <div class="col">
+              <!-- second column -->
+              <div class="col-lg-6 second">
                 <div
                   class="row row-cols-1 p-1"
                   style="
@@ -214,7 +220,7 @@
               Active Projects
             </p>
             <div
-              class="p-2"
+              class="p-2 third"
               style="
                 border-radius: 10px;
                 box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
@@ -262,7 +268,7 @@
                   Recent Invoices
                 </p>
                 <div
-                  class="p-3"
+                  class="p-3 fourth"
                   style="
                     border-radius: 10px;
                     box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
@@ -337,7 +343,7 @@
             {% for project in recommended %}
             <a class="btn" href="{{ project.get_absolute_url }}" role="button">
               <div
-                class="p-3"
+                class="p-3 fifth"
                 style="
                   border-radius: 10px;
                   box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);

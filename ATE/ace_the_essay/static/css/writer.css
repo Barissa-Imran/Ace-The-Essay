@@ -8,6 +8,7 @@
   overflow-y: auto;
   background: #198787;
   color: #fff;
+  z-index: 1;
 }
 
 .sidebar-logo {
@@ -108,7 +109,49 @@
   padding: 5px;
 }
 
+/* .navbar-toggler {
+  display: none;
+} */
+
 /* alerts */
 div .alert-error {
   background: #dc3545 !important;
+}
+
+/* Mobile responsive settings */
+@media only screen and (max-width: 1024px) {
+  .content-container {
+    margin-left: unset;
+  }
+  /* .sidebar-container {
+    display: none;
+  }
+
+  .has-search {
+    display: none;
+  }
+
+  .navbar-toggler {
+    display: unset;
+  } */
+
+  /* div .second {
+    background: #cfe2eb9f !important;
+    margin: 10px;
+  }
+
+  div .third {
+    background: #cfe2eb9f !important;
+  }
+
+  div .fourth {
+    background: #cfe2eb9f !important;
+  }
+
+  div .fifth {
+    background: #cfe2eb9f !important;
+  } */
+  /* .nav-applicant {
+    background: #00bbbb9d !important;
+  } */
 }

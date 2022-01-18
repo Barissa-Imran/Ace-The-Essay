@@ -35,7 +35,7 @@
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
     <!-- navbar here -->
     <!-- Sidebar menu -->
-    <div class="sidebar-container">
+    <div class="sidebar-container d-none d-lg-block">
       <div class="sidebar-logo">Applicant</div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
@@ -92,7 +92,7 @@
       <!-- end of copyright -->
     </div>
     <div class="content-container">
-      <div class="container-fluid">
+      <div class="container-fluid mb-5">
         <!-- navbar area -->
         <nav class="navbar">
           <div class="navbar-brand text-dark">
@@ -100,24 +100,23 @@
               href="{% url 'index' %}"
               style="text-decoration: none; font-size: medium"
               class="text-dark"
-              ><i class="fa fa-arrow-left m-2"></i> HOME</a
+              ><i class="fa fa-arrow-left m-2"></i> ACE</a
             >
           </div>
-          <div class="dropdown show">
-            <a
+          <div class="dropdown">
+            <button
               class="btn btn-light dropdown-toggle"
-              href="#"
-              role="button"
-              id="dropdownMenuLink"
+              type="button"
+              id="dropdownMenuButton"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
               {{user.username}}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="{% url 'logout' %}"
-                >Log out <i class="fa fa-power-off"></i
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item text-danger " href="{% url 'logout' %}"
+                >Logout <i class="fa fa-power-off"></i
               ></a>
             </div>
           </div>
@@ -129,14 +128,35 @@
         {% endfor %} {% endif %} {% block content %} {% endblock content%}
       </div>
     </div>
-    <script
-      type="text/javascript"
-      src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
-    ></script>
+
+    <footer class="d-lg-none bg-light">
+      <p
+        class="
+          d-flex
+          justify-content-center
+          badge
+          mb-0
+          fixed-bottom
+        "
+        style="color: #198754;"
+      >
+        2022&copy; Ace The Essay <i class="fa fa-heart px-1"></i> Made by
+        <a target=_blank
+          href="https://barryimranapp.herokuapp.com/" class="text-decoration-none text-warning px-1">
+          Barrylabs</a
+        >
+      </p>
+    </footer>
+
     <script
       type="text/javascript"
       src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+
     <script src="{% static 'js/writer.js' %}"></script>
   </body>
 </html>

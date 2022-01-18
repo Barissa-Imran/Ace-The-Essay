@@ -1,8 +1,8 @@
-{% extends 'users/base.html' %} {% load crispy_forms_tags %} {% block content %}
-{% if usergroup is True %}
+{% extends 'writer/base.html' %} {% load crispy_forms_tags %} {% block content %} {% if usergroup is True %}
 <p class="alert bg-danger text-white">
   You have been redirected to the writer project detail page because you are
-  logged in as an Admin. To see the client detail view log in as a client. <a class="text-warning" href="{% url 'login' %}">Login</a>
+  logged in as an Admin. To see the client detail view log in as a client.
+  <a class="text-warning" href="{% url 'login' %}">Login</a>
 </p>
 {% else %}
 <p class="alert bg-info"></p>

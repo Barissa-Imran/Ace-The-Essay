@@ -1,4 +1,4 @@
-{% extends 'users/base.html' %} {% block content %}
+{% extends 'writer/base.html' %} {% block content %}
 
 <!-- navbar tabs area -->
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -74,8 +74,7 @@
           box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
         "
       >
-
-      <!------------------ header section ---------------------- -->
+        <!------------------ header section ---------------------- -->
         <div class="d-flex">
           <i class="fa fa-image mt-3"></i>
           <span class="px-4"
@@ -91,15 +90,20 @@
             </p></span
           >
         </div>
-      
+
         <!-- ------------- bottom section -------------------- -->
         <span
           class="d-flex justify-content-between p-2"
           style="background-color: whitesmoke; border-radius: 10px"
         >
           <span>
-            <p class="badge bg-primary">${{ project.price|default:"0" }}/page </p><small class="text-muted"> Status:</small>
-            <p class="badge bg-info"> {{ project.bid.completetask.upload_date|default:"Not Complete" }}</p>
+            <p class="badge bg-primary">
+              ${{ project.price|default:"0" }}/page
+            </p>
+            <small class="text-muted"> Status:</small>
+            <p class="badge bg-info">
+              {{ project.bid.completetask.upload_date|default:"Not Complete" }}
+            </p>
           </span>
           <span>
             <a
@@ -135,10 +139,9 @@
     aria-labelledby="paidInvoices-tab"
   >
     <!--------------------- content -------------------- -->
-    {% for project in complete %}
-    {% if project.paid and project.complete is True %}
-    
-        <section class="row row-cols-1 p-2">
+    {% for project in complete %} {% if project.paid and project.complete is True %}
+
+    <section class="row row-cols-1 p-2">
       <div
         class="col p-1 mt-2"
         style="
@@ -146,8 +149,7 @@
           box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
         "
       >
-
-      <!------------------ header section ---------------------- -->
+        <!------------------ header section ---------------------- -->
         <div class="d-flex">
           <i class="fa fa-image mt-3"></i>
           <span class="px-4"
@@ -163,17 +165,22 @@
             </p></span
           >
         </div>
-      
+
         <!-- ------------- bottom section -------------------- -->
         <span
           class="d-flex justify-content-between p-2"
           style="background-color: whitesmoke; border-radius: 10px"
         >
           <span>
-            <p class="badge bg-primary">${{ project.price|default:"0" }}/page </p><small class="text-muted"> Status:</small>
-            
+            <p class="badge bg-primary">
+              ${{ project.price|default:"0" }}/page
+            </p>
+            <small class="text-muted"> Status:</small>
+
             {% if project.complete is True %}
-            <p class="badge bg-info"> {{ project.bid.completetask.upload_date| default:"Complete"}}</p>
+            <p class="badge bg-info">
+              {{ project.bid.completetask.upload_date| default:"Complete"}}
+            </p>
             {% else %}
             <p class="badge bg-info">Not Complete</p>
             {% endif %}
@@ -191,10 +198,9 @@
     </section>
 
     {% else %}
-    <p> </p>
-    {% endif %}
+    <p></p>
+    {% endif %} 
     {% endfor %}
-
   </div>
 </div>
 
