@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .sidebar-container {
   position: fixed;
   width: 220px;

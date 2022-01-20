@@ -1,27 +1,39 @@
-// applicant dropdown button
-
+// ****  JQuery  ***
 $(document).ready(function () {
+  // applicant dropdown button
   $(".dropdown-toggle").dropdown();
-});
 
-// sidebar panel show/hide on screen size
+  /*---------------------Dashboards mobile view page-------------------------- */
 
-$(document).ready(function () {
-  // variable assignment outside event handler
+  /* sidebar panel show/hide on screen size
+  variable assignment outside event handler*/
   var $window = $(window);
   var $panel = $("#navcol-1");
 
   function checkWidth() {
     var windowsize = $window.width();
     if (windowsize <= 1024) {
-      // if window is equal to tablet ir smaller then hide sidebar panel
-      $panel.toggleClass("collapse");
+      // if window is equal to tablet or smaller then hide sidebar panel
+      $panel.addClass("collapse");
+    } else {
+      $panel.removeClass("collapse");
     }
   }
   //   Execute on load
   checkWidth();
   //   Bind event listener
   $(window).resize(checkWidth);
+
+  /*---------------------project detail page-------------------------- */
+
+  // prepopulate bid form fields with data.
+  let project = $("h2").html();
+  $("#id_project option").html(project);
+
+  let user = $("#username").html();
+  $("#id_made_by option").html(user);
+
+  // alert(test);
 });
 
 // $(document).ready(function () {

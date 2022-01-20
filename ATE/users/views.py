@@ -449,7 +449,24 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
     # provide custom context data for the view i.e forms
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
-        project = self.model.title
+        project = self.get_object()
+        user = self.request.user
+
+        # only show complete task section is user is assigned order
+        def func(project, user):
+            bids = project.bid_set.all()
+            for bid in bids:
+                if bid.made_by == user and bid.assign == True:
+                    return True
+                pass
+
+        # only show bid button is order is not assigned yet
+        def func2(project):
+            bids = project.bid_set.all()
+            for bid in bids:
+                if bid.assign == False:
+                    return False
+                pass
 
         # get the current user's usergroup
         usergroup = None
@@ -469,7 +486,8 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
         context.update({
             'cForm': CompleteTaskForm,
             'bForm': BidForm,
-            'project': project,
+            'assigned': func(project, user),
+            'bid': func2(project),
             'usergroup':get_admin(usergroup),
         })
 
@@ -477,17 +495,16 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
 
     # Bid form validation
     def bForm_form_valid(self, request, form):
-        form.instance.project = self.request.ProjectOrder
+        form.instance.project = self.get_object()
         form.instance.made_by = self.request.user
         messages.success(
-            request, "Your bid has been submitted successfuly. View all bids by clicking on the Bids tab")
+            request, "Your bid has been submitted successfuly. View your bids by clicking on the Bids tab")
         return super().form_valid(form)
 
     # Complete task form validation
     def cForm_form_valid(self, request, form):
-        form.instance.project = self.request.ProjectOrder
-        project = self.request.ProjectOrder
-        form.instance.bid = project.bid.filter(made_by=self.request.user)
+        project = self.get_object()
+        # form.instance.bid = project.bid.filter(made_by=self.request.user)
         messages.success(request, "Project was submitted successfully")
         return super().form_valid(form)
 
