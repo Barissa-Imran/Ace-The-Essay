@@ -160,6 +160,24 @@
         {% if messages %} {% for message in messages %}
         <div class="alert alert-{{message.tags}}">{{ message }}</div>
         {% endfor %} {% endif %} {% block content %} {% endblock content%}
+
+        <footer class="d-lg-none bg-light mt-5">
+      <p
+        class="
+          d-flex
+          justify-content-center
+          badge
+          mb-0
+        "
+        style="color: #198754;"
+      >
+        2022&copy; Ace The Essay <i class="fa fa-heart px-1"></i> Made by
+        <a target=_blank
+          href="https://barryimranapp.herokuapp.com/" class="text-decoration-none text-warning px-1">
+          Barrylabs</a
+        >
+      </p>
+    </footer>
       </div>
     </div>
     <script

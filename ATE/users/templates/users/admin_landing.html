@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
     <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
-    <title>ACE - Writer</title>
+    <title>ACE - Admin</title>
     <style>
     .alert-error {
       background: #dc3545;
@@ -34,7 +34,6 @@
             <div class="alert alert-{{message.tags}} m-2">{{ message }}</div>
         {% endfor %}
     {% endif %}
-    <p class="alert alert-success"> Website is now fully mobile responsive. Open on mobile to experience... (~_~)</p>
     <header class="m-4">Welcome, <span class="text-muted">{{user.username}}</span>
     <a
         href="{% url 'logout' %}"
@@ -45,12 +44,71 @@
         <i class="fa fa-sign-out-alt"></i> log out
       </a>
     </header>
-    <section class="h-100 w-100 row d-flex align-items-center ">
+    <section class="">
         <div class="col-md-12 m-4">
             <a class="btn btn-outline-primary m-2" href="/admin" role="button">Admin Panel</a>
             <a class="btn btn-outline-warning m-2" href="{% url 'application' %}" role="button">Applicant Dashboard</a>
             <a class="btn btn-outline-info m-2" href="{% url 'writer' %}" role="button">Writer Dashboard</a>
             <a class="btn btn-outline-secondary m-2" href="{% url 'client' %}" role="button">Client Dashboard</a>
+        </div>
+        <p class="mx-4">Tutorial: <a class="text-warning" href="#" target="_blank">Read the docs</a></p>
+        <div class="m-4 mt-5 p-4" style="
+                    border-radius: 10px;
+                    box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
+                  ">
+          <h6 class="lead">Logs</h6>
+          <small>
+
+            <div>
+            <p class="badge bg-success">Released v0.29</p>
+            <small class="text-muted">what's new <i class="fa fa-rocket"></i></small>
+            <ul class="text-muted p-2" style="background: whitesmoke;">
+              <li>Add logs section on admin-landing page</li>
+              <li>Add footer on dashboards in mobile display</li>
+              <li>Fix bug where mobile menu not closing except by using menu button</li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="badge bg-success">Released v0.28</p>
+            <small class="text-muted">what's new <i class="fa fa-rocket"></i></small>
+            <ul class="text-muted p-2" style="background: whitesmoke;">
+              <li>Fix sidebar showing on-scroll bug in mobile</li>
+              <li>Add complete task and bid display on project detail page- show only one according to condition</li>
+              <li>Add calculated word count after choosing spacing on place-order page</li>
+              <li>Fix bug where date was not being calculated place-order page</li>
+              <li>Add subject to price calculation place-order page</li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="badge bg-success">Released v0.27</p>
+            <small class="text-muted">what's new <i class="fa fa-rocket"></i></small>
+            <ul class="text-muted p-2" style="background: whitesmoke;">
+                <li>Add mobile responsiveness on Dashboards</li>
+                <li>Fix dropdown on Applicant/Application page</li>
+                <li>Remove access to Test-task page before sending application</li>
+                <li>Add CRUD functionality for clients - can now Create, Read, Update and Delete Orders </li>
+              </ul>
+          </div>
+
+          <div class="border-bottom">
+            <p class="badge bg-success">Released v0.26</p>
+            <small class="text-muted">what's new <i class="fa fa-rocket"></i></small>
+            <ul class="text-muted p-2" style="background: whitesmoke;">
+                <li>Add Admin-landing page</li>
+                <li>Intergrate writer dashboard with backend to populate data</li>
+                <li>Add JQuery on place-order page to calculate price and show live functionality</li>
+                <li>Fix 500 server error bug on writer dashboard accessing projects page</li>
+              </ul>
+          </div>
+
+          <div class="mt-2">
+          <p class="badge bg-success">Released v0.1</p>
+          <small class="text-muted">View changes on Github <i class="fa fa-github-code-fork"></i></small>
+          </div>
+
+        </small>
         </div>   
     </section>
       </div>

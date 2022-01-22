@@ -20,17 +20,30 @@
       style="background: #00bbbb9d"
     >
       <a id="username" href="#" class="mr-2 text-white">{{ object.username }}</a>
-      <small class="badge bg-danger">
-        Deadline:
-        <span style="font-weight: 600">{{object.deadline}}</span></small
-      >
-      <span class="badge text-secondar bg-primary"
-        >Price: ${{object.price}} /pg</span
-      >
+
+      <span class="d-none d-lg-block">
+        <small class="badge bg-danger">
+          Deadline:
+          <span style="font-weight: 600">{{object.deadline}}</span></small
+        >
+        <span class="badge bg-primary"
+          >Price: ${{object.price}} /pg</span
+        >
+      </span>
 
       <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
     </div>
     <div class="mt-3 project-details">
+      <span class="d-lg-none">
+        <small class="badge bg-danger">
+          Deadline:
+          <span style="font-weight: 600">{{object.deadline}}</span></small
+        >
+        <span class="badge bg-primary mb-2"
+          >Price: ${{object.price}} /pg</span
+        >
+      </span>
+
       <h2
         class="project-title lead border-bottom"
         style="color: #198787; font-weight: 600"
@@ -79,7 +92,7 @@
     {% else %}
 
     {% if bid is False %}
-    <form class="bid" method="POST" action="{{ object.get_absolute_url }}">
+    <form class="bid" method="POST" action="">
       {% csrf_token %}
       <fieldset class="form_group m-4 p-4 d-non">
         <legend class="border-bottom mb-4">Bid</legend>

@@ -232,7 +232,7 @@ def admin_landing(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
     if usergroup == "Admin":
-        messages.info(request, "Select a page you would like to visit below!")
+        messages.info(request, "Website is now fully mobile responsive. Open on mobile to experience (~_~)")
         return render(request, "users/admin_landing.html")
     elif usergroup == "Writers" or usergroup == "Admin":
         return HttpResponseRedirect('writer')
