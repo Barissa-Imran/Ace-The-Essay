@@ -12,37 +12,63 @@
   >
   <div class="mt-4 text-primary">scroll below to post a job</div>
 </header>
-<div
-  class="content-section"
->
-<section class="mx-4 px-4">
-  <h5 class="text-success">Our Custom Essay Writing Service Offers</h5>
-  <ul>
-    <li>On-time delivery guarantee</li>
-    <li>100% money-back guarantee</li>
-    <li>PhD-level proffessional editors</li>
-    <li>Automatic plagiarism check</li>
-    <li>100% Privacy and confidentiality</li>
-    <li>High-Quality custom-written pages</li>
-  </ul>
-  <div>Visit our dedicated section us to why you should use our services on the why us page <a href="{% url 'whyus' %}" class="text-warning">here.</a> </div>
-  <div class="text-warning" >You have to create an account to post a job on this website. Register below.</div>
-</section>
-  <form method="POST">
-    {% csrf_token %}
-    <fieldset class="form_group m-4 p-4">
-      <legend class="border-bottom mb-4">Create an Account</legend>
-      {{ form|crispy }}
-    </fieldset>
-    <div class="form-group mb-2 mx-5">
-      <button class="btn btn-outline-warning" type="submit">Sign Up</button>
+<main class="content-section">
+  <section class="mx-4 px-4">
+    <h5 class="text-success">Our Custom Essay Writing Service Offers</h5>
+    <ul>
+      <li>On-time delivery guarantee</li>
+      <li>100% money-back guarantee</li>
+      <li>PhD-level proffessional editors</li>
+      <li>Automatic plagiarism check</li>
+      <li>100% Privacy and confidentiality</li>
+      <li>High-Quality custom-written pages</li>
+    </ul>
+    <div>
+      Visit our dedicated section us to why you should use our services on the
+      why us page <a href="{% url 'whyus' %}" class="text-warning">here.</a>
     </div>
-  </form>
-  <div class="border-top pt-3 mb-4 mx-5">
-    <small class="text-muted">
-      Already have an account?
-      <a class="ml-2 text-dark" href="{% url 'login' %}">Sign In</a>
-    </small>
+    <div class="border-bottom mt-4">
+      <small>
+        <b>
+          <i
+            >For security reasons and your privacy, a client is supposed to
+            create an account before creating an order</i
+          >
+        </b>
+      </small>
+    </div>
+  </section>
+  <section class="row">
+    <div class="col">
+    <form method="POST" style="width: fit-content">
+      {% csrf_token %}
+      <fieldset class="form_group m-4 p-4">
+        <legend class="border-bottom mb-4">Create an Account</legend>
+        {{ form|crispy }}
+      </fieldset>
+      <div class="form-group mb-2 mx-5">
+        <button class="btn btn-outline-warning" type="submit">Sign Up</button>
+        <p class="text-muted text-justified mt-2">
+          <small
+            >By signing up above, you acknowledge that you have read and
+            understood <br />
+            our <a href="{% url 'TC' %}">Terms</a> and
+            <a href="{% url 'privacy-policy' %}">Privacy policy</a></small
+          >
+        </p>
+        <p></p>
+      </div>
+    </form>
+    <div class="border-top pt-3 mb-4 mx-5">
+      <small class="text-muted">
+        Already have an account?
+        <a class="ml-2 text-warning" href="{% url 'login' %}">Sign In</a>
+      </small>
+    </div>
   </div>
-</div>
+  <div class="col d-none d-lg-block" style="background-image: url({% static 'img/background.svg' %});
+        background-size: auto; width: 100%;">
+  </div>
+  </section>
+</main>
 {% endblock content %}

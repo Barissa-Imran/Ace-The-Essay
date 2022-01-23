@@ -56,7 +56,7 @@ class ProjectOrder(models.Model):
         max_length=50, default='$', help_text='currency is always in US dollars')
     date_posted = models.DateTimeField(
         default=timezone.now, help_text="This is an automatically generated field, don't fill in")
-    deadline = models.DateField(default=timezone.now)
+    deadline = models.DateTimeField(default=timezone.now)
     update_time = models.DateField(auto_now=True)
     username = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.CASCADE)

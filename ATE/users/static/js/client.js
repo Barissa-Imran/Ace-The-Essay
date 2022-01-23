@@ -148,7 +148,31 @@ $(document).ready(function () {
     }
   });
 
+  // $("#bid").click(function () {
+  //   $.ajax({
+  //     url: "",
+  //     type: "POST",
+  //     data: {
+  //       button_text: $(this).text(),
+  //       price: $("total").text(),
+  //     },
+  //     sucess: function (response) {
+  //       $("#bid").text(sucess);
+  //     },
+  //   });
+  //   alert("Order sent successfully");
+  // });
   // ### more jquery goes here following the above pattern ###
 });
 
-// *** JavaScript ***
+/*** JavaScript ***/
+
+var $panel = $("#navcol-1");
+
+// close menu when screen in clicked
+function toggleMenu() {
+  $panel.removeClass("show");
+}
+ 
+
+

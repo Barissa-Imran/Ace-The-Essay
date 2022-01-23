@@ -523,6 +523,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         'number_of_pages',
         'spacing',
         'currency',
+        'deadline',
     ]
 
     # validate the form and add data to empty fields as specified
@@ -552,6 +553,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         form.instance.slug = str(title) + \
             '-' + str(char_Gen(8))
         form.instance.username = self.request.user
+        # form.instance.price = get('total')
         return super().form_valid(form)
 
 

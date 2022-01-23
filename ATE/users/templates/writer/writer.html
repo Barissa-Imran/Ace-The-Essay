@@ -27,7 +27,17 @@
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif">
     <!-- Sidebar menu -->
     <div id="navcol-1" class="sidebar-container">
-      <div class="sidebar-logo">Writer Dashboard</div>
+      <div class="sidebar-logo text-center" style="">
+        <a class="btn text-white" href="{% url 'settings' %}" role="button">
+          <img
+            src="{{ user.profile.image.url }}"
+            alt="profile"
+            class="rounded-circle mx-2"
+            style="max-width: 60px; height: 60px"
+          />
+          <p style="font-size: 13px;">{{ user.username }}<br>{{ user.email }}</p>
+        </a>
+      </div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
         <li>
@@ -68,7 +78,7 @@
       </ul>
       <a
         href="{% url 'logout' %}"
-        class="text-white mx-5 my-3 btn btn-warning"
+        class="text-white mx-5 my-3 btn btn-danger"
         style="text-decoration: none"
         role="button"
       >

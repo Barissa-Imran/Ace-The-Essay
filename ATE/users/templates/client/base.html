@@ -17,7 +17,6 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,300&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="{% static 'css/writer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/client.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
     <link
@@ -37,7 +36,17 @@
     <!-- navbar here -->
     <!-- Sidebar menu -->
     <div id="navcol-1" class="sidebar-container">
-      <div class="sidebar-logo">Client Dashboard</div>
+      <div class="sidebar-logo text-center">
+        <a class="btn text-white" href="{% url 'client_settings' %}" role="button">
+          <img
+            src="{{ user.profile.image.url }}"
+            alt="profile"
+            class="rounded-circle mx-2"
+            style="max-width: 80px; height: 80px"
+          />
+          <p style="font-size: 13px;">{{ user.username }}<br>{{ user.email }}</p>
+        </a>
+      </div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
         <li>
@@ -79,7 +88,7 @@
       {% if user.is_authenticated %}
       <a
         href="{% url 'logout' %}"
-        class="text-white mx-5 my-3 btn btn-warning"
+        class="text-white mx-5 my-3 btn btn-danger"
         style="text-decoration: none"
         role="button"
       >
@@ -152,7 +161,7 @@
             aria-expanded="false"
           >
             <span class="visually-hidden">Toggle navigation</span>
-            <i class="fas fa-bars text-success"></i>
+            <i class="fas fa-bars"></i>
           </button>
         </nav>
 

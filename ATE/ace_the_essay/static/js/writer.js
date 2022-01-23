@@ -35,6 +35,12 @@ $(document).ready(function () {
 
   // alert(test);
 });
+var $panel = $("#navcol-1");
+
+// close menu when screen in clicked
+function toggleMenu() {
+  $panel.removeClass("show");
+}
 
 // $(document).ready(function () {
 //   $(".bid").click(function () {
