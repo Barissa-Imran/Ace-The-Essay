@@ -119,8 +119,37 @@ html {
 
 /* alerts */
 div .alert-error {
-  background: #dc3545 !important;
+        color: #842029;
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
+      }
+
+/*-------------- writer settings page------------------ */
+#blur.active {
+  filter: blur(10px);
+  pointer-events: none;
+  user-select: none;
 }
+#popup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* width: 600px; */
+  padding: 20px;
+  background-color: #f5fcff;
+  box-shadow: 0 5px 30px rgba(0, 0, 0,.30);
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+}
+#popup.active {
+  top: 50%;
+  visibility: visible;
+  opacity: 1;
+  transition: 0.5s;
+}
+/* ---------------------------------------------------------- */
 
 /* Mobile responsive settings */
 @media only screen and (max-width: 1024px) {

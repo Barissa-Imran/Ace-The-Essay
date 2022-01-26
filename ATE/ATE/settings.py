@@ -150,15 +150,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# redirect users according to user group
-# if User.groups.filter(name='Applicant').exists():
-#     LOGIN_REDIRECT_URL = 'application'
-# elif User.groups.filter(name='Clients').exists():
-#     LOGIN_REDIRECT_URL = 'client'
-# elif User.groups.filter(name='Writers').exists():
-#     LOGIN_REDIRECT_URL = 'writer'
-# else:
-#     LOGIN_REDIRECT_URL = 'login'
 
 LOGIN_REDIRECT_URL = 'admin_landing'
 

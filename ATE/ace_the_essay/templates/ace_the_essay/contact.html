@@ -3,10 +3,7 @@
   <div class="px-5">
     <header
       class="container text-center py-4"
-      style="
-        background-image: url({% static 'img/background.svg' %});
-        background-size: auto;
-      "
+      style=""
     >
       <h1 class="display-4">Contact Us</h1>
       <p>Apply now and start earning as a freelance writer</p>
@@ -17,15 +14,37 @@
         ><b>APPLY NOW</b></a
       >
     </header>
-    <section class="container d-flex justify-content-center mt-2">
-      <form method="POST" class="bg-info" style="width: fit-content">
+    <section class="d-flex justify-content-center mt-2">
+      <form method="POST" class="contact">
         {% csrf_token %}
-        <fieldset class="form_group m-4 p-4">
+        <fieldset class="form_group m-4 p-4 d-flex flex-column">
           <legend class="border-bottom mb-4 lead">Contact Us</legend>
-          {{ form|crispy }}
+          <div class="m-2">
+            <small class="text-muted">
+              <input type="text" name="name" required id="name" placeholder="Name" />
+            </small>
+          </div>
+          <div class="m-2">
+            <small class="text-muted">
+              <input type="email" name="email" required id="email" placeholder="Email" />
+            </small>
+          </div>
+          <div class="m-2">
+            <small class="text-muted">
+              <input type="text" name="subject" required id="subject" placeholder="subject"/>
+            </small>
+          </div>
+          <div class="m-2">
+            <small class="text-muted d-flex flex-column">
+              <label for="message">Message:</label>
+              <input type="text" name="message" required id="message" />
+            </small>
+          </div>
         </fieldset>
         <div class="form-group mb-2 mx-5">
-          <button class="btn btn-outline-success" type="submit">Send</button>
+          <button id="send-btn" class="btn btn-outline-success" type="submit" value="contact">
+            Send
+          </button>
         </div>
       </form>
     </section>

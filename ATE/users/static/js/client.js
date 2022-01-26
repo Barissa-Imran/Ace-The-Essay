@@ -167,12 +167,15 @@ $(document).ready(function () {
 
 /*** JavaScript ***/
 
-var $panel = $("#navcol-1");
+/*--------------------settings page---------------------------*/ 
 
-// close menu when screen in clicked
-function toggleMenu() {
-  $panel.removeClass("show");
-}
+function deleteForm() {
+  var blur = document.getElementById("blur");
+  blur.classList.toggle("active");
+
+  var popup = document.getElementById("popup");
+  popup.classList.toggle("active");
+};
  
 
 

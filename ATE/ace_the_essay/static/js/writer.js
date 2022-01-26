@@ -24,23 +24,30 @@ $(document).ready(function () {
   //   Bind event listener
   $(window).resize(checkWidth);
 
-  /*---------------------project detail page-------------------------- */
+  $('#bid').click(function (){
+    $("#bid").text("Bidding...")
+  });
 
-  // prepopulate bid form fields with data.
-  let project = $("h2").html();
-  $("#id_project option").html(project);
+  $("input").focus(function () {
+    $("#upload").text("Upload");
+  });
 
-  let user = $("#username").html();
-  $("#id_made_by option").html(user);
+  $('#upload').click(function (){
+    $("#upload").text("Uploading...")
+  });
 
-  // alert(test);
 });
-var $panel = $("#navcol-1");
 
-// close menu when screen in clicked
-function toggleMenu() {
-  $panel.removeClass("show");
-}
+// ** JavaScript **
+/*--------------------settings page---------------------------*/ 
+
+function deleteForm() {
+  var blur = document.getElementById("blur");
+  blur.classList.toggle("active");
+
+  var popup = document.getElementById("popup");
+  popup.classList.toggle("active");
+};
 
 // $(document).ready(function () {
 //   $(".bid").click(function () {

@@ -1,7 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100%">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
     <title>Login</title>
   </head>
-  <body style="background: #f5fcff">
+  <body style="background: #f5fcff" class="w-100%">
     <!-- webdesign -->
         {% if messages %}
       {% for message in messages %}
@@ -40,6 +40,7 @@
         <div class="d-flex flex-column mt-3 form-group">
           <a href="{% url 'password_reset' %}" class="text-white forgot">Forgot password?</a>
           <button
+          id="login-btn"
             class="btn btn-block btn-color login-btn btn-success px-5 my-2 form-group"
             type="submit"
           >
@@ -84,6 +85,7 @@
         <div class="d-flex flex-column mt-3 form-group">
           <a href="{% url 'password_reset' %}" class="text-white forgot">Forgot password?</a>
           <button
+          id="login-btn"
             class="btn btn-block btn-color login-btn btn-success px-5 my-2 form-group"
             type="submit"
           >

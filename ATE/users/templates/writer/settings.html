@@ -1,12 +1,12 @@
 {% extends 'writer/base.html' %} {% load crispy_forms_tags %} {% block content %}
 
-<div class="content-section">
+<div id="blur" class="content-section">
   <div class="media d-flex m-4">
     <img
       src="{{ user.profile.image.url }}"
       alt="profile"
       class="rounded-circle mx-2"
-      style="max-width: 80px; height: 80px"
+      style="max-width: 80px; height: 80px;"
     />
     <div class="media-body">
       <small>
@@ -15,7 +15,7 @@
       </small>
     </div>
   </div>
-  <form method="post" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" class="border-bottom">
     {% csrf_token %}
     <fieldset class="form_group m-4 p-4">
       <legend class="border-bottom mb-4">Profile Info</legend>
@@ -23,9 +23,20 @@
     </fieldset>
     <div class="form-group mb-2 mx-5 d-flex">
       <button class="btn btn-outline-success" type="submit">Update</button>
-      <a class="btn btn-outline-danger mx-2" href="#delete">Delete Account</a>
+      <a id="delete" onclick="deleteForm();" class="btn btn-outline-danger mx-2">Delete Account</a>
     </div>
   </form>
 </div>
+  <form id="popup" method="get" class="">
+    <legend class="border-bottom">Confirmation</legend>
+    <p style="background: whitesmoke;">
+      Are you sure you want to delete your account? enter your username <code class="bg-white">{ {{user.username}} }</code> in the box below to continue.
+    </p>
+    <div class="d-flex">
+      <a onclick="deleteForm();" class="btn btn-outline-primary mx-2 btn-sm" id="cancel">Cancel</a>
+      <input class="rounded-xl" type="text" name="username" required id="confirm" placeholder="Type here">
+      <button class="btn btn-outline-danger mx-2 btn-sm" type="submit">Yes, Delete</button>
+    </div>
+  </form>
 
 {% endblock content %}

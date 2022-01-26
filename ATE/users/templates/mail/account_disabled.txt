@@ -1,0 +1,8 @@
+Account with username:
+
+{{ username }}
+
+has disabled their account. Check for any follow up from the contact us page.
+
+Regards,
+The Team @ACE 

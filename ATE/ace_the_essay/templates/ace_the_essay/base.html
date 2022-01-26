@@ -17,175 +17,227 @@
     />
     <link rel="stylesheet" href="{% static 'vendor/fa/css/all.css' %}" />
     <link rel="stylesheet" href="{% static 'css/core.css' %}" />
-    <link rel="shortcut icon" href="{% static 'img/favicon.svg' %}" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="{% static 'img/favicon.svg' %}"
+      type="image/x-icon"
+    />
     <title>ACE</title>
     <style>
       .alert-error {
-        background: #dc3545;
-        color: #fff;
+        color: #842029;
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
       }
     </style>
   </head>
-  <body
-    style="
-      background: #f5fcff;
-      overflow-x: hidden;
-      font-family: 'Poppins', sans-serif;
-    "
-  >
-    <!-- Navigation bar section -->
-    <nav class="navbar navbar-default navbar-expand-md" role="navigation">
-      <div class="container-fluid">
-        <button
-          class="navbar-toggler collapsed"
-          data-bs-toggle="collapse"
-          data-bs-target="#navcol-1"
-          aria-expanded="false"
-        >
-          <span class="visually-hidden">Toggle navigation</span>
-          <i class="fas fa-bars text-success"></i>
-        </button>
-        <a class="navbar-brand text-dark" href="{% url 'index' %}">ACE</a>
-        <div
-          class="navbar-collapse collapse justify-content-lg-center"
-          id="navcol-1"
-        >
-          <ul class="navbar-nav">
-            <li class="p-3 nav-item">
+  <body style="background: #f5fcff; font-family: 'Poppins', sans-serif">
+    <main id="blur" style="overflow-x: hidden">
+      <!-- Navigation bar section -->
+      <nav class="navbar navbar-default navbar-expand-md" role="navigation">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler collapsed"
+            data-bs-toggle="collapse"
+            data-bs-target="#navcol-1"
+            aria-expanded="false"
+          >
+            <span class="visually-hidden">Toggle navigation</span>
+            <i class="fas fa-bars text-success"></i>
+          </button>
+          <a class="navbar-brand text-dark" href="{% url 'index' %}">ACE</a>
+          <div
+            class="navbar-collapse collapse justify-content-lg-center"
+            id="navcol-1"
+          >
+            <ul class="navbar-nav">
+              <li class="p-3 nav-item">
+                <a
+                  href="{% url 'index' %}"
+                  class="text-decoration-none text-success nav-link"
+                  ><strong>Home</strong></a
+                >
+              </li>
+              <li class="p-3 nav-item">
+                <a
+                  href="{% url 'whyus' %}"
+                  class="text-decoration-none text-success nav-link"
+                  ><strong>Why Us</strong></a
+                >
+              </li>
+              <li class="p-3 nav-item">
+                <a
+                  href="{% url 'top' %}"
+                  class="text-decoration-none text-success nav-link"
+                  ><strong>Terms of Payment</strong></a
+                >
+              </li>
+              <li class="p-3 nav-item">
+                <a
+                  href="{% url 'faq' %}"
+                  class="text-decoration-none text-success nav-link"
+                  ><strong>FAQ</strong></a
+                >
+              </li>
+            </ul>
+          </div>
+          <a class="btn btn-warning text-success" onclick="login();">Log in</a>
+        </div>
+      </nav>
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{message.tags}} m-2">{{ message }}</div>
+      {% endfor %} {% endif %} {% block content %}{% endblock content %}
+      <footer class="" style="background: #b7c8cc">
+        <nav class="navbar d-flex flex-row justify-content-start container">
+          <ul class="list-unstyled">
+            <li class="nav-item">
               <a
-                href="{% url 'index' %}"
-                class="text-decoration-none text-success nav-link"
-                ><strong>Home</strong></a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'apply' %}"
+                ><strong>Apply to Join</strong></a
               >
             </li>
-            <li class="p-3 nav-item">
+            <li class="nav-item">
               <a
-                href="{% url 'whyus' %}"
-                class="text-decoration-none text-success nav-link"
-                ><strong>Why Us</strong></a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'register' %}"
+                ><strong>Post a Job</strong></a
               >
             </li>
-            <li class="p-3 nav-item">
+            <li class="nav-item">
               <a
-                href="{% url 'top' %}"
-                class="text-decoration-none text-success nav-link"
-                ><strong>Terms of Payment</strong></a
-              >
-            </li>
-            <li class="p-3 nav-item">
-              <a
-                href="{% url 'faq' %}"
-                class="text-decoration-none text-success nav-link"
-                ><strong>FAQ</strong></a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'revision-policy' %}"
+                ><strong>Revision Policy</strong></a
               >
             </li>
           </ul>
-        </div>
-        <a class="btn btn-warning text-success" href="{% url 'login' %}"
-          >Log in</a
+          <ul class="list-unstyled">
+            <li>
+              <a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'privacy-policy' %}"
+                ><strong>Privacy Policy</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'TC' %}"
+                ><strong>Terms and Conditions</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'faq' %}"
+                ><strong>Frequently Asked Questions</strong></a
+              >
+            </li>
+          </ul>
+          <ul class="list-unstyled">
+            <li class="nav-item">
+              <a
+                class="text-decoration-none nav-link text-white"
+                href="{% url 'contact' %}"
+                ><strong>Contact Us</strong></a
+              >
+            </li>
+          </ul>
+        </nav>
+        <p
+          class="d-flex justify-content-center text-success badge mb-0 text-center"
         >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="86.406"
+            height="20.951"
+            viewBox="0 0 86.406 89.951"
+          >
+            <g transform="translate(2448.541 -2655.803)">
+              <path
+                d="M228.467,720.372,227.2,719.9c-.278-.1-27.992-10.723-40.975-34.8s-6.626-53.067-6.56-53.356l.3-1.32,1.267.475c.278.1,27.992,10.723,40.975,34.8s6.626,53.067,6.56,53.356Zm-40.163-36.4c10.976,20.357,32.877,30.792,38.426,33.174,1.055-5.947,4.364-30-6.6-50.334s-32.874-30.786-38.426-33.174c-1.056,5.95-4.363,30,6.6,50.334Z"
+                transform="translate(-2592.514 2025.381)"
+                fill="#345b5e"
+              />
+              <path
+                d="M196.146,676.652c23.331,14.037,32.317,41.918,32.317,41.918s-28.842,5.123-52.173-8.914-32.317-41.918-32.317-41.918S172.815,662.615,196.146,676.652Z"
+                transform="translate(-2592.514 2025.381)"
+                fill="#345b5e"
+              />
+            </g>
+          </svg>
+          2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i> Made by
+          <a
+            target="_blank"
+            href="https://barryimranapp.herokuapp.com/"
+            class="text-decoration-none text-primary px-1"
+          >
+            Barrylabs</a
+          >
+        </p>
+      </footer>
+    </main>
+
+    <!-- login popup -->
+    <section id="popup">
+      <div class="d-flex justify-content-end">
+        <button id="close" class="btn btn-danger" onclick="login();">x</button>
       </div>
-    </nav>
-    {% if messages %} {% for message in messages %}
-    <div class="alert alert-{{message.tags}}">{{ message }}</div>
-    {% endfor %} {% endif %} {% block content %}{% endblock content %}
-    <footer class="" style="background: #b7c8cc">
-      <nav class="navbar d-flex flex-row justify-content-start container">
-        <ul class="list-unstyled">
-          <li class="nav-item">
-            <a
-              class="text-decoration-none nav-link text-white"
-              href="{% url 'apply' %}"
-              ><strong>Apply to Join</strong></a
+      <form method="POST" style="padding: 20px">
+        {% csrf_token %}
+        <legend class="border-bottom">Login</legend>
+        <fieldset class="d-flex flex-column">
+          {% if msg %}
+          <small class="alert alert-danger">{{ msg }}</small>
+          {% else %}
+          {% endif %}
+          <input
+            class="p-2 text-success"
+            type="text"
+            name="username"
+            required
+            id="username"
+            placeholder="Username"
+          />
+          <input
+            class="my-3 p-2 text-success"
+            type="password"
+            name="password"
+            required
+            id="password"
+            placeholder="Password"
+          />
+        </fieldset>
+        <div class="d-flex flex-column mt-3" class="text-center">
+          <a href="{% url 'password_reset' %}" class="text-muted text-center"
+            ><small>Forgot password?</small></a
+          >
+          <button
+            id="login-btn"
+            class="btn btn-block btn-color login-btn btn-success px-5 my-2 form-group"
+            type="submit"
+          >
+            Login
+          </button>
+          <p class="text-muted m-0 text-center">
+            <small>Don't have an account?</small>
+          </p>
+          <span class="d-flex flex-row justify-content-center">
+            <a class="btn btn-post m-2 text-success" href="{% url 'apply' %}"
+              ><small>Writer</small></a
             >
-          </li>
-          <li class="nav-item">
             <a
-              class="text-decoration-none nav-link text-white"
+              class="btn btn-apply m-2 text-success"
               href="{% url 'register' %}"
-              ><strong>Post a Job</strong></a
+              ><small>Company</small></a
             >
-          </li>
-          <li class="nav-item">
-            <a
-              class="text-decoration-none nav-link text-white"
-              href="{% url 'revision-policy' %}"
-              ><strong>Revision Policy</strong></a
-            >
-          </li>
-        </ul>
-        <ul class="list-unstyled">
-          <li>
-            <a
-              class="text-decoration-none nav-link text-white"
-              href="{% url 'privacy-policy' %}"
-              ><strong>Privacy Policy</strong></a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="text-decoration-none nav-link text-white"
-              href="{% url 'TC' %}"
-              ><strong>Terms and Conditions</strong></a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="text-decoration-none nav-link text-white"
-              href="{% url 'faq' %}"
-              ><strong>Frequently Asked Questions</strong></a
-            >
-          </li>
-        </ul>
-        <ul class="list-unstyled">
-          <li class="nav-item">
-            <a
-              class="text-decoration-none nav-link text-white"
-              href="{% url 'contact' %}"
-              ><strong>Contact Us</strong></a
-            >
-          </li>
-        </ul>
-      </nav>
-      <p
-        class="
-          d-flex
-          justify-content-center
-          text-success
-          badge
-          mb-0
-          text-center
-        "
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="86.406"
-          height="20.951"
-          viewBox="0 0 86.406 89.951"
-        >
-          <g transform="translate(2448.541 -2655.803)">
-            <path
-              d="M228.467,720.372,227.2,719.9c-.278-.1-27.992-10.723-40.975-34.8s-6.626-53.067-6.56-53.356l.3-1.32,1.267.475c.278.1,27.992,10.723,40.975,34.8s6.626,53.067,6.56,53.356Zm-40.163-36.4c10.976,20.357,32.877,30.792,38.426,33.174,1.055-5.947,4.364-30-6.6-50.334s-32.874-30.786-38.426-33.174c-1.056,5.95-4.363,30,6.6,50.334Z"
-              transform="translate(-2592.514 2025.381)"
-              fill="#345b5e"
-            />
-            <path
-              d="M196.146,676.652c23.331,14.037,32.317,41.918,32.317,41.918s-28.842,5.123-52.173-8.914-32.317-41.918-32.317-41.918S172.815,662.615,196.146,676.652Z"
-              transform="translate(-2592.514 2025.381)"
-              fill="#345b5e"
-            />
-          </g>
-        </svg>
-        2021&copy; Ace The Essay <i class="fa fa-heart px-1"></i> Made by
-        <a
-          target="_blank"
-          href="https://barryimranapp.herokuapp.com/"
-          class="text-decoration-none text-primary px-1"
-        >
-          Barrylabs</a
-        >
-      </p>
-    </footer>
+          </span>
+        </div>
+      </form>
+    </section>
+    <!-- end -->
+
     <script
       type="text/javascript"
       src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"

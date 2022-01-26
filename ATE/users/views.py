@@ -1,11 +1,12 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http.response import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User, Group
-
+from django.utils import timezone
 from .forms import (
     EmailApplicationForm,
     UserRegisterForm,
@@ -156,7 +157,7 @@ def application(request):
         }
         return render(request, 'applicant/application.html', context)
     else:
-        return HttpResponseBadRequest('You do not have permission to view this page! -Ate Team')
+        return HttpResponseBadRequest('You do not have permission to view this page! -The Team @ACE')
 
 
 @login_required
@@ -191,7 +192,7 @@ def application_task(request):
                 request, 'You can only upload a task once, please be thorough!')
         return render(request, 'applicant/application_task.html', {'form': form})
     else:
-        return HttpResponseBadRequest('You do not have permission to view this page')
+        return HttpResponseBadRequest('You do not have permission to view this page! -The Team @ACE')
 # register page view
 
 
@@ -232,7 +233,8 @@ def admin_landing(request):
     usergroup = None
     usergroup = request.user.groups.values_list('name', flat=True).first()
     if usergroup == "Admin":
-        messages.info(request, "Website is now fully mobile responsive. Open on mobile to experience (~_~)")
+        messages.info(
+            request, "Website is now fully mobile responsive. Open on mobile to experience (~_~)")
         return render(request, "users/admin_landing.html")
     elif usergroup == "Writers" or usergroup == "Admin":
         return HttpResponseRedirect('writer')
@@ -240,8 +242,9 @@ def admin_landing(request):
         return HttpResponseRedirect('applicant/application')
     elif usergroup == "Clients" or usergroup == "Admin":
         # check if it's first client login then redirect to place order page.
-        if User.last_login is None:
-            return HttpResponseRedirect('client/place_order.html')
+        user = request.user
+        if user.last_login == timezone.now():  # fix this
+            return HttpResponseRedirect('client/placeorder_form.html')
         else:
             return HttpResponseRedirect('client')
     else:
@@ -251,9 +254,20 @@ def admin_landing(request):
 
 
 # ------------------Writer dashboard views-----------------#
+
+# usergroup check
+def usergroup_check(user):
+    usergroup = None
+    usergroup = user.groups.values_list('name', flat=True).first()
+    if usergroup == "Writers" or usergroup == "Admin":
+        return True
+    return False
+
 # writer dashboard view
 
+
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def writer(request):
 
     def count_complete():
@@ -285,11 +299,12 @@ def writer(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def projects(request):
 
     context = {
         'projects': ProjectOrder.objects.all(),
-        'assigned': ProjectOrder.objects.filter(bid__assign=True)
+        'assigned': ProjectOrder.objects.filter(bid__assign=True, bid__made_by=request.user)
     }
 
     return render(request, 'writer/projects.html', context)
@@ -298,6 +313,7 @@ def projects(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def search_results(request):
     search_text = request.GET.get('q', '')
     results = ProjectOrder.objects.filter(title__icontains=search_text)
@@ -307,6 +323,7 @@ def search_results(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def writer_bids(request):
     context = {
         'bids': Bid.objects.filter(made_by=request.user)
@@ -316,6 +333,7 @@ def writer_bids(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def invoices(request):
     complete = ProjectOrder.objects.filter(
         complete=True,
@@ -335,6 +353,7 @@ def invoices(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def reports(request):
     return render(request, 'writer/reports.html')
 
@@ -342,6 +361,7 @@ def reports(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def settings(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -354,18 +374,72 @@ def settings(request):
             messages.success(
                 request, f'Your account has been updated!')
             return redirect('settings')
+
+    # **User is disabled with this function**
+
+    # to make sure the user requesting disable is the owner
+    elif request.GET.get('username') == request.user.username:
+        username = request.user.username
+
+        # function to disable a user
+        def delete_user(request, username):
+            context = None
+
+            try:
+                user = User.objects.get(username=username)
+                user.is_active = False
+                user.save()
+                context = 'Profile successfully disabled. Thank you for using our service, cheers!'
+
+            except User.DoesNotExist:
+                context = 'User does not exist.'
+            except Exception as e:
+                context = e.message
+
+           # send email to admin
+            try:
+                ctext = {
+                    'username': username,
+                }
+
+                msg_plain = render_to_string('mail/email.txt', ctext)
+                send_mail(
+                    'ACCOUNT DISABLED',
+                    msg_plain,
+                    config('EMAIL_USER'),
+                    [config('EMAIL_USER'), ],
+                    # html_message=msg_html,
+                )
+            except:
+                pass
+
+            return context
+
+        context = {
+            'msg': delete_user(request, username),
+        }
+
+        return render(request, "users/user_delete.html", context)
+
+    elif request.GET.get('username') != None and request.GET.get('username') != request.user.username:
+        messages.error(request, "Username mismatch!")
+
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+    u_form = UserUpdateForm(instance=request.user)
+    p_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
     }
     return render(request, 'writer/settings.html', context)
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def library(request):
     messages.info(request, "Information will be made available soon.")
     return render(request, "writer/library.html")
@@ -375,7 +449,17 @@ def library(request):
 
 # ------------------Client dashboard views-----------------#
 
+# usergroup check
+def usergroup_check(user):
+    usergroup = None
+    usergroup = user.groups.values_list('name', flat=True).first()
+    if usergroup == "Clients" or usergroup == "Admin":
+        return True
+    return False
+
+
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client(request):
     def get_count():
         count = 0
@@ -396,6 +480,7 @@ def client(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def place_order(request):
     if request.method == 'POST':
         form = ProjectOrderForm(request.POST)
@@ -431,8 +516,16 @@ def place_order(request):
     return render(request, 'client/place_order.html', context)
 
 
-class ProjectDetailView(LoginRequiredMixin, DetailView):
+class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = ProjectOrder
+
+    def test_func(self):
+        usergroup = None
+        usergroup = self.request.user.groups.values_list(
+            'name', flat=True).first()
+        if usergroup == "Writers" or usergroup == "Admin" or usergroup == "Clients":
+            return True
+        return False
 
     # Get detail template according to user.
     def get_template_names(self):
@@ -455,18 +548,35 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
         # only show complete task section is user is assigned order
         def func(project, user):
             bids = project.bid_set.all()
-            for bid in bids:
-                if bid.made_by == user and bid.assign == True:
-                    return True
-                pass
+            if bids.exists():
+                for bid in bids:
+                    if bid.made_by == user and bid.assign == True:
+                        return True
+                    pass
+            else:
+                return False
 
-        # only show bid button is order is not assigned yet
+        # only show bid button if order is not assigned yet
         def func2(project):
             bids = project.bid_set.all()
-            for bid in bids:
-                if bid.assign == False:
-                    return False
-                pass
+            if bids.exists():
+                for bid in bids:
+                    if bid.assign == False or bid == None:
+                        return False
+                    pass
+            else:
+                return False
+        # Check to see if user has submitted a bid on the project prevent multiple
+
+        def func3(project, user):
+            bids = project.bid_set.all()
+            if bids.exists():
+                for bid in bids:
+                    if bid.made_by == user:
+                        return True
+                    pass
+            else:
+                return False
 
         # get the current user's usergroup
         usergroup = None
@@ -477,39 +587,129 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
         def get_admin(usergroup):
             Admin = None
             if usergroup == "Admin":
-                Admin =True
-                return Admin
-            else:
-                Admin =False
-                return Admin
-        
+                return True
+            return False
+
         context.update({
             'cForm': CompleteTaskForm,
             'bForm': BidForm,
             'assigned': func(project, user),
             'bid': func2(project),
-            'usergroup':get_admin(usergroup),
+            'usergroup': get_admin(usergroup),
+            'bid_sent': func3(project, user),
         })
 
         return context
 
-    # Bid form validation
-    def bForm_form_valid(self, request, form):
-        form.instance.project = self.get_object()
-        form.instance.made_by = self.request.user
-        messages.success(
-            request, "Your bid has been submitted successfuly. View your bids by clicking on the Bids tab")
-        return super().form_valid(form)
+    # Post request handler (Complete task & Bid form)
+    def post(self, request, *args, **kwargs):
+        bform = BidForm(request.POST)
+        cform = CompleteTaskForm(request.POST,
+                                 request.FILES)
 
-    # Complete task form validation
-    def cForm_form_valid(self, request, form):
+        # bidForm section
+        if bform.is_valid():
+            try:
+                new_bform = bform.save(commit=False)
+                new_bform.project = self.get_object()
+                new_bform.made_by = self.request.user
+                new_bform.save()
+
+                messages.success(
+                    request, "Your bid has been submitted successfully")
+            except:
+                messages.error(request, "Bid sending error, Try again later")
+
+        # completeTaskForm section
+        elif cform.is_valid():
+            try:
+                project = self.get_object()
+                new_cform = cform.save(commit=False)
+                new_cform.project = self.get_object()
+
+                # get bid for current project
+                def bid(project, request):
+                    bids = project.bid_set.all()
+                    for bid in bids:
+                        if bid.made_by == request.user:
+                            return bid
+                        else:
+                            pass
+                        
+                new_cform.bid = bid(project, request) 
+                new_cform.save()
+
+                # {send notification and email to client/admin}
+
+                messages.success(
+                    request, "File uploaded successfully, please wait for feedback")
+            except:
+                messages.error(request, "File upload failed. Please try again later")
+
+
+        else:
+            messages.error(request, "Bid sending error, Try again later")
+
+        # get context data for post request redirect-------------------
+        # only show complete task section is user is assigned order
+        def func(project, user):
+            bids = project.bid_set.all()
+            for bid in bids:
+                if bid.made_by == user and bid.assign == True:
+                    return True
+                pass
+
+        # only show bid button if order is not assigned yet
+        def func2(project):
+            bids = project.bid_set.all()
+            if bids.exists():
+                for bid in bids:
+                    if bid.assign == False or bid == None:
+                        return False
+                    pass
+            else:
+                return False
+
+        # Check to see if user has submitted a bid on the project prevent multiple
+        def func3(project, user):
+            bids = project.bid_set.all()
+            if bids.exists():
+                for bid in bids:
+                    if bid.made_by == user:
+                        return True
+                    pass
+            else:
+                return False
+
+        # get the current user's usergroup
+        usergroup = None
+        usergroup = self.request.user.groups.values_list(
+            'name', flat=True).first()
+
+        # to pass admin user into the context as True
+        def get_admin(usergroup):
+            Admin = None
+            if usergroup == "Admin":
+                return True
+            return False
+
         project = self.get_object()
-        # form.instance.bid = project.bid.filter(made_by=self.request.user)
-        messages.success(request, "Project was submitted successfully")
-        return super().form_valid(form)
+        user = self.request.user
+
+        context = {
+            'bid_sent': func3(project, user),
+            'form': bform,
+            'cForm': cform,
+            'assigned': func(project, user),
+            'bid': func2(project),
+            'usergroup': get_admin(usergroup),
+            'object': self.get_object(),
+        }
+
+        return render(request, "writer/projectorder_detail.html", context)
 
 
-class ProjectCreateView(LoginRequiredMixin, CreateView):
+class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = ProjectOrder
     template_name = "client/projectorder_form.html"
     fields = [
@@ -525,6 +725,14 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         'currency',
         'deadline',
     ]
+
+    def test_func(self):
+        usergroup = None
+        usergroup = self.request.user.groups.values_list(
+            'name', flat=True).first()
+        if usergroup == "Admin" or usergroup == "Clients":
+            return True
+        return False
 
     # validate the form and add data to empty fields as specified
     def form_valid(self, form):
@@ -574,7 +782,6 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         'date_posted',
     ]
 
-
     def form_valid(self, form):
 
         # generate random unique characters to be used in the slug
@@ -602,12 +809,13 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             '-' + str(char_Gen(8))
         form.instance.username = self.request.user
         return super().form_valid(form)
-    
+
     def test_func(self):
         project = self.get_object()
         if self.request.user == project.username:
             return True
         return False
+
 
 class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = ProjectOrder
@@ -619,7 +827,9 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_projects(request):
     context = {
         'projects': ProjectOrder.objects.filter(username=request.user)
@@ -628,6 +838,7 @@ def client_projects(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_bids(request):
     context = {
         'bids': Bid.objects.filter(project__username=request.user)
@@ -636,6 +847,7 @@ def client_bids(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_invoices(request):
     complete = ProjectOrder.objects.filter(
         username=request.user,
@@ -653,11 +865,13 @@ def client_invoices(request):
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_reports(request):
     return render(request, 'client/client_reports.html')
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_settings(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -670,19 +884,74 @@ def client_settings(request):
             messages.success(
                 request, f'Your account has been update!')
             return redirect('client_settings')
+
+     # **User is disabled with this function**
+
+    # to make sure the user requesting disable is the owner
+    elif request.GET.get('username') == request.user.username:
+        username = request.user.username
+
+        # function to disable a user
+        def delete_user(request, username):
+            context = None
+
+            try:
+                user = User.objects.get(username=username)
+                user.is_active = False
+                user.save()
+                context = 'Profile successfully disabled. Thank you for using our service, cheers!'
+
+            except User.DoesNotExist:
+                context = 'User does not exist.'
+            except Exception as e:
+                context = e.message
+
+        # send email to admin
+            try:
+                ctext = {
+                    'username': username,
+                }
+
+                msg_plain = render_to_string('mail/email.txt', ctext)
+                send_mail(
+                    'ACCOUNT DISABLED',
+                    msg_plain,
+                    config('EMAIL_USER'),
+                    [config('EMAIL_USER'), ],
+                    # html_message=msg_html,
+                )
+            except:
+                pass
+
+            return context
+
+        context = {
+            'msg': delete_user(request, username),
+        }
+
+        return render(request, "users/user_delete.html", context)
+
+    elif request.GET.get('username') != None and request.GET.get('username') != request.user.username:
+        messages.error(request, "Username mismatch!")
+
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+    u_form = UserUpdateForm(instance=request.user)
+    p_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
     }
+
     return render(request, 'client/client_settings.html', context)
 
 
 @login_required
+@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_ProjectOrders(request):
     return render(request, 'client/client_ProjectOrders.html')
 
-# ------------------------End client dahsboard views--------------------------#
+# ------------------------End client dashboard views--------------------------#

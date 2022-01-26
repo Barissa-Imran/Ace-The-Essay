@@ -23,9 +23,10 @@
     <title>ACE - Admin</title>
     <style>
     .alert-error {
-      background: #dc3545;
-      color: #fff;
-    }
+        color: #842029;
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
+      }
     </style>
   </head>
   <body style="background-color: #f5fcff; font-family: 'Poppins', sans-serif; height: 100%; width: 100%;">
@@ -52,12 +53,48 @@
             <a class="btn btn-outline-secondary m-2" href="{% url 'client' %}" role="button">Client Dashboard</a>
         </div>
         <p class="mx-4">Tutorial: <a class="text-warning" href="#" target="_blank">Read the docs</a></p>
-        <div class="m-4 mt-5 p-4" style="
+        <div 
+        class="m-4 mt-5 p-4" 
+        style="
+                border-radius: 10px;
+                box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
+        ">
+        <p class="lead">Dummy Accounts</p>
+        <small>
+          <ol class="text-muted p-2" style="background: whitesmoke;">
+            <li>
+              <strong>Username:</strong> writer <strong>Password:</strong> app12345
+            </li>
+            <li>
+              <strong>Username:</strong> client <strong>Password:</strong> app12345
+            </li>
+            <li>
+              <strong>Username:</strong> support <strong>Password:</strong> appadmin321
+            </li>
+          </ol>
+        </small>
+        </div>
+        <div class="m-4 mt-3 p-4" style="
                     border-radius: 10px;
                     box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   ">
           <h6 class="lead">Logs</h6>
           <small>
+
+            <div>
+                <p class="badge bg-success">Released v0.31</p>
+                <small class="text-muted">what's new <i class="fa fa-rocket"></i></small>
+                <ul class="text-muted p-2" style="background: whitesmoke;">
+                  <li>Add Feature - User can now disable their account</li>
+                  <li>Add user permissions - User cannot access pages not designated for their account</li>
+                  <li>Change login interface</li>
+                  <li>Fix bug where assigned projects showing on all writers</li>
+                  <li>Add Dummy accounts section</li>
+                  <li>Add Bid functionality for writers</li>
+                  <li>Add complete order upload functionality</li>
+                </ul>
+              </div>
+  
               <div>
                 <p class="badge bg-success">Released v0.30</p>
                 <small class="text-muted">what's new <i class="fa fa-rocket"></i></small>

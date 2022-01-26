@@ -27,8 +27,9 @@
     <title>ACE - Writer</title>
     <style>
       .alert-error {
-        background: #dc3545;
-        color: #fff;
+        color: #842029;
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
       }
     </style>
   </head>
@@ -37,7 +38,7 @@
     <!-- Sidebar menu -->
     <div id="navcol-1" class="sidebar-container">
       <div class="sidebar-logo text-center">
-        <a class="btn text-white" href="{% url 'client_settings' %}" role="button">
+        <a class="btn text-white" href="{% url 'settings' %}" role="button">
           <img
             src="{{ user.profile.image.url }}"
             alt="profile"

@@ -1,0 +1,10 @@
+{% extends 'ace_the_essay/base.html' %} {% block content %}
+
+<p class="alert alert-info p-2 m-4">{{ msg }}</p>
+<p class="p-2 m-4" style="background: whitesmoke">
+  Want to enable your account again? easy,
+  <a class="text-warning" href="{% url 'contact' %}">Contact US</a><br />
+  Just send us your username and email on the link above/contact us page
+</p>
+<p class="m-4 text-muted"><strong><em>Note: Account will get permanently deleted after 60 days</em></strong></p>
+{% endblock content %}
