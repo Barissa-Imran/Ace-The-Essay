@@ -59,9 +59,11 @@ fieldset #password {
   border-radius: 15px;
   margin-top: 20px;
 }
+
 fieldset #username:focus,
 fieldset #password:focus {
-  border: 1px blue !important;
+  outline: none !important;
+  border: 1px solid rgb(0, 255, 179) !important;
 }
 
 .contact {

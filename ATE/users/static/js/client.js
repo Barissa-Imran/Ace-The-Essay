@@ -148,20 +148,24 @@ $(document).ready(function () {
     }
   });
 
-  // $("#bid").click(function () {
-  //   $.ajax({
-  //     url: "",
-  //     type: "POST",
-  //     data: {
-  //       button_text: $(this).text(),
-  //       price: $("total").text(),
-  //     },
-  //     sucess: function (response) {
-  //       $("#bid").text(sucess);
-  //     },
-  //   });
-  //   alert("Order sent successfully");
-  // });
+  $("select").focus( function () {
+    $("#order").text("Order");
+  });
+
+  $("#order").click(function () {
+    $(this).text("Ordering...");
+    // $.ajax({
+    //   url: "",
+    //   type: "POST",
+    //   data: {
+    //     deadline: $(Edeadline_count).text(),
+    //     price: $("total").text(),
+    //   },
+    //   sucess: function (response) {
+    //     $("#order").text(sucess);
+    //   },
+    // });
+  });
   // ### more jquery goes here following the above pattern ###
 });
 

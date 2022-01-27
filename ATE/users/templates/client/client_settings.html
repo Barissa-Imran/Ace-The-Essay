@@ -34,10 +34,14 @@
       Are you sure you want to delete your account? enter your username <code class="bg-white">{ {{user.username}} }</code> in the box below to continue.
     </p>
     <div class="d-flex">
-      <a onclick="deleteForm();" class="btn btn-outline-primary mx-2 btn-sm" id="cancel">Cancel</a>
+      <a onclick="deleteForm();" class="btn btn-outline-primary mx-2 btn-sm d-none d-lg-block" id="cancel">Cancel</a>
       <input class="rounded-xl" type="text" name="username" required id="confirm" placeholder="Type here">
-      <button class="btn btn-outline-danger mx-2 btn-sm" type="submit">Yes, Delete</button>
+      <button class="btn btn-outline-danger mx-2 btn-sm d-none d-lg-block" type="submit">Yes, Delete</button>
     </div>
+    <div class="mt-2">
+      <a onclick="deleteForm();" class="btn btn-outline-primary btn-sm d-lg-none" id="cancel">Cancel</a>
+      <button class="btn btn-outline-danger btn-sm d-lg-none" type="submit">Yes, Delete</button>
+      </div>
   </form>
 
 {% endblock content %}

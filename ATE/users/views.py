@@ -269,24 +269,21 @@ def usergroup_check(user):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def writer(request):
-
-    def count_complete():
-        count = 0
-        completed = ProjectOrder.objects.filter(bid__made_by=request.user,
-                                                bid__assign=True,
-                                                complete=True)
-        for project in completed:
-            count += 1
-        return count
+    count_complete = ProjectOrder.objects.filter(username=request.user, 
+                                                 bid__assign=True,
+                                                 complete=True).count()
+    active_projects = ProjectOrder.objects.filter(bid__made_by=request.user, bid__assign=True)[:2]
+    recommended_project = ProjectOrder.objects.filter(bid__assign=False)[:1]
+    complete_projects = ProjectOrder.objects.filter(bid__made_by=request.user,
+                                                         bid__assign=True,
+                                                         complete=True)[:2]
 
     context = {
-        'projects': ProjectOrder.objects.filter(bid__made_by=request.user, bid__assign=True)[:2],
+        'projects': active_projects,
         # fix to get latest
-        'recommended': ProjectOrder.objects.filter(bid__assign=False)[:1],
-        'completedProjects': ProjectOrder.objects.filter(bid__made_by=request.user,
-                                                         bid__assign=True,
-                                                         complete=True)[:2],
-        'count': count_complete(),
+        'recommended': recommended_project,
+        'completedProjects': complete_projects,
+        'count': count_complete,
     }
 
     return render(request, 'writer/writer.html', context)
@@ -461,19 +458,15 @@ def usergroup_check(user):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client(request):
-    def get_count():
-        count = 0
-        projects = ProjectOrder.objects.filter(username=request.user)
-
-        for project in projects:
-            count += 1
-        return count
+    count = ProjectOrder.objects.filter(username=request.user).count()
+    featured_projects = ProjectOrder.objects.filter(username=request.user)[:2]
+    invoices = ProjectOrder.objects.filter(bid__assign=True)[:2]
 
     context = {
-        'projects': ProjectOrder.objects.filter(username=request.user)[:2],
-        'invoices': ProjectOrder.objects.filter(bid__assign=True)[:2],
+        'projects': featured_projects,
+        'invoices': invoices,
         'recommended': '',
-        'count': get_count(),
+        'count': count,
     }
 
     return render(request, 'client/client.html', context)
