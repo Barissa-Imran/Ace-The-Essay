@@ -62,8 +62,10 @@ class ProjectOrderForm(forms.ModelForm):
             'paper_format',
             'number_of_pages',
             'spacing',
-            'deadline',
+            'price',
+            'deadline'
         ]
+
 # Create bid form-(filled automatically when user clicks bid button on project detail view)
 
 

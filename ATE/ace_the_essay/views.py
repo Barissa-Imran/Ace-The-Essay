@@ -5,9 +5,8 @@ from decouple import config
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login
 from django.shortcuts import HttpResponseRedirect
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView
 from .forms import ContactForm, LoginForm
-from .models import Contact
 
 
 class indexView(TemplateView):

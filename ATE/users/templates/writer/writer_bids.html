@@ -40,6 +40,7 @@
     aria-labelledby="myBids-tab"
   >
     <div class="row">
+      {% if bids %}
       {% for bid in bids %} {% if bid.assign is False %}
 
       <div
@@ -67,6 +68,9 @@
       </div>
 
       {% else %} {% endif %} {% endfor %}
+      {% else %}
+      <p class="alert alert-info m-2">You don't have any bids to display. Start sending bids now <a class="text-warning" href="{% url 'projects' %}">projects</a></p>
+      {% endif %}
     </div>
   </div>
   <div
@@ -76,6 +80,7 @@
     aria-labelledby="successfulBids-tab"
   >
     <div class="row">
+      {% if bids %}
       {% for bid in bids %} {% if bid.assign is True %}
       <div
         class="col-md-3 p-4 m-2"
@@ -103,6 +108,9 @@
       {% else %}
       <p></p>
       {% endif %} {% endfor %}
+      {% else %}
+      <p class="alert alert-info m-2">You don't have any successful bids to display. Start sending bids now <a class="text-warning" href="{% url 'projects' %}">projects</a></p>
+      {% endif %}
     </div>
   </div>
 </div>

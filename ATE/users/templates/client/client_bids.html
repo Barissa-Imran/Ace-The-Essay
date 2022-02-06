@@ -1,82 +1,14 @@
 {% extends 'client/base.html' %} {% block content %}
-
-<!-- navbar tabs area -->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button
-      class="nav-link active"
-      id="myBids-tab"
-      data-bs-toggle="tab"
-      data-bs-target="#myBids"
-      type="button"
-      role="tab"
-      aria-controls="myBids"
-      aria-selected="true"
-    >
-      Received Bids
-    </button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button
-      class="nav-link"
-      id="successfulBids-tab"
-      data-bs-toggle="tab"
-      data-bs-target="#successfulBids"
-      type="button"
-      role="tab"
-      aria-controls="successfulBids"
-      aria-selected="false"
-    >
-      Assigned Bids
-    </button>
-  </li>
-</ul>
-<!-- tabs content area -->
-<div class="tab-content" id="myTabContent">
-  <div
-    class="tab-pane fade show active"
-    id="myBids"
-    role="tabpanel"
-    aria-labelledby="myBids-tab"
+<header class="" style="color: #196487; font-weight: 600"">Assigned Bids</header>
+<div
+    class=""
   >
-    {% for bid in bids %}
-
-    <div
-      class="col-md-3 p-4 m-2"
-      style="
-        border-radius: 10px;
-        width: fit-content;
-        gap: 10px;
-        box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
-      "
-    >
-      <p class="lead">
-        <a href="{{ bid.project.get_absolute_url }}" class="text-warning"
-          >{{ bid.project}}</a
-        >
-      </p>
-      <p class="text-muted">{{ bid.date }}</p>
-      <a
-        class="btn btn-outline-success"
-        href="{{ bid.project.get_absolute_url }}"
-        >view details</a
-      >
-    </div>
-
-    {% endfor %}
-  </div>
-  <div
-    class="tab-pane fade"
-    id="successfulBids"
-    role="tabpanel"
-    aria-labelledby="successfulBids-tab"
-  >
+  {% if bids %}
     {% for bid in bids %} {% if bid.assign is True %}
     <div
       class="col-md-3 p-4 m-2"
       style="
         border-radius: 10px;
-        width: fit-content;
         gap: 10px;
         box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
       "
@@ -86,6 +18,7 @@
           >{{ bid.project}}</a
         >
       </p>
+      <p class="badge bg-info">{{ bid.made_by }}</p>
       <p class="text-muted">{{ bid.date }}</p>
       <a
         class="btn btn-outline-success"
@@ -98,6 +31,9 @@
       
     </p>
     {% endif %} {% endfor %}
+    {% else %}
+    <p class="alert alert-info m-2">You don't have any assigned projects to display. Assign now: <a class="text-warning" href="{% url 'client_projects' %}">Projects</a></p>
+    {% endif %}
   </div>
 </div>
 

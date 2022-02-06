@@ -10,17 +10,22 @@
 {% endif %}
 
 <section class="media content-section container">
-  <img
-    src="{{ object.username.profile.image }}"
-    alt=""
-    class="rounded-circle article-img"
-  />
   <div class="media-body">
     <div
       class="article-metadata p-2 d-flex justify-content-between"
       style="background: #00bbbb9d"
     >
-      <a id="username" href="#" class="mr-2 text-white">{{ object.username }}</a>
+      <div class="d-flex">
+      <img
+        src="{{ object.username.profile.image.url }}"
+        alt=""
+        class="rounded-circle article-img"
+        style="max-width: 50px; height: 50px"
+      />
+      <a id="username" href="#" class="m-2 text-white"
+        >{{ object.username }}</a
+      >
+    </div>
 
       <span class="d-none d-lg-block">
         <small class="badge bg-danger">
@@ -28,7 +33,7 @@
           <span style="font-weight: 600">{{object.deadline}}</span></small
         >
         <span class="badge bg-primary"
-          >Price: ${{object.price}} /pg</span
+          >Price: $4.0 /pg</span
         >
       </span>
 
@@ -41,7 +46,7 @@
           <span style="font-weight: 600">{{object.deadline}}</span></small
         >
         <span class="badge bg-primary mb-2"
-          >Price: ${{object.price}} /pg</span
+          >Price: $4.0 /pg</span
         >
       </span>
 
@@ -104,11 +109,19 @@
       </fieldset>
       <div class="form-group">
         {% if bid_sent is True %}
-        <button class="disabled btn btn-success">Bid Sent</button>
+        <button
+        id="unbid"
+          class="btn btn-danger d-flex justify-content-end mb-4"
+          type="submit"
+          name="action"
+          value="bForm"
+        >
+          Unbid
+        </button>
         {% else %}
         <button
         id="bid"
-          class="btn btn-warning text-white d-flex justify-content-end mb-4"
+          class="btn btn-success text-white d-flex justify-content-end mb-4"
           type="submit"
           name="action"
           value="bForm"

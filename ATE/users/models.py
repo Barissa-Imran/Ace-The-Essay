@@ -57,13 +57,13 @@ class ProjectOrder(models.Model):
     date_posted = models.DateTimeField(
         default=timezone.now, help_text="This is an automatically generated field, don't fill in")
     deadline = models.DateTimeField(default=timezone.now)
-    update_time = models.DateField(auto_now=True)
+    update_time = models.DateField(auto_now_add=True)
     username = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     complete = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
-    price = models.FloatField(default=4.0)
+    price = models.FloatField(default=0.0, help_text="This field is auto-generated hence cannot be changed")
 
     def __str__(self):
         return self.title

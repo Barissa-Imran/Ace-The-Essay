@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http.response import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -7,6 +8,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
+from django.http import JsonResponse
+
+from ace_the_essay.forms import LoginForm
 from .forms import (
     EmailApplicationForm,
     UserRegisterForm,
@@ -27,6 +31,10 @@ from django.views.generic import (
     UpdateView
 )
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import (
+    F, Q, Max, Min, Count, Aggregate
+)
+from django.contrib.auth import authenticate, login
 from decouple import config
 
 # To be used in password creation
@@ -47,8 +55,12 @@ messages.error """
 
 
 def apply(request):
+    lform = LoginForm()
+    msg = None
+
     if request.method == "POST":
         form = EmailApplicationForm(request.POST)
+        lform = LoginForm(request.POST)
 
         if form.is_valid():
             email = form.cleaned_data.get('email')
@@ -113,9 +125,26 @@ def apply(request):
             except:
                 messages.error(
                     request, "(X) There was a problem submitting your Email or Email already exists, try again after a few minutes!")
+        elif lform.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect("admin-landing")
+            else:
+                msg = "Wrong username or password given, please try again or click on 'forgot password'"
+                messages.error(
+                    request, "Login failed, click login again to see the problem")
     else:
         form = EmailApplicationForm()
-    return render(request, "users/apply.html", {'form': form})
+
+    context = {
+        'form': form,
+        'loginform': lform,
+        'msg': msg,
+    }
+    return render(request, "users/apply.html", context)
 
 # applicant landing page view----------------------
 
@@ -269,18 +298,37 @@ def usergroup_check(user):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def writer(request):
-    count_complete = ProjectOrder.objects.filter(username=request.user, 
+    # count complete projects in the last month
+    count_complete = ProjectOrder.objects.filter(bid__made_by=request.user,
                                                  bid__assign=True,
-                                                 complete=True).count()
-    active_projects = ProjectOrder.objects.filter(bid__made_by=request.user, bid__assign=True)[:2]
-    recommended_project = ProjectOrder.objects.filter(bid__assign=False)[:1]
+                                                 complete=True,
+                                                 update_time__gt=F('date_posted') - timedelta(days=30)).count()
+
+    def get_rank():  # fix this function
+        count_complete = ProjectOrder.objects.filter(bid__made_by=request.user,
+                                                     bid__assign=True,
+                                                     complete=True,
+                                                     update_time__gt=F('date_posted') - timedelta(days=30)).count()
+        writers = ProjectOrder.objects.exclude(bid__in=ProjectOrder.bid_set.filter(
+            bid__made_by=request.user,
+            bid__assign=True,
+            complete=True,
+            update_time__gt=F('date_posted') - timedelta(days=30)
+        )).count()
+        return writers
+
+    # rank = get_rank()
+    active_projects = ProjectOrder.objects.filter(
+        bid__made_by=request.user, bid__assign=True).order_by('-date_posted')[:2]
+    recommended_project = ProjectOrder.objects.filter(
+        bid__assign=False).order_by('-date_posted')[:1]
     complete_projects = ProjectOrder.objects.filter(bid__made_by=request.user,
-                                                         bid__assign=True,
-                                                         complete=True)[:2]
+                                                    bid__assign=True,
+                                                    complete=True)[:2]
 
     context = {
         'projects': active_projects,
-        # fix to get latest
+        'rank': '1',
         'recommended': recommended_project,
         'completedProjects': complete_projects,
         'count': count_complete,
@@ -458,9 +506,11 @@ def usergroup_check(user):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client(request):
-    count = ProjectOrder.objects.filter(username=request.user).count()
-    featured_projects = ProjectOrder.objects.filter(username=request.user)[:2]
-    invoices = ProjectOrder.objects.filter(bid__assign=True)[:2]
+    count = ProjectOrder.objects.filter(username=request.user, update_time__gt=F(
+        'date_posted') - timedelta(days=30)).count()
+    featured_projects = ProjectOrder.objects.filter(
+        username=request.user).order_by('-date_posted')[:2]
+    invoices = ProjectOrder.objects.filter(bid__assign=True, username=request.user)[:2]
 
     context = {
         'projects': featured_projects,
@@ -470,44 +520,6 @@ def client(request):
     }
 
     return render(request, 'client/client.html', context)
-
-
-@login_required
-@user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
-def place_order(request):
-    if request.method == 'POST':
-        form = ProjectOrderForm(request.POST)
-
-        if form.is_valid():
-            new_form = form.save()
-            title = new_form.title
-            pk = new_form.pk
-            # fix this functionality to produce raw string
-            new_form.slug = str(title) + "-" + str(pk)
-            new_form.username = request.user
-            new_form.save()
-            username = request.user
-
-            try:
-                send_mail(
-                    'NEW ORDER',
-                    f'There is a new order placed by {username} title: {title}',
-                    config('EMAIL_USER'),
-                    [config('EMAIL_USER'), ],
-                    # html_message=msg_html,
-                )
-            except:
-                pass
-            messages.success(
-                request, 'Your order has been placed successfully, Please wait to be contacted by admin about pricing')
-    else:
-        form = ProjectOrderForm()
-
-    context = {
-        'place_order': form,
-    }
-    return render(request, 'client/place_order.html', context)
-
 
 class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = ProjectOrder
@@ -525,7 +537,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         usergroup = None
         usergroup = self.request.user.groups.values_list(
             'name', flat=True).first()
-        if usergroup == "Writers" or usergroup == "Admin":
+        if usergroup == "Writers":
             return ["writer/projectorder_detail.html"]
         elif usergroup == "Clients" or usergroup == "Admin":
             return ["client/projectorder_detail.html"]
@@ -537,8 +549,22 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project = self.get_object()
         user = self.request.user
+        client_bids = Bid.objects.filter(project__id=project.id)
+        client_bids_assign = Bid.objects.filter(
+            project__id=project.id, assign=True)
 
-        # only show complete task section is user is assigned order
+        # to get the complete uploaded document for the order
+        def get_file():
+            bids = project.bid_set.all()
+            for bid in bids:
+                files = bid.completetask_set.all()
+                for file in files:
+                    return file  # fix to show file instead of url
+
+        uploaded_project = get_file()
+
+        # only show complete task section if user is assigned order
+
         def func(project, user):
             bids = project.bid_set.all()
             if bids.exists():
@@ -586,10 +612,13 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context.update({
             'cForm': CompleteTaskForm,
             'bForm': BidForm,
+            'client_bids': client_bids,
+            'client_bids_assign': client_bids_assign,
             'assigned': func(project, user),
             'bid': func2(project),
             'usergroup': get_admin(usergroup),
             'bid_sent': func3(project, user),
+            'uploaded_project': uploaded_project,
         })
 
         return context
@@ -602,16 +631,38 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
         # bidForm section
         if bform.is_valid():
-            try:
-                new_bform = bform.save(commit=False)
-                new_bform.project = self.get_object()
-                new_bform.made_by = self.request.user
-                new_bform.save()
+            project = self.get_object()
+            bids = project.bid_set.all()
 
-                messages.success(
-                    request, "Your bid has been submitted successfully")
-            except:
-                messages.error(request, "Bid sending error, Try again later")
+            if bids.exists():
+                for bid in bids:
+                    if bid.made_by == request.user:
+                        bid.delete()
+                        messages.info(request, "Bid reverted successfully")
+                    else:
+                        try:
+                            new_bform = bform.save(commit=False)
+                            new_bform.project = self.get_object()
+                            new_bform.made_by = self.request.user
+                            new_bform.save()
+
+                            messages.success(
+                                request, "Your bid has been submitted successfully")
+                        except:
+                            messages.error(
+                                request, "Bid sending error, Try again later")
+            else:
+                try:
+                    new_bform = bform.save(commit=False)
+                    new_bform.project = self.get_object()
+                    new_bform.made_by = self.request.user
+                    new_bform.save()
+
+                    messages.success(
+                        request, "Your bid has been submitted successfully")
+                except:
+                    messages.error(
+                        request, "Bid sending error, Try again later")
 
         # completeTaskForm section
         elif cform.is_valid():
@@ -628,8 +679,8 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                             return bid
                         else:
                             pass
-                        
-                new_cform.bid = bid(project, request) 
+
+                new_cform.bid = bid(project, request)
                 new_cform.save()
 
                 # {send notification and email to client/admin}
@@ -637,14 +688,67 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                 messages.success(
                     request, "File uploaded successfully, please wait for feedback")
             except:
-                messages.error(request, "File upload failed. Please try again later")
+                messages.error(
+                    request, "File upload failed. Please try again later")
 
+        # handle mark as complete post request from client detail page
+        elif request.is_ajax():
+            project = self.get_object()
+            if project.complete is False:
+                try:
+                    project.complete = True
+                    project.save()
 
+                    # {send notification to client/admin}
+
+                    # no request hence no message
+                    messages.success(request, "Order completed successfully.")
+                except:
+                    messages.error(
+                        request, "request failed, please try again later")
+            elif project.complete is True:
+                try:
+                    project.complete = False
+                    project.save()
+                    messages.info(request, "Action reverted successfully")
+                except:
+                    messages.error(
+                        request, "request failed, please try again later")
+
+        # handle writter assignment to projects
         else:
-            messages.error(request, "Bid sending error, Try again later")
+            try:
+                id = request.POST.get('bidId')
+                bid = Bid.objects.get(id=id)
+
+                if bid.assign == False:
+                    try:
+                        bid.assign = True
+                        bid.save()
+                        messages.success(
+                            request, "Writer assigned successfully")
+                    except:
+                        messages.error(
+                            request, "writer assignment failed, please try again!")
+                else:
+                    bid.assign = False
+                    bid.save()
+                    messages.info(request, "Assignment reverted successfully")
+            except:
+                pass
 
         # get context data for post request redirect-------------------
+        # to get the complete uploaded document for the order
+
+        def get_file(project):
+            bids = project.bid_set.all()
+            for bid in bids:
+                files = bid.completetask_set.all()
+                for file in files:
+                    return file  # fix to show file instead of url
+
         # only show complete task section is user is assigned order
+
         def func(project, user):
             bids = project.bid_set.all()
             for bid in bids:
@@ -688,18 +792,29 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
         project = self.get_object()
         user = self.request.user
+        uploaded_project = get_file(project)
+        client_bids = Bid.objects.filter(project__id=project.id)
+        client_bids_assign = Bid.objects.filter(
+            project__id=project.id, assign=True)
 
         context = {
-            'bid_sent': func3(project, user),
             'form': bform,
             'cForm': cform,
+            'bForm': bform,
+            'client_bids': client_bids,
+            'client_bids_assign': client_bids_assign,
+            'bid_sent': func3(project, user),
             'assigned': func(project, user),
             'bid': func2(project),
             'usergroup': get_admin(usergroup),
             'object': self.get_object(),
+            'uploaded_project': uploaded_project,
         }
-
-        return render(request, "writer/projectorder_detail.html", context)
+        # check usergroup to return appropriate page client/writer
+        if usergroup == "Writers":
+            return render(request, "writer/projectorder_detail.html", context)
+        else:
+            return render(request, "client/projectorder_detail.html", context)
 
 
 class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -716,7 +831,8 @@ class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         'number_of_pages',
         'spacing',
         'currency',
-        'deadline',
+        'price',
+        'deadline'
     ]
 
     def test_func(self):
@@ -727,7 +843,7 @@ class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return True
         return False
 
-    # validate the form and add data to empty fields as specified
+    #validate the form and add data to empty fields as specified
     def form_valid(self, form):
 
         # generate random unique characters to be used in the slug
@@ -747,14 +863,17 @@ class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             # create the char hash
             char = "".join(temp)
             return char
+        
+        try:
+            # replace spaces in title with hiphens
+            title = form.instance.title.replace(" ", "-")
 
-        # replace spaces in title with hiphens
-        title = form.instance.title.replace(" ", "-")
-
-        form.instance.slug = str(title) + \
-            '-' + str(char_Gen(8))
-        form.instance.username = self.request.user
-        # form.instance.price = get('total')
+            form.instance.slug = str(title) + \
+                '-' + str(char_Gen(8))
+            form.instance.username = self.request.user
+            # return JsonResponse({'slug':form.instance.slug}, status=200)
+        except:
+            pass
         return super().form_valid(form)
 
 
@@ -772,7 +891,8 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         'number_of_pages',
         'spacing',
         'currency',
-        'date_posted',
+        'price',
+        'deadline'
     ]
 
     def form_valid(self, form):
@@ -813,6 +933,7 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = ProjectOrder
     template_name = "client/projectorder_confirm_delete.html"
+    success_url = "/auth/order/deleted"
 
     def test_func(self):
         project = self.get_object()
@@ -820,6 +941,9 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
+def project_deleted(request):
+    return render(request, "client/projectorder_deleted.html")
 
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
@@ -833,6 +957,7 @@ def client_projects(request):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_bids(request):
+
     context = {
         'bids': Bid.objects.filter(project__username=request.user)
     }

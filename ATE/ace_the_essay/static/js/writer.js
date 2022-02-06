@@ -28,6 +28,10 @@ $(document).ready(function () {
     $("#bid").text("Bidding...")
   });
 
+  $("#unbid").click(function () {
+    $("#unbid").text("Unbidding...");
+  });
+
   $("input").focus(function () {
     $("#upload").text("Upload");
   });

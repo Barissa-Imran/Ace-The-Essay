@@ -68,6 +68,7 @@
 
       <!------------- content -------------->
       <section class="row row-cols-1 p-2">
+        {% if projects %}
       {% for project in projects %}
       {% if project.complete is False %}
       
@@ -122,7 +123,7 @@
                   style="background-color: whitesmoke; border-radius: 10px"
                 >
                   <p style="font-weight: 600">
-                    ${{project.price|default:"0"}}/month
+                    $4.0/page
                   </p>
                   <span>
                     <a
@@ -142,6 +143,9 @@
       <p></p>
       {% endif %}
       {% endfor %}
+      {% else %}
+      <p class="alert alert-info m-2">All projects will be shown here</p>
+      {% endif %}
     </section>
 
     </div>
@@ -156,6 +160,7 @@
   >
     <!----------------------- content ------------------->
     <section class="row row-cols-1 p-2">
+      {% if assigned %}
       {% for project in assigned %}
       {% if project.complete is False %}
 
@@ -210,7 +215,7 @@
                   style="background-color: whitesmoke; border-radius: 10px"
                 >
                   <p style="font-weight: 600">
-                    ${{project.price|default:"0"}}/month
+                    $4.0 /page
                   </p>
                   <span>
                     <a
@@ -231,6 +236,9 @@
       <span></span>
       {% endif %}
       {% endfor %}
+      {% else %}
+      <p class="alert alert-info m-2"> Projects assigned to you will be shown here</p>
+      {% endif %}
     </section>
 
   </div>
@@ -245,6 +253,7 @@
 
    <!--------------------- content -------------------- -->
    <section class="row row-cols-1 p-2">
+     {% if assigned %}
       {% for project in assigned %}
       {% if project.complete is True %}
       
@@ -299,7 +308,7 @@
                   style="background-color: whitesmoke; border-radius: 10px"
                 >
                   <p style="font-weight: 600">
-                    ${{project.price|default:"0"}}/month
+                    $4.0/page
                   </p>
                   <span>
                     <a
@@ -319,6 +328,9 @@
       <p> <p>
       {% endif %}
       {% endfor %}
+      {% else %}
+      <p class="alert alert-info m-2"> Projects you have completed will be shown here</p>
+      {% endif %}
     </section>
 
   </div>

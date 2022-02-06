@@ -55,6 +55,7 @@ urlpatterns = [
     path("client/place-order", user_views.ProjectCreateView.as_view(), name="place_order"),
     path("project/<slug>/update", user_views.ProjectUpdateView.as_view(), name="project_update"),
     path("project/<slug>/delete", user_views.ProjectDeleteView.as_view(), name="project_delete"),
+    path("order/deleted", user_views.project_deleted, name="project_deleted"),
     path("client/invoices", user_views.client_invoices, name="client_invoices"),
     path("client/projects", user_views.client_projects, name="client_projects"),
     path("client/bids", user_views.client_bids, name="client_bids"),

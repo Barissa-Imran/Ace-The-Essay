@@ -64,6 +64,7 @@
     aria-labelledby="allInvoices-tab"
   >
     <!------------- content -------------->
+    {% if assigned %}
     {% for project in assigned %}
 
     <section class="row row-cols-1 p-2">
@@ -98,7 +99,7 @@
         >
           <span>
             <p class="badge bg-primary">
-              ${{ project.price|default:"0" }}/page
+              $4.0/page
             </p>
             <small class="text-muted"> Status:</small>
             <p class="badge bg-info">
@@ -118,6 +119,9 @@
     </section>
 
     {% endfor %}
+    {% else %}
+      <p class="alert alert-info m-2">You don't have any invoices to display.</p>
+    {% endif %}
   </div>
 
   <!-----------Late Invoices Tab content---------->
@@ -128,7 +132,9 @@
     aria-labelledby="lateInvoices-tab"
   >
     <!----------------------- content ------------------->
-    <section class="row row-cols-1 p-2">late invoices</section>
+    <section class="row row-cols-1 p-2">
+      <p class="alert alert-info m-2">You don't have any late invoices to display.</p>
+    </section>
   </div>
 
   <!-----------Paid Invoices Tab content---------->
@@ -139,6 +145,7 @@
     aria-labelledby="paidInvoices-tab"
   >
     <!--------------------- content -------------------- -->
+    {% if complete %}
     {% for project in complete %} {% if project.paid and project.complete is True %}
 
     <section class="row row-cols-1 p-2">
@@ -173,7 +180,7 @@
         >
           <span>
             <p class="badge bg-primary">
-              ${{ project.price|default:"0" }}/page
+              $4.0/page
             </p>
             <small class="text-muted"> Status:</small>
 
@@ -201,6 +208,9 @@
     <p></p>
     {% endif %} 
     {% endfor %}
+    {% else %}
+      <p class="alert alert-info m-2">You don't have any paid invoices to display.</p>
+    {% endif %}
   </div>
 </div>
 

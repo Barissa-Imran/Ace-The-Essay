@@ -1,65 +1,195 @@
-{% extends 'client/base.html' %} {% load crispy_forms_tags %} 
-{% block content %}
+{% extends 'client/base.html' %} {% load crispy_forms_tags %} {% block content %}
 
 <section class="media content-section container">
-  <img
-    src="{{ object.username.profile.image }}"
-    alt=""
-    class="rounded-circle article-img"
-  />
   <div class="media-body">
+    <!-- header section -->
     <div
       class="article-metadata p-2 d-flex justify-content-between"
-      style="background: #00bbbb9d"
+      style="background: #196487;"
     >
-      <a id="username" href="#" class="mr-2 text-white">{{ object.username }}</a>
-
+      <div class="d-flex">
+        <img
+          src="{{ object.username.profile.image.url }}"
+          alt=""
+          class="rounded-circle article-img"
+          style="max-width: 50px; height: 50px"
+        />
+        <a id="username" href="#" class="m-2 text-white"
+          >{{ object.username }}</a
+        >
+      </div>
       <span class="d-none d-lg-block">
         <small class="badge bg-danger">
           Deadline:
-          <span style="font-weight: 600">{{object.deadline}}</span></small
+          <span style="font-weight: 600">{{ object.deadline }}</span></small
         >
-        <span class="badge bg-primary"
-          >Price: ${{object.price}} /pg</span
-        >
+        <span class="badge bg-primary">Price: ${{ object.price }}</span>
       </span>
 
-      <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+      <small class="text-light">{{ object.date_posted|date:"F d, Y" }}</small>
     </div>
     <div class="mt-3 project-details">
       <span class="d-lg-none">
         <small class="badge bg-danger">
           Deadline:
-          <span style="font-weight: 600">{{object.deadline}}</span></small
+          <span style="font-weight: 600">{{ object.deadline }}</span></small
         >
         <span class="badge bg-primary mb-2"
-          >Price: ${{object.price}} /pg</span
+          >Price: ${{ object.price }} /pg</span
         >
       </span>
+      <!-- body section detail -->
 
       <h2
         class="project-title lead border-bottom"
-        style="color: #198787; font-weight: 600"
+        style="color: #196487; font-weight: 600"
       >
         {{ object.title }}
       </h2>
-      <p><strong>Academic Level:</strong> {{object.academic_level}}</p>
-      <p><strong>Type of Paper:</strong> {{object.type_of_paper}}</p>
-      <p><strong>Subject Area:</strong> {{object.subject_area}}</p>
-      <p><strong>Subject Area:</strong> {{object.paper_format}}</p>
-      <p><strong>Number of Pages:</strong> {{object.number_of_pages}}</p>
-      <p class="border-bottom"><strong>Spacing:</strong> {{object.spacing}}</p>
+      <p><strong>Academic Level:</strong> {{ object.academic_level }}</p>
+      <p><strong>Type of Paper:</strong> {{ object.type_of_paper }}</p>
+      <p><strong>Subject Area:</strong> {{ object.subject_area }}</p>
+      <p><strong>Subject Area:</strong> {{ object.paper_format }}</p>
+      <p><strong>Number of Pages:</strong> {{ object.number_of_pages }}</p>
+      <p class="border-bottom">
+        <strong>Spacing:</strong> {{ object.spacing }}
+      </p>
       <p class="project-content text-dark bg-light border-bottom">
         {{ object.paper_instructions }}
       </p>
       <p class="text-secondary">
-        Additional Materials: {{object.additional_materials| default:'None'}}
+        Additional Materials: {{ object.additional_materials| default:'None' }}
       </p>
-      <p></p>
+      <!-- complete project file section -->
+      <div
+        class="p-2 m-3"
+        style="
+          border-radius: 10px;
+          box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
+        "
+      >
+        <p class="">
+          Complete Task:
+          <a
+            class="text-danger"
+            href="{{ uploaded_project.complete_task.url }}"
+            target="_blank"
+            >{{ uploaded_project.complete_task| default:"Uploaded file will be shown here" }}</a
+          >
+        </p>
+        <form method="post">
+          {% csrf_token %} {% if object.complete is False %}
+          <button
+            id="markcomplete"
+            class="btn btn-sm btn-outline-primary"
+            type="submit"
+          >
+            Mark complete <i class="fa fa-check-circle"></i>
+          </button>
+          {% else %}
+          <button
+            id="markcomplete"
+            class="btn btn-sm btn-outline-danger"
+            type="submit"
+          >
+            Mark incomplete <i class="fa fa-exclamation-circle"></i>
+          </button>
+          {% endif %}
+        </form>
+      </div>
+      <section>
+        <h6 class="lead" style="color: #196487; font-weight: 600">Bids</h6>
+        {% if client_bids %}
+        {% if client_bids_assign %}
+        <!-- show assigned bid only -->
+
+        {% for bid in client_bids_assign %}
+        <div
+          class="p-2 my-2 d-fle"
+          style="
+            border-radius: 10px;
+            gap: 10px;
+            box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
+          "
+        >
+          <small>
+            <p class="badge bg-info">{{ bid.made_by }}</p>
+            <p class="text-muted">{{ bid.date }}</p>
+          </small>
+          <form method="POST">
+            {% csrf_token %}
+            <fieldset class="d-none">
+              <input type="text" name="bidId" id="bidId" value="{{ bid.id }}" />
+            </fieldset>
+            {% if bid.assign is False %}
+            <button
+              class="btn btn-sm btn-outline-success"
+              type="submit"
+              value="{{ bid.id }}"
+            >
+              Assign <i class="fa fa-check-circle"></i>
+            </button>
+            {% else %}
+            <button
+              class="btn btn-sm btn-outline-danger"
+              type="submit"
+              value="{{ bid.id }}"
+            >
+              Un-assign <i class="fa fa-exclamation-circle"></i>
+            </button>
+            {% endif %}
+          </form>
+        </div>
+        {% endfor %} {% else %}
+
+        <!-- show unassigned bids only -->
+
+        {% for bid in client_bids %} {% if bid.assign is False %}
+        <div
+          class="p-2 my-2 d-fle"
+          style="
+            border-radius: 10px;
+            gap: 10px;
+            box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
+          "
+        >
+          <small>
+            <p class="badge bg-info">{{ bid.made_by }}</p>
+            <p class="text-muted">{{ bid.date }}</p>
+          </small>
+          <form method="POST">
+            {% csrf_token %}
+            <fieldset class="d-none">
+              <input type="text" name="bidId" id="bidId" value="{{ bid.id }}" />
+            </fieldset>
+            {% if bid.assign is False %}
+            <button
+              class="btn btn-sm btn-outline-success"
+              type="submit"
+              value="{{ bid.id }}"
+            >
+              Assign <i class="fa fa-check-circle"></i>
+            </button>
+            {% else %}
+            <button
+              class="btn btn-sm btn-outline-danger"
+              type="submit"
+              value="{{ bid.id }}"
+            >
+              Un-assign <i class="fa fa-exclamation-circle"></i>
+            </button>
+            {% endif %}
+          </form>
+        </div>
+        {% endif %} {% endfor %} {% endif %}
+        {% else %}
+        <p class="alert alert-info">Bids for this project will be shown here<p>
+         {% endif %}
+      </section>
     </div>
   </div>
   <a
-    class="btn bg-success p-2 text-white"
+    class="btn bg-success p-2 my-5 text-white"
     href="{{ object.get_absolute_url }}/update"
     style="height: fit-content; font-size: small"
     >Update</a

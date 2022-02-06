@@ -192,7 +192,7 @@
                       style="background-color: whitesmoke; border-radius: 10px"
                     >
                       <p class="bg-warning p-2" style="border-radius: 10px">
-                        1
+                        {{ rank| default:"0" }}
                       </p>
                       <span class="px-2"
                         ><p>Rank<br /><span class="badge text-dark">in top 5%</span></p></span
@@ -246,6 +246,7 @@
               "
             >
               <!-- first project -->
+              {% if projects %}
               {% for project in projects %}
               {% if project.complete is False %}
 
@@ -266,6 +267,9 @@
               <span></span>
               {% endif %}
               {% endfor %}
+              {% else %}
+              <p class="alert alert-info"> You don't have any active projects to display</p>
+              {% endif %}
 
               <a
                 href="{% url 'projects' %}"
@@ -293,7 +297,7 @@
                     box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   "
                 >
-
+                {% if projects %}
                 {% for project in projects %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
@@ -310,9 +314,12 @@
                         pending
                       </p>
                     {% endif %}
-                    <p class="badge bg-primary">${{ project.price }}/pg</p>
+                    <p class="badge bg-primary">$4.0/pg</p>
                   </div>
                 {% endfor %}
+                {% else %}
+              <p class="alert alert-info"> Your invoices will be shown here</p>
+                {% endif %}
                 
                 </div>
               </div>
@@ -359,6 +366,7 @@
               Recommended Project
             </p>
 
+            {% if recommended %}
             {% for project in recommended %}
             <a class="btn" href="{{ project.get_absolute_url }}" role="button">
               <div
@@ -387,7 +395,7 @@
                   class="d-flex justify-content-between p-2"
                   style="background-color: whitesmoke; border-radius: 10px"
                 >
-                  <p>${{ project.price }}/page</p>
+                  <p>$4.0/page</p>
                   <p
                     class="badge bg-danger"
                   >
@@ -397,6 +405,9 @@
               </div>
             </a>
             {% endfor %}
+            {% else %}
+            <p class="alert alert-info"> There are no recommended projects at this time, please come back later</p>
+            {% endif %}
 
           </div>
         </section>

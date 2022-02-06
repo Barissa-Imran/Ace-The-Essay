@@ -191,7 +191,7 @@
                       style="background-color: whitesmoke; border-radius: 10px"
                     >
                       <p class="bg-warning p-2" style="border-radius: 10px">
-                        1
+                        {{ rank| default:"0" }}
                       </p>
                       <span class="px-2"
                         ><p>
@@ -254,6 +254,7 @@
               "
             >
               <!-- first project -->
+              {% if projects %}
               {% for project in projects %}
               <div class="d-flex">
                 <a href="#profile">{{ project.username.image }}</a>
@@ -274,6 +275,9 @@
                 >
               </div>
               {% endfor %}
+              {% else %}
+      <p class="alert alert-info m-2">You don't have any featured projects to display. <a class="text-warning" href="{% url 'place_order' %}">Place order</a> now</p>
+              {% endif %}
               <a
                 href="{% url 'client_projects' %}"
                 class="text-warning"
@@ -300,6 +304,7 @@
                     box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651);
                   "
                 >
+                {% if invoices %}
                   {% for project in invoices %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
@@ -323,6 +328,9 @@
                     <p class="badge bg-primary">${{ project.price }}/pg</p>
                   </div>
                   {% endfor %}
+                  {% else %}
+                  <p class="alert alert-info">You don't have any invoices to display.</p>
+                  {% endif %}
                 </div>
               </div>
               <div
@@ -428,6 +436,7 @@
       type="text/javascript"
       src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
     ></script>
-    <script src="{% static 'js/client.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/client.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
 </html>
