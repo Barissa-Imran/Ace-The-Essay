@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.mail import send_mail
 from decouple import config
@@ -22,7 +22,7 @@ class indexView(TemplateView):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect("auth/admin-landing")
+                return redirect("admin_landing")
             else:
                 msg = "Wrong username or password given, please try again or click on 'forgot password'"
                 messages.error(

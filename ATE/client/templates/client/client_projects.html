@@ -1,0 +1,92 @@
+{% extends 'client/base.html' %} {% block content %}
+
+<p class="lead" style="color: #198787; font-size: small; font-weight: 600">
+  My Projects
+</p>
+{% if projects %}
+{% for project in projects %}
+
+<div
+  class="col p-1 mt-2 mb-4"
+  style="
+    border-radius: 10px;
+    box-shadow: 0 0.5px 1.5px rgba(128, 128, 128, 0.651);
+  "
+>
+  <div class="accordion accordion-flush" id="accordionFlushExample">
+    <div class="accordion-item py-4" style="background: none">
+      <h2 class="accordion-header" id="flush-heading{{ project.id }}">
+        <button
+          class="accordion-button collapsed"
+          style="background: none"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#flush-collapse{{ project.id }}"
+          aria-expanded="false"
+          aria-controls="flush-collapse{{ project.id }}"
+        >
+          <div class="d-flex">
+            <i class="fa fa-image mt-3"></i>
+            <span class="px-4"
+              ><p>
+                {{ project.title }}<br /><span class="badge bg-danger m-2"
+                  >{{ project.type_of_paper }}</span
+                ><a
+                  href="#writer"
+                  class="badge bg-success"
+                  style="text-decoration: none; z-index: 2"
+                  >{{project.username}}</a
+                >
+              </p></span
+            >
+          </div>
+        </button>
+      </h2>
+      <div
+        id="flush-collapse{{ project.id }}"
+        class="accordion-collapse collapse"
+        aria-labelledby="flush-heading{{ project.id }}"
+        data-bs-parent="#accordionFlushExample"
+      >
+        <div class="accordion-body">
+          <p style="font-size: small">
+            {{ project.paper_instructions|default:'This project does not have a description'}}
+          </p>
+          <span
+            class="d-flex justify-content-between p-2"
+            style="background-color: whitesmoke; border-radius: 10px"
+          >
+            <p style="font-weight: 600">${{project.price|default:"0"}}</p>
+            <span>
+              <a
+                class="btn bg-primary p-2 text-white m-1"
+                href="{{ project.get_absolute_url }}"
+                style="height: fit-content; font-size: small"
+                >View Details</a
+              >
+              <a
+                class="btn btn-outline-success p-2 m-1"
+                href="{{ project.get_absolute_url }}/update"
+                style="height: fit-content; font-size: small"
+                >Update</a
+              >
+              <a
+                class="btn btn-outline-danger p-2 m-1"
+                href="{{ project.get_absolute_url }}/delete"
+                style="height: fit-content; font-size: small"
+                >Delete</a
+              >
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+{% else %}
+    <p class="alert alert-info m-2">You don't have any projects to display. <a class="text-warning" href="{% url 'place_order' %}">Place order</a> now</p>
+{% endif %}
+
+{% endblock content %}

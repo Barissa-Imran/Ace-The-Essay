@@ -44,8 +44,13 @@ INSTALLED_APPS = [
     # --------My apps------------
     'ace_the_essay',
     'users',
+    'writer',
+    'client',
+    # 'notifications',
+    # 'ratings',
     # --------External packages------------
     'crispy_forms',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'writer.context_processors.get_rating',
             ],
         },
     },

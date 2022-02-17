@@ -44,7 +44,7 @@
       {% csrf_token %}
       <fieldset class="form_group m-4 p-4">
         <legend class="border-bottom mb-4">Create an Account</legend>
-        {{ form|crispy }}
+        {{ userForm|crispy }}
       </fieldset>
       <div class="form-group mb-2 mx-5">
         <button class="btn btn-outline-warning" type="submit">Sign Up</button>
