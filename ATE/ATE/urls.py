@@ -25,6 +25,7 @@ urlpatterns = ([
     path('auth/', include('users.urls')),
     path('auth/', include('client.urls')),
     path('auth/', include('writer.urls')),
+    path('auth/chat/', include('chat.urls')),
     path('register/', user_views.register, name='register'),
 ])
 

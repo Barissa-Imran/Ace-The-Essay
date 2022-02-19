@@ -14,6 +14,8 @@ Django = "==3.2.11"
 Pillow = "==9.0.0"
 whitenoise = "*"
 django-mathfilters = "*"
+channels = "*"
+channels-redis = "*"
 
 [dev-packages]
 

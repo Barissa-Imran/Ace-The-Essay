@@ -35,19 +35,26 @@ ALLOWED_HOSTS = [config("HOSTS")]
 # Application definition
 
 INSTALLED_APPS = [
+    # --------Special-External packages------------
+    'channels',
+
+    # --------Django packages------------
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # --------My apps------------
     'ace_the_essay',
     'users',
     'writer',
     'client',
+    'chat',
     # 'notifications',
     # 'ratings',
+
     # --------External packages------------
     'crispy_forms',
     'mathfilters',
@@ -168,3 +175,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
+
+#This is the channels configuration
+ASGI_APPLICATION = 'ATE.asgi.application'

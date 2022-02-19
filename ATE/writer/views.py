@@ -257,16 +257,20 @@ def writer(request):
         return writers
 
     # rank = get_rank()
+
+    # get projects that the user is currently working on
     active_projects = ProjectOrder.objects.filter(
         bid__made_by=request.user, bid__assign=True).order_by('-date_posted')[:2]
+    # get projects to recommend to the user(writer)
     recommended_project = ProjectOrder.objects.filter(
         bid__assign=False).order_by('-date_posted')[:1]
+    # get projects the user has completed
     complete_projects = ProjectOrder.objects.filter(bid__made_by=request.user,
                                                     bid__assign=True,
                                                     complete=True)[:2]
-
+    # get active projects grouped by month
     projects_monthly = ProjectOrder.objects.annotate(month=ExtractMonth('date_posted')).values(
-        'month').annotate(c=Count('id')).values('month', 'c').order_by()
+        'month').annotate(c=Count('id', filter=Q(bid__made_by=request.user, bid__assign=True))).values('month', 'c').order_by()
     
     # convert the numeric date to string representation
     def get_month(month):
@@ -295,18 +299,19 @@ def writer(request):
         elif month == 12:
             return "December"
     
-    
-    print("")
-    print("")
-    for data in projects_monthly:
-        count = data['c']
-        month = data['month']
-        print(get_month(month))
-        print(count)
+    # this section is used in getting chat data
+    data = []
+    labels = []
+    for i in projects_monthly:
+        counter = i['c']
+        month = i['month']
+
+
+        data.append(counter)
+        labels.append(get_month(month))
+
     # print(projects_monthly)
-    # print(projects_monthly)
-    print("")
-    print("")
+
 
     # user = request.user
     # rating = user.rating_set.all()
@@ -326,6 +331,8 @@ def writer(request):
         'recommended': recommended_project,
         'completedProjects': complete_projects,
         'count': count_complete,
+        'data': json.dumps(data),
+        'labels': json.dumps(labels)
     }
 
     return render(request, 'writer/writer.html', context)

@@ -48,6 +48,10 @@
           />
           <p style="font-size: 13px;">{{ user.username }}<br>{{ user.email }}</p>
         </a>
+        <span class="d-lg-none text-secondary mx-2 p-2 rounded">
+            <i class="fa fa-bell p-2 fa-sm rounded" style="background-color: #ebebeb;"></i>
+            <i class="fa fa-envelope mx-1 p-2 fa-sm rounded" style="background-color: #ebebeb;"></i>
+          </span>
       </div>
       <ul class="sidebar-navigation">
         <li class="header">Navigation</li>
@@ -128,6 +132,10 @@
               <span style="color: grey">{{user.username|default:'Guest'}}</span>
             </p>
           </div>
+          <span class="d-none d-lg-block text-secondary mx-2 p-2 rounded">
+            <i class="fa fa-bell p-2 rounded" style="background-color: #ebebeb;"></i>
+            <i class="fa fa-envelope mx-1 p-2 rounded" style="background-color: #ebebeb;"></i>
+          </span>
         
           <button
             class="navbar-toggler collapsed d-lg-none"
@@ -290,11 +298,30 @@
                   {% for project in invoices %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
-                    <i class="fa fa-image mt-3"></i>
+                  <img
+                    src="
+                        {% for bid in project.bid_set.all %}
+                          {% if bid.assign is True %}
+                             {{ bid.made_by.profile.image.url | default:'writer name' }}
+                          {% else %}
+                          {% endif %}
+                        {% endfor %}
+                    "
+                    alt="profile"
+                    class="rounded-circle"
+                    style="max-width: 40px; height: 40px"
+                  />
                     <span class="px-2 badge text-secondary"
                       ><p>
                         <span class="text-warning"
-                          >{{ project.bid.made_by| default:"writer name" }}</span
+                          >
+                          {% for bid in project.bid_set.all %}
+                            {% if bid.assign is True %}
+                              {{ bid.made_by| default:"writer name" }}
+                            {% else %}
+                            {% endif %}
+                          {% endfor %}
+                          </span
                         ><br /><span>{{ project.title }}</span>
                       </p></span
                     >
@@ -349,7 +376,7 @@
             >
               Recommended Writers
             </p>
-            <a class="btn" href="#writer-detail-url" role="button">
+            <a class="btn" href="#writer-bio" role="button">
               <div
                 class="p-3 fifth"
                 style="
@@ -358,24 +385,24 @@
                 "
               >
                 <!-- header section -->
-                <div class="d-flex justify-content-between">
-                  <i class="fa fa-image mt-3"></i>
+                <div class=" justify-content-between">
+                  <img
+                    src="{{ writer.profile.image.url }}"
+                    alt="profile"
+                    class="rounded-circle"
+                    style="max-width: 40px; height: 40px"
+                  />
                   <span class="px-2"
                     ><p class="badge text-muted">
-                      {{ writer_name| default:"writer-name" }}<br /><span
-                        >{{ writer_last_login| default:"Last-login" }}</span
-                      >
+                      {{ writer.username| default:"writer-name" }}
                     </p></span
                   >
-                  <p class="badge bg-warning mt-2" style="height: fit-content">
-                    {{ best_type_of_paper| default:"best-category" }}
+                  <p class="badge bg-warning mt-2" style="height: fit-content"> Last seen: 
+                    {{ writer.last_login| default:"Last-login"|date:"M d - P" }}
                   </p>
                 </div>
                 <p class="badge bg-info">
                   Project count: {{ writer_count| default:"0" }}
-                </p>
-                <p class="badge bg-info">
-                  Best project: {{ best_project_title| default:"title" }}
                 </p>
                 <span
                   class="d-flex justify-content-between p-2"
@@ -383,8 +410,8 @@
                 >
                   <p></p>
                   <p
-                    class="text-warning p-1"
-                    style="border: 1px solid #ffc107; border-radius: 25px"
+                    class="text-success p-1"
+                    style="border: 1px solid green; border-radius: 25px"
                   >
                     Pro
                   </p>
@@ -439,14 +466,6 @@
                         'rgb(153, 102, 255)',
                         'rgb(255, 159, 64)'
                     ],
-                    /*borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],*/
                     hoverOffset: 4
                 }]
             },

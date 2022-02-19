@@ -29,7 +29,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import (
     F, Q, Max, Min, Count, Aggregate
 )
-from django.db.models.functions import ExtractMonth
+from django.db.models.functions import ExtractMonth, Extract
 from decouple import config
 
 # To be used in password creation
@@ -77,7 +77,36 @@ def client(request):
     projects_monthly = ProjectOrder.objects.annotate(month=ExtractMonth('date_posted')).values(
         'month').annotate(c=Count('id', filter=Q(username=request.user))).values('month', 'c').order_by()
 
+    projects_writer = ProjectOrder.objects.values('bid__made_by').annotate(
+        c=Count('id', filter=Q(bid__assign=True))).order_by()
+
+    print("")
+    print("")
+
+    # get the data
+    c = []
+    for i in projects_writer:
+        c.append(i['c'])
+
+    high = max(c)
+    writer = None
+    writer_count = 0
+    for i in projects_writer:
+        if i['c'] == high:
+            userId = i['bid__made_by']
+            if userId is not None:
+                user = User.objects.get(id=userId)
+                writer = user
+                writer_count = i['c']
+            else:
+                pass
+        pass
+    
+    print("")
+    print("")
+
     # convert the numeric date to string representation
+
     def get_month(month):
         if month == 1:
             return "January"
@@ -111,13 +140,14 @@ def client(request):
         counter = i['c']
         month = i['month']
 
-
         data.append(counter)
         labels.append(get_month(month))
 
     # print(data)
 
     context = {
+        'writer': writer,
+        'writer_count': writer_count,
         'projects': featured_projects,
         'invoices': invoices,
         'recommended': '',
@@ -161,7 +191,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         client_bids = Bid.objects.filter(project__id=project.id)
         client_bids_assign = Bid.objects.filter(
             project__id=project.id, assign=True)
-        
+
         def get_rating():
             for bid in client_bids_assign:
                 user = bid.made_by
@@ -327,7 +357,8 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                         # {send notification to client/admin}
 
                         # no request hence no message
-                        messages.success(request, "Order completed successfully.")
+                        messages.success(
+                            request, "Order completed successfully.")
                     except:
                         messages.error(
                             request, "request failed, please try again later")
@@ -354,10 +385,10 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                 reviewed_by = self.request.user
 
                 Rating.objects.create(
-                    username = username,
-                    score = score,
-                    review = review,
-                    reviewed_by = reviewed_by,
+                    username=username,
+                    score=score,
+                    review=review,
+                    reviewed_by=reviewed_by,
                 )
 
                 # form.instance.username = username
