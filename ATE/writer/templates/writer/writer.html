@@ -1,4 +1,5 @@
 {% load static %}
+{% load mathfilters %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,9 +46,9 @@
 
             <br>{{ user.email }}</p>
         </a>
-        <span class="d-none d-lg-block text-secondary mx-2 p-2 rounded">
-            <i class="fa fa-bell p-2 rounded" style="background-color: #ebebeb;"></i>
-            <i class="fa fa-envelope mx-1 p-2 rounded" style="background-color: #ebebeb;"></i>
+        <span class="d-lg-none text-secondary mx-2 p-2 rounded">
+            <i class="fa fa-bell p-2 fa-sm rounded" style="background-color: #ebebeb;"></i>
+            <i class="fa fa-envelope mx-1 p-2 fa-sm rounded" style="background-color: #ebebeb;"></i>
           </span>
       </div>
       <ul class="sidebar-navigation">
@@ -264,7 +265,7 @@
                       style="text-decoration: none"
                       >{{ project.title }}</a
                     ><br /><span class="badge bg-success">{{ project.date_posted|date:"F d - Y" }}</span>
-                    <span class="badge bg-danger">{{ project.deadline|date:"F d - Y" }}</span>
+                    <span class="badge bg-danger">Deadline: {{ project.deadline|date:"F d - Y" }}</span>
               </div>
                             
               {% else %}
@@ -305,7 +306,14 @@
                 {% for project in projects %}
                   <!-- first project -->
                   <div class="d-flex justify-content-between">
-                    <i class="fa fa-image mt-3"></i>
+                    <img
+                    src="
+                      {{ project.username.profile.image.url | default:'writer name' }}
+                    "
+                    alt="profile"
+                    class="rounded-circle"
+                    style="max-width: 40px; height: 40px"
+                  />
                     <span class="px-2 badge text-secondary"
                       ><p><span class="text-warning">{{ project.username }}</span><br /><span>{{ project.title }}</span></p></span
                     >
@@ -318,7 +326,7 @@
                         pending
                       </p>
                     {% endif %}
-                    <p class="badge bg-primary">$4.0/pg</p>
+                    <p class="badge bg-primary">$ {{ project.number_of_pages|mul:4 }}.0</p>
                   </div>
                 {% endfor %}
                 {% else %}
@@ -382,7 +390,12 @@
               >
                 <!-- header section -->
                 <div class="d-flex justify-content-between">
-                  <i class="fa fa-image mt-3"></i>
+                  <img
+                    src="{{ project.username.profile.image.url }}"
+                    alt="profile"
+                    class="rounded-circle"
+                    style="max-width: 40px; height: 40px"
+                  />
                   <span class="px-2"
                     ><p class="badge text-muted">{{ project.username }}<br /><span>{{project.update_time}}</span></p></span
                   >
@@ -399,11 +412,11 @@
                   class="d-flex justify-content-between p-2"
                   style="background-color: whitesmoke; border-radius: 10px"
                 >
-                  <p>$4.0/page</p>
+                  <p>$ {{ project.number_of_pages|mul:4 }}.0</p>
                   <p
                     class="badge bg-danger"
                   >
-                    {{ project.deadline }}
+                    Deadline: {{ project.deadline|date:"M d - P" }}
                   </p>
                 </span>
               </div>

@@ -10,7 +10,7 @@
       <div class="d-flex">
         <img
           src="{{ object.username.profile.image.url }}"
-          alt=""
+          alt="profile"
           class="rounded-circle article-img"
           style="max-width: 50px; height: 50px"
         />
@@ -60,6 +60,7 @@
       <p class="text-secondary">
         Additional Materials: {{ object.additional_materials| default:'None' }}
       </p>
+
       <!-- complete project file section -->
       {% if client_bids_assign %}
       <div
@@ -76,12 +77,13 @@
             class="text-danger"
             href="{{ uploaded_project.complete_task.url }}"
             target="_blank"
-            >{{ uploaded_project.complete_task| default:"Uploaded file will be
-            shown here" }}</a
+            >{{ uploaded_project.complete_task| default:"Uploaded file will be shown here" }}</a
           >
         </p>
         <form method="post">
-          {% csrf_token %} {% if object.complete is False %}
+          {% csrf_token %} 
+
+          {% if object.complete is False %}
           <button
             id="markcomplete"
             class="btn btn-sm btn-outline-primary"
@@ -89,6 +91,8 @@
           >
             Mark complete <i class="fa fa-check-circle"></i>
           </button>
+          <small id="markHint" class="d-none">Try refreshing the page if nothing changed</small>
+
           {% else %}
           <button
             id="markcomplete"
@@ -97,8 +101,50 @@
           >
             Mark incomplete <i class="fa fa-exclamation-circle"></i>
           </button>
+          <small id="markHint" class="d-none">Try refreshing the page if nothing changed</small>
           {% endif %}
+
         </form>
+        <p class="mt-3 text-sm">Send Message <i class="fa fa-paper-plane" aria-hidden="true"></i></p>
+        <div>
+            {% for bid in client_bids_assign %}
+          <a id="admin-room-name" class="btn btn-sm btn-secondary" role="button" href="{{bid.project.get_absolute_url}}">
+            To: Admin
+          </a>
+          <a id="writer-room-name" class="btn btn-sm btn-warning text-white" role="button" href="{{bid.project.get_absolute_url}}">
+            To: {{bid.made_by}}
+          </a>
+            {% endfor %}
+        </div>
+        <div>
+          <div class="chat-top mt-2">
+
+          </div>
+          <div class="messages">
+            <ul class="chat-log">
+              {% for chat in chats %}
+              <li id="msg">
+                <img src="{{ chat.author.profile.image.url }}" alt="profile" />
+                <p>
+                  {{ chat.content }}
+                </p>
+                {{ chat.author.username|json_script:"author" }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <form id="message-form" method="POST" class="pt-2">
+            {% csrf_token %}
+            <div class="message-input">
+              <div class="wrap">
+                <input id="chat-message-input" type="text" placeholder="Write your message..." />
+                <button id="chat-message-submit" type="submit" class="submit">
+                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
 
         <!-- review writer section -->
         {% if object.complete is True %}
@@ -136,7 +182,8 @@
       {% else %} {% endif %}
       <section>
         <h6 class="lead" style="color: #196487; font-weight: 600">Bids</h6>
-        {% if client_bids %} {% if client_bids_assign %}
+        {% if client_bids %}
+         {% if client_bids_assign %}
         <!-- show assigned bid only -->
 
         {% for bid in client_bids_assign %}
@@ -151,9 +198,14 @@
           <small id="">
             <p class="badge bg-info">{{ bid.made_by }}</p>
             <!-- star rating -->
-            <fieldset class="starability-result mx-auto" data-rating="4">
-              Rated: 4 stars
-            </fieldset>
+          <span id="starScore">
+            <span class="fa fa-star" id="one"></span>
+            <span class="fa fa-star" id="two"></span>
+            <span class="fa fa-star" id="three"></span>
+            <span class="fa fa-star" id="four"></span>
+            <span class="fa fa-star" id="five"></span> 
+          </span>
+
             <p class="text-muted">{{ bid.date }}</p>
           </small>
           <form method="POST">
@@ -161,6 +213,7 @@
             <fieldset class="d-none">
               <input type="text" name="bidId" id="bidId" value="{{ bid.id }}" />
             </fieldset>
+
             {% if bid.assign is False %}
             <button
               class="btn btn-sm btn-outline-success"
@@ -169,6 +222,7 @@
             >
               Assign <i class="fa fa-check-circle"></i>
             </button>
+
             {% else %}
             <button
               class="btn btn-sm btn-outline-danger"
@@ -178,13 +232,15 @@
               Un-assign <i class="fa fa-exclamation-circle"></i>
             </button>
             {% endif %}
+
           </form>
         </div>
         {% endfor %} {% else %}
 
         <!-- show unassigned bids only -->
 
-        {% for bid in client_bids %} {% if bid.assign is False %}
+        {% for bid in client_bids %} 
+          {% if bid.assign is False %}
         <div
           class="p-2 my-2 d-fle"
           style="
@@ -195,13 +251,18 @@
         >
           <small id="">
             <p class="badge bg-info">{{ bid.made_by }}</p>
-            <!-- star rating -->
-            {% for rate in bid.made_by.rating_set.all %}
-            {% endfor %}
 
-            <fieldset class="starability-result" data-rating="4">
-              Rated: 4 stars
-            </fieldset>
+            <!-- star rating -->
+            <p id="avgScore" class="d-none">{{ rates2 }}</p>
+            <span id="starScore">
+            <span class="fa fa-star" id="one"></span>
+            <span class="fa fa-star" id="two"></span>
+            <span class="fa fa-star" id="three"></span>
+            <span class="fa fa-star" id="four"></span>
+            <span class="fa fa-star" id="five"></span> 
+          </span>
+            
+
             <p class="text-muted">{{ bid.date }}</p>
           </small>
           <form method="POST">
@@ -209,6 +270,7 @@
             <fieldset class="d-none">
               <input type="text" name="bidId" id="bidId" value="{{ bid.id }}" />
             </fieldset>
+
             {% if bid.assign is False %}
             <button
               class="btn btn-sm btn-outline-success"
@@ -217,6 +279,7 @@
             >
               Assign <i class="fa fa-check-circle"></i>
             </button>
+
             {% else %}
             <button
               class="btn btn-sm btn-outline-danger"
@@ -226,14 +289,17 @@
               Un-assign <i class="fa fa-exclamation-circle"></i>
             </button>
             {% endif %}
+
           </form>
         </div>
         {% endif %}
          {% endfor %} 
         {% endif %} 
+
         {% else %}
         <p class="alert alert-info">Bids for this project will be shown here</p>
         {% endif %}
+
       </section>
     </div>
   </div>
@@ -252,3 +318,60 @@
 </section>
 
 {% endblock content %}
+{% block script %}
+
+<script>
+        document.querySelector('#admin-room-name').onclick = function(e) {
+            var roomName = 'Adminuser'
+            window.location.pathname = 'auth/chat/' + roomName + '/';
+        };
+        document.querySelector('#writer-room-name').onclick = function(e) {
+            var roomName = document.querySelector('#writer-room-name').value;
+            window.location.pathname = 'auth/chat/' + roomName + '/';
+        };
+        var username = '{{ user.username }}'
+        var msgListTag = document.getElementById("msg") 
+        
+        author.forEach( (author) => {
+          if (author === username) {
+            console.log(author);
+                msgListTag.className = "sent"
+            } else {
+            console.log(author);
+                msgListTag.className = "replies"
+            }
+        });
+        
+</script>
+<script>
+  // get rating and present into stars config
+var stars = document.getElementById("starScore");
+
+const handleStarRating = (score) => {
+  const starChildren = stars.children;
+
+  for (let i = 0; i < starChildren.length; i++) {
+    if (i <= score) {
+      starChildren[i].classList.add("checked");
+    } else {
+      starChildren[i].classList.remove("checked");
+    }
+  }
+};
+
+const score = {{ rates }}
+
+if (score <= 1.5) {
+  handleStarRating(0);
+} else if (score <= 2.4) {
+  handleStarRating(1);
+} else if (score <= 3.4) {
+  handleStarRating(2);
+} else if (score <= 4.4) {
+  handleStarRating(3);
+} else if (score <= 5) {
+  handleStarRating(4);
+}
+</script>
+
+{% endblock script %}

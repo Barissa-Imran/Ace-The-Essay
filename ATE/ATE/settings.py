@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'users',
     'writer',
     'client',
-    'chat',
+    # 'chats',
     # 'notifications',
     # 'ratings',
 
@@ -84,7 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'writer.context_processors.get_rating',
+                'writer.context_processors.get_rating',
             ],
         },
     },
@@ -178,3 +178,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
 
 #This is the channels configuration
 ASGI_APPLICATION = 'ATE.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

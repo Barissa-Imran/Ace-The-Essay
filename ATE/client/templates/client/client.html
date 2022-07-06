@@ -8,7 +8,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <link
-      rel="stylesheet"
+      rel="stylesheet prefetch"
       href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -133,7 +133,7 @@
             </p>
           </div>
           <span class="d-none d-lg-block text-secondary mx-2 p-2 rounded">
-            <i class="fa fa-bell p-2 rounded" style="background-color: #ebebeb;"></i>
+              <i class="fa fa-bell p-2 rounded" style="background-color: #ebebeb;"></i>
             <i class="fa fa-envelope mx-1 p-2 rounded" style="background-color: #ebebeb;"></i>
           </span>
         
@@ -259,7 +259,7 @@
                       >{{ project.date_posted|date:"F d - Y" }}</span
                     >
                     <span class="badge bg-danger"
-                      >{{ project.deadline|date:"F d - Y" }}</span
+                      >Deadline: {{ project.deadline|date:"F d - Y" }}</span
                     >
                   </p></span
                 >

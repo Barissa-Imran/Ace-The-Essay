@@ -1,19 +1,172 @@
-<!-- chat/templates/chat/room.html -->
+{% load static %}
+
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta description="Ace The Essay chat app">
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://use.typekit.net/hoy3lrg.js"></script>
+    <script>
+      try {
+        Typekit.load({ async: true });
+      } catch (e) {}
+    </script>
+    <link
+      rel="stylesheet prefetch"
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+    />
+    <link
+      rel="stylesheet prefetch"
+      href="{% static 'vendor/fa/css/all.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
+      id="bootstrap-css"
+    />
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{% static 'vendor/jquery/jquery-3.6.0.min.js' %}"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{% static 'img/favicon.svg' %}"
+    />
     <title>Chat Room</title>
 </head>
-<body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
-    <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+  <body style="background-image: url({% static 'img/background.svg' %})">
+    <div id="frame">
+      <div id="sidepanel">
+        <div id="profile">
+          <div class="wrap">
+            <img
+              id="profile-img"
+              src="{{ user.profile.image.url }}"
+              class="online"
+              alt="profile"
+            />
+            <p>{{user.username}}</p>
+            <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+            <div id="status-options">
+              <ul>
+                <li id="status-online" class="active">
+                  <span class="status-circle"></span>
+                  <p>Online</p>
+                </li>
+                <li id="status-away">
+                  <span class="status-circle"></span>
+                  <p>Away</p>
+                </li>
+                <li id="status-busy">
+                  <span class="status-circle"></span>
+                  <p>Busy</p>
+                </li>
+                <li id="status-offline">
+                  <span class="status-circle"></span>
+                  <p>Offline</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="search">
+          <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+          <input type="text" placeholder="Search contacts..." />
+        </div>
+        <div id="contacts">
+          <ul>
+            <li class="contact active">
+              <div class="wrap">
+                <span class="contact-status away"></span>
+                <img
+                  src="{{user.profile.image.url}}"
+                  alt="profile"
+                />
+                <div class="meta">
+                  <p class="name">Harvey Specter</p>
+                  <p class="preview">
+                    Wrong. You take the gun, or you pull out a bigger one. Or,
+                    you call their bluff. Or, you do any one of a hundred and
+                    forty six other things.
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div id="bottom-bar">
+          <button id="addcontact">
+            <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+            <span>Add contact</span>
+          </button>
+          <button id="settings">
+            <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+            <span>Settings</span>
+          </button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="contact-profile">
+          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+          <p>Harvey Specter</p>
+          <div class="social-media">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+            <i class="fa fa-instagram" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="messages">
+            <p class="alert alert-info m-1">Please remember to follow community guildelines in ACE chat.</p>
+            <p class="alert alert-danger m-1">Coming soon!</p>
+          <ul id="chat-log">
+            <li class="sent">
+              <img src="{{ user.profile.image.url }}" alt="profile" />
+              <p>
+                How the hell am I supposed to get a jury to believe you when I
+                am not even sure that I do?!
+              </p>
+            </li>
+            <li class="replies">
+              <img
+                src="http://emilcarlsson.se/assets/harveyspecter.png"
+                alt=""
+              />
+              <p>
+                When you're backed against the wall, break the god damn thing
+                down.
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div class="message-input">
+          <div class="wrap">
+            <input id="chat-message-input" type="text" placeholder="Write your message..." />
+            <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+            <button id="chat-message-submit" type="submit" class="submit">
+              <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        const chatSocket = new WebSocket(
+    <script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+    <script>
+        const roomName = '{{ room_name }}';
+        var username = '{{ user.username }}';
+
+        const chatSocket = new ReconnectingWebSocket(
             'ws://'
             + window.location.host
             + '/ws/auth/chat/'
@@ -21,30 +174,101 @@
             + '/'
         );
 
+        // preload already sent messages on load
+        chatSocket.onopen = function(e) {
+            fetchMessages();
+        }
+
+        // frontend message handler
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            // get all messages from saved and display them
+            // console.log(data['command']);
+            if (data['command'] === "messages") {
+                for (let i=0; i<data['messages'].length; i++) {
+                    createMessage(data['messages'][i]);
+                }
+            }
+            // get the new message from model and display it
+            else if (data['command'] === 'new_message') {
+                createMessage(data['message']);
+            }
         };
 
+        // when the chat is closed
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
+        // handle message submission on Enter key press
+        document.getElementById('chat-message-input').onkeyup = function(e) {
             if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
+                document.getElementById('chat-message-submit').click();
+                return false;
             }
         };
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
+        // submit message handler
+        document.getElementById('chat-message-submit').onclick = function(e) {
+            const messageInputDom = $('.message-input input').val();
+            const message = messageInputDom;
+            // console.log(messageInputDom);
+
+            // send the message to the chat consumer in server
             chatSocket.send(JSON.stringify({
-                'message': message
+                'command': 'new_message',
+                'message': message,
+                'from': username
             }));
+            // console.log(username);
+
+            // display message from the input into the chat log
+            function newMessage() {
+              if ($.trim(message) == "") {
+                return false;
+              }
+              $(
+                '<li class="sent"><img src="{{ user.profile.image.url }}" alt="profile" /><p>' +
+                  message +
+                  "</p></li>"
+              ).appendTo($(".messages ul"));
+              $(".message-input input").val(null);
+              $(".contact.active .preview").html("<span>You: </span>" + message);
+              $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+            }
+
+            newMessage();
+
             messageInputDom.value = '';
         };
+
+        // function to send preload message command to server
+        function fetchMessages() {
+            chatSocket.send(JSON.stringify({
+                'command': 'fetch_messages'
+            }));
+        }
+
+        // function to create a new message on the frontend
+        function createMessage(data) {
+            var author = data['author'];
+            var msgListTag = document.createElement('li');
+            var imgTag = document.createElement('img');
+            var pTag = document.createElement('p');
+            pTag.textContent = data.content;
+            imgTag.src = '{{ user.profile.image.url }}';
+
+            if (author === username) {
+                msgListTag.className = "sent"
+            } else {
+                msgListTag.className = "replies"
+            }
+            msgListTag.appendChild(imgTag);
+            msgListTag.appendChild(pTag);
+            document.querySelector("#chat-log").appendChild(msgListTag)
+        };
+
     </script>
+    <script src="{% static 'js/chat.js' %}"></script>
 </body>
 </html>

@@ -16,8 +16,10 @@ from users.forms import (
     ProfileUpdateForm,
 )
 from writer.forms import BidForm, CompleteTaskForm, RatingForm
+# from chat.forms import MessageForm
 from .models import ProjectOrder
 from writer.models import Bid, Rating
+# from chat.models import ChatMessage
 # Class based views
 from django.views.generic import (
     DetailView,
@@ -27,9 +29,9 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import (
-    F, Q, Max, Min, Count, Aggregate
+    F, Q, Max, Min, Count, Aggregate, Avg
 )
-from django.db.models.functions import ExtractMonth, Extract
+from django.db.models.functions import ExtractMonth
 from decouple import config
 
 # To be used in password creation
@@ -62,6 +64,9 @@ def usergroup_check(user):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client(request):
+    """
+    This is the client dashboard view. (Homepage)
+    """
     # count project orders made in a span of a month
     count = ProjectOrder.objects.filter(username=request.user, update_time__gt=F(
         'date_posted') - timedelta(days=30)).count()
@@ -79,9 +84,6 @@ def client(request):
 
     projects_writer = ProjectOrder.objects.values('bid__made_by').annotate(
         c=Count('id', filter=Q(bid__assign=True))).order_by()
-
-    print("")
-    print("")
 
     # get the data
     c = []
@@ -101,9 +103,6 @@ def client(request):
             else:
                 pass
         pass
-    
-    print("")
-    print("")
 
     # convert the numeric date to string representation
 
@@ -133,7 +132,7 @@ def client(request):
         elif month == 12:
             return "December"
 
-    # this section is used in getting chat data
+    # this function is used in getting chart data
     data = []
     labels = []
     for i in projects_monthly:
@@ -161,6 +160,10 @@ def client(request):
 
 
 class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    """
+    This is the project order detail view.
+    Split into two templates for writers and clients kept in check by usergroups and the usergroup variable
+    """
     model = ProjectOrder
 
     def test_func(self):
@@ -182,29 +185,38 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             return ["client/projectorder_detail.html"]
         else:
             return HttpResponseBadRequest("You are not allowed to access this page")
-
+    
     # provide custom context i for the view i.e forms
-    def get_context_i(self, **kwargs):
-        context = super(ProjectDetailView, self).get_context_i(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project = self.get_object()
         user = self.request.user
         client_bids = Bid.objects.filter(project__id=project.id)
         client_bids_assign = Bid.objects.filter(
             project__id=project.id, assign=True)
+        # bids = Bid.objects.all()
+        # chats = ChatMessage.objects.all()
 
-        def get_rating():
+        def assigned_rating():
+            rating = None#
             for bid in client_bids_assign:
                 user = bid.made_by
-                rating = user.rating_set.all()
+                rating = user.rating_set.all().aggregate(Avg('score'))
+            try:
+                return rating['score__avg']
+            except:
+                return rating
 
-                agg = 0
-                count = 0
-                for rating in rating:
-                    agg = agg + rating.score
-                    count += 1
-                    avg = agg/count
-                return avg
+        def unassigned_rating():
+            rates = []
+            for bid in client_bids:
+                if bid.assign == False:
+                    user = bid.made_by
+                    rating = user.rating_set.all().aggregate(Avg('score'))
+                    rates.append(rating)
+            return rates
 
+        # unassigned_rating()
         # to get the complete uploaded document for the order
         def get_file():
             bids = project.bid_set.all()
@@ -264,6 +276,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context.update({
             'cForm': CompleteTaskForm,
             'bForm': BidForm,
+            # 'mform': MessageForm,
             'client_bids': client_bids,
             'client_bids_assign': client_bids_assign,
             'assigned': func(project, user),
@@ -271,7 +284,9 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             'usergroup': get_admin(usergroup),
             'bid_sent': func3(project, user),
             'uploaded_project': uploaded_project,
-            'rate': get_rating()
+            'rates': assigned_rating(),
+            'rates2': unassigned_rating(),
+            # 'chats': chats
         })
 
         return context
@@ -281,6 +296,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         bform = BidForm(request.POST)
         cform = CompleteTaskForm(request.POST,
                                  request.FILES)
+        # mform = MessageForm(request.POST)
 
         # bidForm section
         if bform.is_valid():
@@ -365,6 +381,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                 elif project.complete is True:
                     try:
                         project.complete = False
+                        # add delete made review if action reverted
                         project.save()
                         messages.info(request, "Action reverted successfully")
                     except:
@@ -390,12 +407,8 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                     review=review,
                     reviewed_by=reviewed_by,
                 )
-
-                # form.instance.username = username
-                # form.instance.score = score
-                # form.instance.review = review
-                # form.instance.reviewed_by = self.request.user
-                # form.save()
+            elif request.POST.get('form') == "message-form":
+                pass
         # handle writter assignment to projects
         else:
             try:
@@ -418,7 +431,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             except:
                 pass
 
-        # get context i for post request redirect-------------------
+        # --------------get context data for post request redirect----------
         # to get the complete uploaded document for the order
 
         def get_file(project):
@@ -429,7 +442,6 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
                     return file  # fix to show file instead of url
 
         # only show complete task section is user is assigned order
-
         def func(project, user):
             bids = project.bid_set.all()
             for bid in bids:
@@ -482,6 +494,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             'form': bform,
             'cForm': cform,
             'bForm': bform,
+            # 'mform': mform,
             'client_bids': client_bids,
             'client_bids_assign': client_bids_assign,
             'bid_sent': func3(project, user),
@@ -499,6 +512,9 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
 
 class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """
+    This class allows a user(client) to create a project order from the frontend
+    """
     model = ProjectOrder
     template_name = "client/projectorder_form.html"
     fields = [
@@ -559,6 +575,9 @@ class ProjectCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
 class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """
+    To update a project order that has already been made by the user(client)
+    """
     model = ProjectOrder
     template_name = "client/projectorder_form.html"
     fields = [
@@ -612,6 +631,9 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """
+    Allows the deletion of a project order
+    """
     model = ProjectOrder
     template_name = "client/projectorder_confirm_delete.html"
     success_url = "/auth/order/deleted"
@@ -624,12 +646,18 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 def project_deleted(request):
+    """
+    Project deleted success url/view
+    """
     return render(request, "client/projectorder_deleted.html")
 
 
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_projects(request):
+    """
+    shows all the projects made by the user(client)
+    """
     context = {
         'projects': ProjectOrder.objects.filter(username=request.user)
     }
@@ -639,6 +667,9 @@ def client_projects(request):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_bids(request):
+    """
+    shows all assigned bids made to projects made by the user(client) 
+    """
 
     context = {
         'bids': Bid.objects.filter(project__username=request.user)
@@ -649,6 +680,9 @@ def client_bids(request):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_invoices(request):
+    """
+    shows all paid and pending invoices for the user(client)
+    """
     complete = ProjectOrder.objects.filter(
         username=request.user,
         complete=True
@@ -667,12 +701,18 @@ def client_invoices(request):
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_reports(request):
+    """
+    aggregates all reports and stats for the user(client)
+    """
     return render(request, 'client/client_reports.html')
 
 
 @login_required
 @user_passes_test(usergroup_check, login_url=reverse_lazy('login'))
 def client_settings(request):
+    """
+    shows the user profile, allows for update or deletion.
+    """
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,

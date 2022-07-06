@@ -49,7 +49,7 @@
           />
           <p style="font-size: 13px;">{{ user.username }}<br>{{ user.email }}</p>
         </a>
-        <span class="d-lg-none text-secondary mx-2 p-2 rounded">
+        <span class=" text-secondary rounded ">
             <i class="fa fa-bell p-2 fa-sm rounded" style="background-color: #ebebeb;"></i>
             <i class="fa fa-envelope mx-1 p-2 fa-sm rounded" style="background-color: #ebebeb;"></i>
           </span>
@@ -207,7 +207,6 @@
     {% comment %} <script src="{% static 'js/writer.js' %}"></script> {% endcomment %}
     <script type="text/javascript" src="{% static 'js/client.js' %}"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="text/javascript">
-    </script>
+    {% block script %}{% endblock script %}
   </body>
 </html>

@@ -465,8 +465,7 @@ $(document).ready(function () {
         price: $finalPrice,
       },
       success: function (response) {
-        window.location.href =
-          "http://acetheessayapp.herokuapp.com/auth/client/projects";
+        window.location.href = window.location.host + "/auth/client/projects";
       },
     });
   });
@@ -476,6 +475,10 @@ $(document).ready(function () {
   // mark a project as complete
   var csrf = $("input[name=csrfmiddlewaretoken]").val();
   let isSubmit = false;
+
+  $("#markcomplete").click(function () {
+    $("#markHint").removeClass("d-none");
+  });
 
   $("#markcomplete").click(function () {
     // e.preventDefault();
@@ -618,4 +621,31 @@ $("#review-form").submit(function (e) {
   });
 });
 
+// get rating and present into stars config
+const stars1 = document.getElementById("starScore");
 
+const handleStarRating1 = (score) => {
+  const starChildren1 = stars1.children;
+
+  for (let i = 0; i < starChildren1.length; i++) {
+    if (i <= score) {
+      starChildren1[i].classList.add("checked");
+    } else {
+      starChildren1[i].classList.remove("checked");
+    }
+  }
+};
+
+const score1 = $("#avgScore").text();
+
+if (score1 <= 1.5) {
+  handleStarRating1(1);
+} else if (score1 <= 2.4) {
+  handleStarRating1(2);
+} else if (score1 <= 3.4) {
+  handleStarRating1(3);
+} else if (score1 <= 4.4) {
+  handleStarRating1(4);
+} else if (score1 <= 5) {
+  handleStarRating1(5);
+}

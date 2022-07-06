@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
+# from chats.views import index, chatPage
 
 urlpatterns = ([
     path('admin/', admin.site.urls),
@@ -26,6 +27,10 @@ urlpatterns = ([
     path('auth/', include('client.urls')),
     path('auth/', include('writer.urls')),
     path('auth/chat/', include('chat.urls')),
+
+    # path('chat2-home', index, name='home'),
+    # path('<str:username>/', chatPage, name='chat'),
+
     path('register/', user_views.register, name='register'),
 ])
 

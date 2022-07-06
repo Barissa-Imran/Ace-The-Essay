@@ -120,10 +120,10 @@ html {
 
 /* alerts */
 div .alert-error {
-        color: #842029;
-        background-color: #f8d7da;
-        border-color: #f5c2c7;
-      }
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}
 
 /* Compute price section on place order page */
 .compute {
@@ -144,7 +144,7 @@ div .alert-error {
   /* width: 600px; */
   padding: 20px;
   background-color: #f5fcff;
-  box-shadow: 0 5px 30px rgba(0, 0, 0,.30);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
   visibility: hidden;
   opacity: 0;
   transition: 0.5s;
@@ -155,9 +155,114 @@ div .alert-error {
   opacity: 1;
   transition: 0.5s;
 }
-/* ---------------------------------------------------------- */
+/* -----------------project detail page--------------------------- */
+.chat-top {
+  background-color: #ededed;
+  min-height: 30px;
+}
+.messages {
+  min-height: 500px;
+  box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651)
+}
+.messages {
+  height: 20%;
+  background-color: #fff;
+  width: 100%;
+
+  min-height: calc(100% - 93px);
+  max-height: calc(100% - 93px);
+  overflow-y: scroll; /*problem*/
+  overflow-x: hidden;
+}
+@media screen and (max-width: 735px) {
+  .messages {
+    max-height: calc(100% - 105px);
+  }
+  .messages::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+  .messages::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+.messages ul li {
+  display: inline-block;
+  clear: both;
+  float: left;
+  margin: 15px 15px 5px 15px;
+  width: calc(100% - 25px);
+  font-size: 0.9em;
+}
+.messages ul li:nth-last-child(1) {
+  margin-bottom: 20px;
+}
+.messages ul li.sent img {
+  float: right;
+  margin: 6px 8px 0 0;
+}
+.messages ul li.sent p {
+  float: right;
+  background: #435f7a;
+  color: #f5f5f5;
+}
+.messages ul li.replies img {
+  margin: 6px 0 0 8px;
+}
+.messages ul li.replies p {
+  background: #f5f5f5;
+}
+.messages ul li img {
+  width: 22px;
+  border-radius: 50%;
+  float: left;
+}
+.messages ul li p {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
+@media screen and (min-width: 735px) {
+  .messages ul li p {
+    max-width: 300px;
+  }
+}
+
+.message-input .wrap {
+  position: relative;
+}
+.message-input .wrap input {
+  border: none;
+  width: calc(100% - 90px);
+  padding: 11px 32px 10px 8px;
+  font-size: 0.8em;
+  color: #32465a;
+  box-shadow: 0 0.5px 2px rgba(128, 128, 128, 0.651)
+}
+.message-input .wrap input:focus {
+  outline: none;
+}
+.message-input .wrap button {
+  float: right;
+  border: none;
+  width: 50px;
+  padding: 8px 0;
+  cursor: pointer;
+  background: #32465a;
+  color: #f5f5f5;
+}
+.message-input .wrap button:hover {
+  background: #435f7a;
+}
+.message-input .wrap button:hover {
+  outline: none;
+}
+
+
 .fa-star.checked {
-  color: #ffc107
+  color: #ffc107;
 }
 
 textarea#review {
